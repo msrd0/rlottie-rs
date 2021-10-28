@@ -1,0 +1,18 @@
+# -*- eval: (cargo-minor-mode 1) -*-
+
+[package]
+workspace = ".."
+name = "rlottie-sys"
+version = "0.1.0"
+publish = false
+
+license = "MIT"
+description = "A platform independent standalone library that plays Lottie Animation"
+
+edition = "2021"
+rust-version = "1.56"
+links = "rlottie"
+
+[build-dependencies]
+bindgen = "0.59.1"
+pkg-config = "0.3.22"
