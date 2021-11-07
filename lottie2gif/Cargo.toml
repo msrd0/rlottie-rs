@@ -4,15 +4,21 @@
 workspace = ".."
 name = "lottie2gif"
 version = "0.1.0"
-publish = false
-
 license = "MIT"
+include = ["src/**/*.rs", "/LICENSE"]
+
 description = "Convert lottie files to GIF"
+repository = "https://github.com/msrd0/rlottie-rs"
 
 edition = "2021"
 rust-version = "1.56"
+autobins = false
+
+[[bin]]
+name = "lottie2gif"
+required-features = ["clap"]
 
 [dependencies]
-clap = "=3.0.0-beta.5"
+clap = { version = "=3.0.0-beta.5", optional = true }
 gif = "0.11.3"
-rlottie = { path = ".." }
+rlottie = { path = "..", version = "0.1" }

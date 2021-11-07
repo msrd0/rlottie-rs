@@ -4,10 +4,11 @@
 workspace = ".."
 name = "rlottie-sys"
 version = "0.1.0"
-publish = false
-
 license = "MIT"
+include = ["src/**/*.rs", "/build.rs", "/wrapper.h", "/LICENSE"]
+
 description = "A platform independent standalone library that plays Lottie Animation"
+repository = "https://github.com/msrd0/rlottie-rs"
 
 edition = "2021"
 rust-version = "1.56"
