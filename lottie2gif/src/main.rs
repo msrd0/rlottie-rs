@@ -44,6 +44,8 @@ fn main() {
 		&[]
 	)
 	.expect("Failed to create gif");
+	gif.set_repeat(gif::Repeat::Infinite)
+		.expect("Failed to repeat gif");
 	for frame in 0..frame_count {
 		player.render(frame, &mut buffer_argb, size, size.width * 4);
 
