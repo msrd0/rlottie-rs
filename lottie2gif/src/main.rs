@@ -36,6 +36,8 @@ fn main() {
 	let bg_b = (bg_color & 0xFF) as u8;
 
 	let mut player = Animation::from_file(&path).expect("Failed to open file");
+	let framerate = player.framerate();
+	let delay = (1.0 / framerate).round() as u16;
 	let buffer_len = width as usize * height as usize;
 	let mut buffer32 = Vec::with_capacity(buffer_len);
 	let mut buffer8 = unsafe {
@@ -85,6 +87,8 @@ fn main() {
 					buffer8[i * 4] = r;
 					buffer8[i * 4 + 2] = b;
 				}
+
+				buffer8[i * 4 + 3] = 0;
 			} else {
 				buffer8[i * 4 + 2] = bg_b;
 				buffer8[i * 4 + 1] = bg_g;
@@ -92,8 +96,9 @@ fn main() {
 			}
 		}
 
-		gif.write_frame(&Frame::from_rgba(width, height, &mut buffer8))
-			.expect("Failed to write frame");
+		let mut frame = Frame::from_rgba(width, height, &mut buffer8);
+		frame.delay = delay;
+		gif.write_frame(&frame).expect("Failed to write frame");
 	}
 
 	// buffer8 points into buffer32 so we need to leak buffer8 to
