@@ -90,9 +90,12 @@ impl Animation {
 		&mut self,
 		frame_num: u64,
 		buffer: &mut Vec<u32>,
-		size: Size,
-		bytes_per_line: u64
-	) {
+		size: Size
+	) -> Result<(), RenderError> {
+		let buffer_len = (size.width * size.height) as usize;
+		if buffer.capacity() < buffer_len {
+			return Err(RenderError);
+		}
 		unsafe {
 			lottie_animation_render(
 				self.0,
@@ -100,10 +103,15 @@ impl Animation {
 				buffer.as_mut_ptr(),
 				size.width,
 				size.height,
-				bytes_per_line
+				size.width * 4
 			);
+			buffer.set_len(buffer_len);
 		}
+		Ok(())
 	}
 }
+
+#[derive(Debug)]
+pub struct RenderError;
 
 pub struct LayerNode(*const LOTLayerNode);
