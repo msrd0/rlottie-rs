@@ -16,3 +16,8 @@ rust-version = "1.56"
 
 [dependencies]
 rlottie-sys = { path = "./sys", version = "0.1.0" }
+
+[profile.release]
+debug = true
+opt-level = 3
+lto = true

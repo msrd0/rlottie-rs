@@ -1,7 +1,7 @@
 use clap::Parser;
 use gif::Frame;
 use rlottie::{Animation, Size};
-use std::{fs::File, path::Path};
+use std::fs::File;
 
 #[derive(Parser)]
 struct Args {
@@ -19,7 +19,6 @@ fn main() {
 	let args = Args::parse();
 
 	let path = args.lottie_file_name;
-	let path: &Path = path.as_ref();
 	let (width, height): (u16, u16) = {
 		let mut split = args.resolution.split('x');
 		(
@@ -36,7 +35,7 @@ fn main() {
 	let bg_g = ((bg_color >> 8) & 0xFF) as u8;
 	let bg_b = (bg_color & 0xFF) as u8;
 
-	let mut player = Animation::from_file(path).expect("Failed to open file");
+	let mut player = Animation::from_file(&path).expect("Failed to open file");
 	let buffer_len = width as usize * height as usize;
 	let mut buffer32 = Vec::with_capacity(buffer_len);
 	let mut buffer8 = unsafe {
@@ -50,7 +49,7 @@ fn main() {
 	let frame_count = player.totalframe();
 
 	let mut gif = gif::Encoder::new(
-		File::create(path.join(".gif")).expect("Failed to create output file"),
+		File::create(&format!("{}.gif", path)).expect("Failed to create output file"),
 		width,
 		height,
 		&[]
@@ -96,4 +95,8 @@ fn main() {
 		gif.write_frame(&Frame::from_rgba(width, height, &mut buffer8))
 			.expect("Failed to write frame");
 	}
+
+	// buffer8 points into buffer32 so we need to leak buffer8 to
+	// avoid causing a double-free
+	buffer8.leak();
 }
