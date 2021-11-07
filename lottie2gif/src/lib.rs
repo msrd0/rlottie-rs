@@ -1,4 +1,4 @@
-use gif::{Encoder, EncodingError, Frame, Repeat};
+use gif::{DisposalMethod, Encoder, EncodingError, Frame, Repeat};
 use rlottie::Animation;
 use std::io::Write;
 
@@ -6,16 +6,24 @@ use std::io::Write;
 pub struct Color {
 	pub r: u8,
 	pub g: u8,
-	pub b: u8
+	pub b: u8,
+	pub alpha: bool
 }
 
+/// Convert a lottie animation to a GIF file.
+///
+/// **This is a lossy operation.**
+/// GIF does not support full alpha channel. Even if you enable the alpha flag
+/// for background color, the rgb value is required. This is because semi-transparent
+/// pixels will be converted to non-transparent pixels, adding onto the background
+/// color. Only fully transparent pixels will remain transparent.
 pub fn convert<W: Write>(mut player: Animation, bg: Color, out: W) -> Result<(), EncodingError> {
 	let size = player.size();
 	let framerate = player.framerate();
 	let delay = (100.0 / framerate).round() as u16;
 	let buffer_len = size.width as usize * size.height as usize;
 	let mut buffer_argb = vec![0; buffer_len];
-	let mut buffer_rgb = vec![0; buffer_len * 3];
+	let mut buffer_rgba = vec![0; buffer_len * 4];
 	let frame_count = player.totalframe();
 
 	let mut gif = Encoder::new(out, size.width as _, size.height as _, &[])?;
@@ -43,13 +51,20 @@ pub fn convert<W: Write>(mut player: Animation, bg: Color, out: W) -> Result<(),
 				b = bg.b;
 			}
 
-			buffer_rgb[i * 3] = r;
-			buffer_rgb[i * 3 + 1] = g;
-			buffer_rgb[i * 3 + 2] = b;
+			buffer_rgba[i * 4] = r;
+			buffer_rgba[i * 4 + 1] = g;
+			buffer_rgba[i * 4 + 2] = b;
+			buffer_rgba[i * 4 + 3] = match a {
+				0 if bg.alpha => 0,
+				_ => 0xFF
+			};
 		}
 
-		let mut frame = Frame::from_rgb(size.width as _, size.height as _, &mut buffer_rgb);
+		let mut frame = Frame::from_rgba(size.width as _, size.height as _, &mut buffer_rgba);
 		frame.delay = delay;
+		if bg.alpha {
+			frame.dispose = DisposalMethod::Background;
+		}
 		gif.write_frame(&frame)?;
 	}
 

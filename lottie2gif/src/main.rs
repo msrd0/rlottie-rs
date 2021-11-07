@@ -20,7 +20,8 @@ fn main() {
 	let bg = Color {
 		r: ((bg_color >> 16) & 0xFF) as u8,
 		g: ((bg_color >> 8) & 0xFF) as u8,
-		b: (bg_color & 0xFF) as u8
+		b: (bg_color & 0xFF) as u8,
+		alpha: true
 	};
 
 	println!("Converting file {} ...", path);
