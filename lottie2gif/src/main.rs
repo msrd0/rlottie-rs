@@ -21,17 +21,24 @@ fn main() {
 	let bg_g = ((bg_color >> 8) & 0xFF) as u8;
 	let bg_b = (bg_color & 0xFF) as u8;
 
+	println!("Reading file {} ...", path);
 	let mut player = Animation::from_file(&path).expect("Failed to open file");
 	let size = player.size();
 	let framerate = player.framerate();
-	let delay = (1.0 / framerate).round() as u16;
+	println!(
+		"Found {}x{} lottie file with {} fps",
+		size.width, size.height, framerate
+	);
+	let delay = (100.0 / framerate).round() as u16;
 	let buffer_len = size.width as usize * size.height as usize;
 	let mut buffer_argb = vec![0; buffer_len];
 	let mut buffer_rgb = vec![0; buffer_len * 3];
 	let frame_count = player.totalframe();
 
+	let gif_path = format!("{}.gif", path);
+	println!("Converting to {} ...", gif_path);
 	let mut gif = gif::Encoder::new(
-		File::create(&format!("{}.gif", path)).expect("Failed to create output file"),
+		File::create(&gif_path).expect("Failed to create output file"),
 		size.width as _,
 		size.height as _,
 		&[]
