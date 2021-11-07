@@ -1,0 +1,18 @@
+# -*- eval: (cargo-minor-mode 1) -*-
+
+[package]
+workspace = ".."
+name = "lottie2gif"
+version = "0.1.0"
+publish = false
+
+license = "MIT"
+description = "Convert lottie files to GIF"
+
+edition = "2021"
+rust-version = "1.56"
+
+[dependencies]
+clap = "=3.0.0-beta.5"
+gif = "0.11.3"
+rlottie = { path = ".." }

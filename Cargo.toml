@@ -1,12 +1,15 @@
 # -*- eval: (cargo-minor-mode 1) -*-
 
 [workspace]
-members = [".", "./sys"]
+members = [".", "./sys", "./lottie2gif"]
 
 [package]
 name = "rlottie"
 version = "0.1.0"
 publish = false
+
+license = "MIT"
+description = "A platform independent standalone library that plays Lottie Animation"
 
 edition = "2021"
 rust-version = "1.56"
