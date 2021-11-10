@@ -1,6 +1,7 @@
 use gif::{DisposalMethod, Encoder, EncodingError, Frame, Repeat};
-use rlottie::Animation;
 use std::io::Write;
+
+pub use rlottie::Animation;
 
 #[derive(Clone, Copy, Debug)]
 pub struct Color {
