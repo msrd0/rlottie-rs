@@ -1,4 +1,5 @@
 use gif::{DisposalMethod, Encoder, EncodingError, Frame, Repeat};
+use rlottie::Argb;
 use std::io::Write;
 
 pub use rlottie::Animation;
@@ -9,6 +10,37 @@ pub struct Color {
 	pub g: u8,
 	pub b: u8,
 	pub alpha: bool
+}
+
+fn argb_to_rgba(bg: Color, buffer_len: usize, buffer_argb: &Vec<Argb>, buffer_rgba: &mut Vec<u8>) {
+	#[cfg(debug_assertions)]
+	{
+		assert_eq!(buffer_argb.len(), buffer_len);
+		assert_eq!(buffer_rgba.len(), buffer_len * 4);
+	}
+
+	for i in 0..buffer_len {
+		let mut color = buffer_argb[i];
+
+		if color.a != 0 {
+			let factor = (0xFF - color.a) as f32 / 255.0;
+			color.r += (bg.r as f32 * factor) as u8;
+			color.g += (bg.g as f32 * factor) as u8;
+			color.b += (bg.b as f32 * factor) as u8;
+		} else {
+			color.r = bg.r;
+			color.g = bg.g;
+			color.b = bg.b;
+		}
+
+		buffer_rgba[i * 4] = color.r;
+		buffer_rgba[i * 4 + 1] = color.g;
+		buffer_rgba[i * 4 + 2] = color.b;
+		buffer_rgba[i * 4 + 3] = match color.a {
+			0 if bg.alpha => 0,
+			_ => 0xFF
+		};
+	}
 }
 
 /// Convert a lottie animation to a GIF file.
@@ -23,7 +55,7 @@ pub fn convert<W: Write>(mut player: Animation, bg: Color, out: W) -> Result<(),
 	let framerate = player.framerate();
 	let delay = (100.0 / framerate).round() as u16;
 	let buffer_len = size.width as usize * size.height as usize;
-	let mut buffer_argb = vec![0; buffer_len];
+	let mut buffer_argb = Vec::with_capacity(buffer_len);
 	let mut buffer_rgba = vec![0; buffer_len * 4];
 	let frame_count = player.totalframe();
 
@@ -32,34 +64,10 @@ pub fn convert<W: Write>(mut player: Animation, bg: Color, out: W) -> Result<(),
 	for frame in 0..frame_count {
 		player.render(frame, &mut buffer_argb, size).unwrap();
 
-		for i in 0..buffer_len {
-			let color = buffer_argb[i];
-
-			let a = ((color >> 24) & 0xFF) as u8;
-			let mut r = ((color >> 16) & 0xFF) as u8;
-			let mut g = ((color >> 8) & 0xFF) as u8;
-			let mut b = (color & 0xFF) as u8;
-			if a != 0 {
-				if a != 0xFF {
-					// un premultiply
-					r += (bg.r as f32 * (0xFF - a) as f32 / 255.0) as u8;
-					g += (bg.g as f32 * (0xFF - a) as f32 / 255.0) as u8;
-					b += (bg.b as f32 * (0xFF - a) as f32 / 255.0) as u8;
-				}
-			} else {
-				r = bg.r;
-				g = bg.g;
-				b = bg.b;
-			}
-
-			buffer_rgba[i * 4] = r;
-			buffer_rgba[i * 4 + 1] = g;
-			buffer_rgba[i * 4 + 2] = b;
-			buffer_rgba[i * 4 + 3] = match a {
-				0 if bg.alpha => 0,
-				_ => 0xFF
-			};
-		}
+		let start = std::time::Instant::now();
+		argb_to_rgba(bg, buffer_len, &buffer_argb, &mut buffer_rgba);
+		let elapsed = start.elapsed();
+		println!("elapsed: {:?}", elapsed);
 
 		let mut frame = Frame::from_rgba(size.width as _, size.height as _, &mut buffer_rgba);
 		frame.delay = delay;

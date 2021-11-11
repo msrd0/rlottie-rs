@@ -15,6 +15,15 @@ pub struct Size {
 	pub height: u64
 }
 
+#[derive(Clone, Copy, Debug, Eq, PartialEq)]
+#[repr(C)]
+pub struct Argb {
+	pub b: u8,
+	pub g: u8,
+	pub r: u8,
+	pub a: u8
+}
+
 pub struct Animation(*mut Lottie_Animation_S);
 
 impl Drop for Animation {
@@ -89,7 +98,7 @@ impl Animation {
 	pub fn render(
 		&mut self,
 		frame_num: u64,
-		buffer: &mut Vec<u32>,
+		buffer: &mut Vec<Argb>,
 		size: Size
 	) -> Result<(), RenderError> {
 		let buffer_len = (size.width * size.height) as usize;
@@ -100,7 +109,7 @@ impl Animation {
 			lottie_animation_render(
 				self.0,
 				frame_num,
-				buffer.as_mut_ptr(),
+				buffer.as_mut_ptr() as *mut u32,
 				size.width,
 				size.height,
 				size.width * 4
