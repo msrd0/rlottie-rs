@@ -12,31 +12,35 @@ pub struct Color {
 	pub alpha: bool
 }
 
-fn argb_to_rgba(bg: Color, buffer_len: usize, buffer_argb: &Vec<Argb>, buffer_rgba: &mut Vec<u8>) {
-	#[cfg(debug_assertions)]
-	{
-		assert_eq!(buffer_argb.len(), buffer_len);
-		assert_eq!(buffer_rgba.len(), buffer_len * 4);
-	}
+#[repr(C)]
+struct Rgba {
+	r: u8,
+	g: u8,
+	b: u8,
+	a: u8
+}
 
-	for i in 0..buffer_len {
-		let mut color = buffer_argb[i];
+fn argb_to_rgba(bg: Color, buffer_argb: &Vec<Argb>, buffer_rgba: &mut Vec<u8>) {
+	let bg_r = bg.r as f32;
+	let bg_g = bg.g as f32;
+	let bg_b = bg.b as f32;
+
+	for (i, color) in buffer_argb.iter().enumerate() {
+		let idx = i * 4;
+		let rgba = &mut buffer_rgba[idx..idx + 3];
+		let rgba: &mut Rgba = unsafe { &mut *(rgba.as_mut_ptr() as *mut Rgba) };
 
 		if color.a != 0 {
 			let factor = (0xFF - color.a) as f32 / 255.0;
-			color.r += (bg.r as f32 * factor) as u8;
-			color.g += (bg.g as f32 * factor) as u8;
-			color.b += (bg.b as f32 * factor) as u8;
+			rgba.r = color.r + (bg_r * factor) as u8;
+			rgba.g = color.g + (bg_g * factor) as u8;
+			rgba.b = color.b + (bg_b * factor) as u8;
 		} else {
-			color.r = bg.r;
-			color.g = bg.g;
-			color.b = bg.b;
+			rgba.r = bg.r;
+			rgba.g = bg.g;
+			rgba.b = bg.b;
 		}
-
-		buffer_rgba[i * 4] = color.r;
-		buffer_rgba[i * 4 + 1] = color.g;
-		buffer_rgba[i * 4 + 2] = color.b;
-		buffer_rgba[i * 4 + 3] = match color.a {
+		rgba.a = match color.a {
 			0 if bg.alpha => 0,
 			_ => 0xFF
 		};
@@ -62,19 +66,28 @@ pub fn convert<W: Write>(mut player: Animation, bg: Color, out: W) -> Result<(),
 	let mut gif = Encoder::new(out, size.width as _, size.height as _, &[])?;
 	gif.set_repeat(Repeat::Infinite)?;
 	for frame in 0..frame_count {
+		// let start = std::time::Instant::now();
 		player.render(frame, &mut buffer_argb, size).unwrap();
+		// let render = start.elapsed();
 
-		let start = std::time::Instant::now();
-		argb_to_rgba(bg, buffer_len, &buffer_argb, &mut buffer_rgba);
-		let elapsed = start.elapsed();
-		println!("elapsed: {:?}", elapsed);
+		// let start = std::time::Instant::now();
+		argb_to_rgba(bg, &buffer_argb, &mut buffer_rgba);
+		// let convert = start.elapsed();
 
-		let mut frame = Frame::from_rgba(size.width as _, size.height as _, &mut buffer_rgba);
+		// let start = std::time::Instant::now();
+		let mut frame =
+			Frame::from_rgba_speed(size.width as _, size.height as _, &mut buffer_rgba, 10);
 		frame.delay = delay;
 		if bg.alpha {
 			frame.dispose = DisposalMethod::Background;
 		}
 		gif.write_frame(&frame)?;
+		// let gif = start.elapsed();
+
+		// println!(
+		// "render took {:?}, rgba convert took {:?}, gif took {:?}",
+		// render, convert, gif
+		// );
 	}
 
 	Ok(())
