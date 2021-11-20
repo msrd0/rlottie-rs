@@ -1,3 +1,5 @@
+//! Safe Rust bindings to rlottie.
+
 use rlottie_sys::*;
 use std::{ffi::CString, os::unix::ffi::OsStrExt, path::Path, ptr};
 
@@ -9,21 +11,57 @@ where
 	CString::new(bytes).expect("path must not contain nul")
 }
 
+/// The size type used by lottie [`Animation`].
 #[derive(Clone, Copy, Debug, Eq, Ord, PartialEq, PartialOrd)]
 pub struct Size {
 	pub width: u64,
 	pub height: u64
 }
 
+/// An ARGB color value.
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
 #[repr(C)]
 pub struct Argb {
+	/// The blue component of the color.
 	pub b: u8,
+
+	/// The green component of the color.
 	pub g: u8,
+
+	/// The red component of the color.
 	pub r: u8,
+
+	/// The alpha component of the color.
 	pub a: u8
 }
 
+/// It is very important that [`Argb`] and `u32` have exactly the same size. This mod does nothing
+/// other than fail to compile if that was not the case.
+#[allow(dead_code)]
+mod argb_size {
+	use super::Argb;
+	use std::{marker::PhantomData, mem};
+
+	#[derive(Default)]
+	struct AssertSize<const N: usize>(PhantomData<[(); N]>);
+
+	impl<const N: usize> AssertSize<N> {
+		const fn new() -> Self {
+			Self(PhantomData)
+		}
+	}
+
+	impl AssertSize<4> {
+		const fn assert_size_u32(self) {}
+	}
+
+	const _: () = {
+		AssertSize::<{ mem::size_of::<Argb>() }>::new().assert_size_u32();
+		AssertSize::<{ mem::size_of::<u32>() }>::new().assert_size_u32();
+	};
+}
+
+/// A lottie animation.
 pub struct Animation(*mut Lottie_Animation_S);
 
 impl Drop for Animation {
@@ -35,6 +73,8 @@ impl Drop for Animation {
 }
 
 impl Animation {
+	/// Read a lottie animation from file. This file needs to be in JSON format; if you want to
+	/// read telegram's tgs files, you need to decompress them first.
 	pub fn from_file<P>(path: P) -> Option<Self>
 	where
 		P: AsRef<Path>
@@ -44,6 +84,7 @@ impl Animation {
 		(ptr != ptr::null_mut()).then(|| Self(ptr))
 	}
 
+	/// Read a file from memory. External resources are resolved relative to `resource_path`.
 	pub fn from_data<P>(data: String, key: String, resource_path: P) -> Option<Self>
 	where
 		P: AsRef<Path>
@@ -57,6 +98,7 @@ impl Animation {
 		(ptr != ptr::null_mut()).then(|| Self(ptr))
 	}
 
+	/// Return the default viewport size of this animation.
 	pub fn size(&self) -> Size {
 		let mut size = Size {
 			width: 0,
@@ -68,14 +110,17 @@ impl Animation {
 		size
 	}
 
+	/// Return the total duration of this animation in seconds.
 	pub fn duration(&self) -> f64 {
 		unsafe { lottie_animation_get_duration(self.0) }
 	}
 
+	/// Return the total number of frames in this animation.
 	pub fn totalframe(&self) -> u64 {
 		unsafe { lottie_animation_get_totalframe(self.0) }
 	}
 
+	/// Return the default framerate of this animation.
 	pub fn framerate(&self) -> f64 {
 		unsafe { lottie_animation_get_framerate(self.0) }
 	}
@@ -91,10 +136,18 @@ impl Animation {
 		}
 	}
 
+	/// Maps position to frame number and returns it.
 	pub fn frame_at_pos(&self, pos: f32) -> u64 {
 		unsafe { lottie_animation_get_frame_at_pos(self.0, pos) }
 	}
 
+	/// Render the contents of a frame into the buffer at a certain viewport size.
+	///
+	/// The buffer's capacity must be at least `size.width * size.height`. It's initial length
+	/// or content doesn't matter. The first `size.width * size.height` bytes of the buffer
+	/// will be written to; and it's length will be set exactly to `size.width * size.height`.
+	///
+	/// This operation will fail only if the buffer's capacity isn't large enough.
 	pub fn render(
 		&mut self,
 		frame_num: u64,

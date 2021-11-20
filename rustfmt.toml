@@ -23,3 +23,7 @@ condense_wildcard_suffixes = true
 
 # prefer foo(Bar { \n }) over foo(\nBar { \n }\n)
 overflow_delimited_expr = true
+
+# I wish there was a way to allow 0..n but not a + 1..b + 2
+# However, the later looks so terible that I use spaces everywhere
+spaces_around_ranges = true
