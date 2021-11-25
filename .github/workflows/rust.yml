@@ -26,6 +26,8 @@ jobs:
           make -j2
           sudo make install
           cd ../..
+        env:
+          pkgver: "0.2"
       - run: cargo test --workspace
   
   rustfmt:
@@ -57,6 +59,8 @@ jobs:
           make -j2
           sudo make install
           cd ../..
+        env:
+          pkgver: "0.2"
       - run: cargo doc --workspace --no-deps
         env:
           RUSTDOCFLAGS: "--default-theme ayu"
