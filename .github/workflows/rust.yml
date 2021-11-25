@@ -1,0 +1,72 @@
+name: Rust
+
+on:
+  push:
+    banches: [main]
+  pull_request:
+
+jobs:
+  build:
+    strategy:
+      fail-fast: false
+      matrix:
+        target:
+          - "i686-unknown-linux-gnu"
+          - "aarch64-unknown-linux-gnu"
+          - "armv7-unknown-linux-gnueabihf"
+    runs-on: ubuntu-latest
+    name: build ${{matrix.target}}
+    steps:
+      - uses: actions/checkout@v2
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          target: ${{matrix.target}}
+      - run: cargo build -p lottie2gif --release --all-features --target ${{matrix.target}}
+  
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: dtolnay/rust-toolchain@stable
+      - run: cargo test --workspace
+  
+  rustfmt:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: dtolnay/rust-toolchain@nightly
+        with:
+          components: rustfmt
+      - run: cargo fmt --all -- --check
+  
+  doc:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: dtolnay/rust-toolchain@stable
+      - run: cargo doc --workspace --no-deps
+        env:
+          RUSTDOCFLAGS: "--default-theme ayu"
+      - run: tar c target/doc/ | zstd -10 -o rustdoc.tar.zst
+      - uses: actions/upload-artifact@v2
+        with:
+          name: rustdoc
+          path: rustdoc.tar.zst
+  
+  pages:
+    runs-on: ubuntu-latest
+    needs: [doc]
+    if: github.ref == 'refs/heads/main'
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          ref: gh-pages
+      - uses: actions/download-artifact@v2
+        with:
+          name: rustdoc
+      - run: |
+          tar xfa rustdoc.tar.zst --strip-components=1
+          rm rustdoc.tar.zst
+      - uses: stefanzweifel/git-auto-commit-action@v4
+        with:
+          commit_message: "GitHub Pages for ${{github.sha}}"
