@@ -69,6 +69,7 @@ macro_rules! auto_vectorize {
 		}
 	) => {
 		pub(crate) fn $ident($($arg_ident: $arg_ty),*) $(-> $ret)? {
+			#[cfg(any(target_arch = "x86", target_arch = "x86_64"))]
 			#[target_feature(enable = "avx2")]
 			#[target_feature(enable = "bmi1")]
 			#[target_feature(enable = "bmi2")]
@@ -77,6 +78,7 @@ macro_rules! auto_vectorize {
 				$($body)*
 			}
 
+			#[cfg(any(target_arch = "x86", target_arch = "x86_64"))]
 			#[target_feature(enable = "sse4.1")]
 			#[allow(unused_unsafe)]
 			unsafe fn sse4_1($($arg_ident: $arg_ty),*) $(-> $ret)? {
@@ -87,13 +89,17 @@ macro_rules! auto_vectorize {
 				$($body)*
 			}
 
+			#[cfg(any(target_arch = "x86", target_arch = "x86_64"))]
 			if is_x86_feature_detected!("avx2") {
-				unsafe { avx2($($arg_ident),*) }
-			} else if is_x86_feature_detected!("sse4.1") {
-				unsafe { sse4_1($($arg_ident),*) }
-			} else {
-				fallback($($arg_ident),*)
+				return unsafe { avx2($($arg_ident),*) };
 			}
+
+			#[cfg(any(target_arch = "x86", target_arch = "x86_64"))]
+			if is_x86_feature_detected!("sse4.1") {
+				return unsafe { sse4_1($($arg_ident),*) };
+			}
+
+			fallback($($arg_ident),*)
 		}
 	};
 }
