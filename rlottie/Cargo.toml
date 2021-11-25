@@ -1,0 +1,17 @@
+# -*- eval: (cargo-minor-mode 1) -*-
+
+[package]
+workspace = ".."
+name = "rlottie"
+version = "0.2.0"
+license = "MIT"
+include = ["src/**/*.rs", "/LICENSE"]
+
+description = "A platform independent standalone library that plays Lottie Animation"
+repository = "https://github.com/msrd0/rlottie-rs"
+
+edition = "2021"
+rust-version = "1.56"
+
+[dependencies]
+rlottie-sys = { path = "../rlottie-sys", version = "0.1.0" }
