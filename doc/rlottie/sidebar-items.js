@@ -1,0 +1,1 @@
+initSidebarItems({"struct":[["Animation","A lottie animation."],["Argb","An ARGB color value."],["LayerNode",""],["RenderError",""],["Size","The size type used by lottie [`Animation`]."]]});

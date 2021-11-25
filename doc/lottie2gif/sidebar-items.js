@@ -1,0 +1,1 @@
+initSidebarItems({"fn":[["convert","Convert a lottie animation to a GIF file."]],"struct":[["Animation","A lottie animation."],["Color","Color definition used for the background color of the GIF."]]});

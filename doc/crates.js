@@ -1,0 +1,1 @@
+window.ALL_CRATES = ["lottie2gif","rlottie","rlottie_sys"];
