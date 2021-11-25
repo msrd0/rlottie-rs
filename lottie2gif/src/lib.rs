@@ -1,8 +1,11 @@
 //! Convert lottie animations to GIF files.
 
+#![warn(rust_2018_idioms)]
+#![deny(unreachable_pub)]
+
 use gif::{DisposalMethod, Encoder, EncodingError, Frame, Repeat};
 use rlottie::Argb;
-use std::io::Write;
+use std::{io::Write, slice};
 
 pub use rlottie::Animation;
 
@@ -24,6 +27,7 @@ pub struct Color {
 	pub alpha: bool
 }
 
+#[derive(Clone, Copy, Default)]
 #[repr(C)]
 struct Rgba {
 	r: u8,
@@ -58,30 +62,82 @@ mod rgba_size {
 	};
 }
 
-fn argb_to_rgba(bg: Color, buffer_argb: &Vec<Argb>, buffer_rgba: &mut Vec<u8>) {
-	let bg_r = bg.r as f32;
-	let bg_g = bg.g as f32;
-	let bg_b = bg.b as f32;
-
-	for (i, color) in buffer_argb.iter().enumerate() {
-		let idx = i * 4;
-		let rgba = &mut buffer_rgba[idx .. idx + 3];
-		let rgba: &mut Rgba = unsafe { &mut *(rgba.as_mut_ptr() as *mut Rgba) };
-
-		if color.a != 0 {
-			let factor = (0xFF - color.a) as f32 / 255.0;
-			rgba.r = color.r + (bg_r * factor) as u8;
-			rgba.g = color.g + (bg_g * factor) as u8;
-			rgba.b = color.b + (bg_b * factor) as u8;
-		} else {
-			rgba.r = bg.r;
-			rgba.g = bg.g;
-			rgba.b = bg.b;
+macro_rules! auto_vectorize {
+	(
+		pub(crate) fn $ident:ident($($arg_ident:ident : $arg_ty:ty),*) $(-> $ret:ty)? {
+			$($body:tt)*
 		}
-		rgba.a = match color.a {
-			0 if bg.alpha => 0,
-			_ => 0xFF
-		};
+	) => {
+		pub(crate) fn $ident($($arg_ident: $arg_ty),*) $(-> $ret)? {
+			#[cfg(any(target_arch = "x86", target_arch = "x86_64"))]
+			#[target_feature(enable = "avx2")]
+			#[target_feature(enable = "bmi1")]
+			#[target_feature(enable = "bmi2")]
+			#[allow(unused_unsafe)]
+			unsafe fn avx2($($arg_ident: $arg_ty),*) $(-> $ret)? {
+				$($body)*
+			}
+
+			#[cfg(any(target_arch = "x86", target_arch = "x86_64"))]
+			#[target_feature(enable = "sse4.1")]
+			#[allow(unused_unsafe)]
+			unsafe fn sse4_1($($arg_ident: $arg_ty),*) $(-> $ret)? {
+				$($body)*
+			}
+
+			fn fallback($($arg_ident: $arg_ty),*) $(-> $ret)? {
+				$($body)*
+			}
+
+			#[cfg(any(target_arch = "x86", target_arch = "x86_64"))]
+			if is_x86_feature_detected!("avx2") {
+				return unsafe { avx2($($arg_ident),*) };
+			}
+
+			#[cfg(any(target_arch = "x86", target_arch = "x86_64"))]
+			if is_x86_feature_detected!("sse4.1") {
+				return unsafe { sse4_1($($arg_ident),*) };
+			}
+
+			fallback($($arg_ident),*)
+		}
+	};
+}
+
+auto_vectorize! {
+	pub(crate) fn argb_to_rgba(bg: Color, buffer_argb: &[Argb], buffer_rgba: &mut [Rgba]) {
+		let bg_r = bg.r as u32;
+		let bg_g = bg.g as u32;
+		let bg_b = bg.b as u32;
+
+		buffer_argb
+			.iter()
+			.map(|color| (color.r as u32, color.g as u32, color.b as u32, color.a))
+			.map(|(mut r, mut g, mut b, mut a)| {
+				if a == 0 {
+					r = 0;
+					g = 0;
+					b = 0;
+				}
+
+				let a_neg = (255 - a) as u32;
+				r += (bg_r * a_neg) / 255;
+				g += (bg_g * a_neg) / 255;
+				b += (bg_b * a_neg) / 255;
+
+				if !bg.alpha || a != 0 {
+					a = 255;
+				}
+
+				(r, g, b, a)
+			})
+			.zip(buffer_rgba.iter_mut())
+			.for_each(|((r, g, b, a), rgba)| {
+				rgba.r = r as u8;
+				rgba.g = g as u8;
+				rgba.b = b as u8;
+				rgba.a = a;
+			});
 	}
 }
 
@@ -98,7 +154,7 @@ pub fn convert<W: Write>(mut player: Animation, bg: Color, out: W) -> Result<(),
 	let delay = (100.0 / framerate).round() as u16;
 	let buffer_len = size.width as usize * size.height as usize;
 	let mut buffer_argb = Vec::with_capacity(buffer_len);
-	let mut buffer_rgba = vec![0; buffer_len * 4];
+	let mut buffer_rgba = vec![Rgba::default(); buffer_len];
 	let frame_count = player.totalframe();
 
 	let mut gif = Encoder::new(out, size.width as _, size.height as _, &[])?;
@@ -107,8 +163,14 @@ pub fn convert<W: Write>(mut player: Animation, bg: Color, out: W) -> Result<(),
 		player.render(frame, &mut buffer_argb, size).unwrap();
 		argb_to_rgba(bg, &buffer_argb, &mut buffer_rgba);
 
-		let mut frame =
-			Frame::from_rgba_speed(size.width as _, size.height as _, &mut buffer_rgba, 10);
+		let mut frame = {
+			// Safety: The pointer is valid and align since it comes from a vec, and we don't
+			// use the vec while the slice exists.
+			let buffer_rgba = unsafe {
+				slice::from_raw_parts_mut(buffer_rgba.as_mut_ptr() as *mut u8, buffer_len * 4)
+			};
+			Frame::from_rgba_speed(size.width as _, size.height as _, buffer_rgba, 10)
+		};
 		frame.delay = delay;
 		if bg.alpha {
 			frame.dispose = DisposalMethod::Background;
