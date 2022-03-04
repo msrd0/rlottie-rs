@@ -1,6 +1,8 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `rlottie&#x2F;src&#x2F;lib.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>lib.rs - source</title><link rel="stylesheet" type="text/css" href="../../normalize.css"><link rel="stylesheet" type="text/css" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../light.css"  id="themeStyle"><link rel="stylesheet" type="text/css" href="../../dark.css" disabled ><link rel="stylesheet" type="text/css" href="../../ayu.css" disabled ><script id="default-settings" 
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `rlottie&#x2F;src&#x2F;lib.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>lib.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" type="text/css" href="../../normalize.css"><link rel="stylesheet" type="text/css" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../ayu.css" disabled><link rel="stylesheet" type="text/css" href="../../dark.css" disabled><link rel="stylesheet" type="text/css" href="../../light.css" id="themeStyle"><script id="default-settings" 
         data-theme="ayu"
-        data-use_system_theme="false"></script><script src="../../storage.js"></script><script src="../../crates.js"></script><noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../favicon.svg"><style type="text/css">#crate-search{background-image:url("../../down-arrow.svg");}</style></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu" role="button">&#9776;</div><a href='../../rlottie/index.html'><div class='logo-container rust-logo'><img src='../../rust-logo.png' alt='logo'></div></a></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!" aria-haspopup="menu" title="themes"><img width="18" height="18" alt="Pick another theme!" src="../../brush.svg"></button><div id="theme-choices" role="menu"></div></div><nav class="sub"><form class="search-form"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" disabled autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><button type="button" id="help-button" title="help">?</button><a id="settings-menu" href="../../settings.html" title="settings"><img width="18" height="18" alt="Change settings" src="../../wheel.svg"></a></div></form></nav><section id="main" class="content"><div class="example-wrap"><pre class="line-numbers"><span id="1">  1</span>
+        data-use_system_theme="false"></script><script src="../../storage.js"></script><script src="../../crates.js"></script><script defer src="../../main.js"></script><script defer src="../../source-script.js"></script><script defer src="../../source-files.js"></script>
+    <noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu" role="button">&#9776;</div><a class="sidebar-logo" href="../../rlottie/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.png" alt="logo"></div>
+        </a></nav><main><div class="width-limiter"><div class="sub-container"><a class="sub-logo-container" href="../../rlottie/index.html"><img class="rust-logo" src="../../rust-logo.png" alt="logo"></a><nav class="sub"><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!" aria-haspopup="menu" title="themes"><img width="18" height="18" alt="Pick another theme!" src="../../brush.svg"></button><div id="theme-choices" role="menu"></div></div><form class="search-form"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><button type="button" id="help-button" title="help">?</button><a id="settings-menu" href="../../settings.html" title="settings"><img width="18" height="18" alt="Change settings" src="../../wheel.svg"></a></div></form></nav></div><section id="main-content" class="content"><div class="example-wrap"><pre class="line-numbers"><span id="1">  1</span>
 <span id="2">  2</span>
 <span id="3">  3</span>
 <span id="4">  4</span>
@@ -184,7 +186,7 @@
 <span class="kw">use</span> <span class="ident">rlottie_sys</span>::<span class="kw-2">*</span>;
 <span class="kw">use</span> <span class="ident">std</span>::{<span class="ident">ffi::CString</span>, <span class="ident">os::unix::ffi::OsStrExt</span>, <span class="ident">path::Path</span>, <span class="ident">ptr</span>};
 
-<span class="kw">fn</span> <span class="ident">path_to_cstr</span><span class="op">&lt;</span><span class="ident">P</span><span class="op">&gt;</span>(<span class="ident">path</span>: <span class="ident">P</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">CString</span>
+<span class="kw">fn</span> <span class="ident">path_to_cstr</span><span class="op">&lt;</span><span class="ident">P</span><span class="op">&gt;</span>(<span class="ident">path</span>: <span class="ident">P</span>) -&gt; <span class="ident">CString</span>
 <span class="kw">where</span>
 	<span class="ident">P</span>: <span class="ident">AsRef</span><span class="op">&lt;</span><span class="ident">Path</span><span class="op">&gt;</span>
 {
@@ -227,7 +229,7 @@
 	<span class="kw">struct</span> <span class="ident">AssertSize</span><span class="op">&lt;</span><span class="kw">const</span> <span class="ident">N</span>: <span class="ident">usize</span><span class="op">&gt;</span>(<span class="ident">PhantomData</span><span class="op">&lt;</span>[(); <span class="ident">N</span>]<span class="op">&gt;</span>);
 
 	<span class="kw">impl</span><span class="op">&lt;</span><span class="kw">const</span> <span class="ident">N</span>: <span class="ident">usize</span><span class="op">&gt;</span> <span class="ident">AssertSize</span><span class="op">&lt;</span><span class="ident">N</span><span class="op">&gt;</span> {
-		<span class="kw">const</span> <span class="kw">fn</span> <span class="ident">new</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
+		<span class="kw">const</span> <span class="kw">fn</span> <span class="ident">new</span>() -&gt; <span class="self">Self</span> {
 			<span class="self">Self</span>(<span class="ident">PhantomData</span>)
 		}
 	}
@@ -243,10 +245,10 @@
 }
 
 <span class="doccomment">/// A lottie animation.</span>
-<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">Animation</span>(<span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">Lottie_Animation_S</span>);
+<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">Animation</span>(<span class="kw-2">*mut</span> <span class="ident">Lottie_Animation_S</span>);
 
 <span class="kw">impl</span> <span class="ident">Drop</span> <span class="kw">for</span> <span class="ident">Animation</span> {
-	<span class="kw">fn</span> <span class="ident">drop</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>) {
+	<span class="kw">fn</span> <span class="ident">drop</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>) {
 		<span class="kw">unsafe</span> {
 			<span class="ident">lottie_animation_destroy</span>(<span class="self">self</span>.<span class="number">0</span>);
 		}
@@ -256,7 +258,7 @@
 <span class="kw">impl</span> <span class="ident">Animation</span> {
 	<span class="doccomment">/// Read a lottie animation from file. This file needs to be in JSON format; if you want to</span>
 	<span class="doccomment">/// read telegram&#39;s tgs files, you need to decompress them first.</span>
-	<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">from_file</span><span class="op">&lt;</span><span class="ident">P</span><span class="op">&gt;</span>(<span class="ident">path</span>: <span class="ident">P</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span>
+	<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">from_file</span><span class="op">&lt;</span><span class="ident">P</span><span class="op">&gt;</span>(<span class="ident">path</span>: <span class="ident">P</span>) -&gt; <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span>
 	<span class="kw">where</span>
 		<span class="ident">P</span>: <span class="ident">AsRef</span><span class="op">&lt;</span><span class="ident">Path</span><span class="op">&gt;</span>
 	{
@@ -266,7 +268,7 @@
 	}
 
 	<span class="doccomment">/// Read a file from memory. External resources are resolved relative to `resource_path`.</span>
-	<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">from_data</span><span class="op">&lt;</span><span class="ident">P</span><span class="op">&gt;</span>(<span class="ident">data</span>: <span class="ident">String</span>, <span class="ident">key</span>: <span class="ident">String</span>, <span class="ident">resource_path</span>: <span class="ident">P</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span>
+	<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">from_data</span><span class="op">&lt;</span><span class="ident">P</span><span class="op">&gt;</span>(<span class="ident">data</span>: <span class="ident">String</span>, <span class="ident">key</span>: <span class="ident">String</span>, <span class="ident">resource_path</span>: <span class="ident">P</span>) -&gt; <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span>
 	<span class="kw">where</span>
 		<span class="ident">P</span>: <span class="ident">AsRef</span><span class="op">&lt;</span><span class="ident">Path</span><span class="op">&gt;</span>
 	{
@@ -280,33 +282,33 @@
 	}
 
 	<span class="doccomment">/// Return the default viewport size of this animation.</span>
-	<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">size</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Size</span> {
+	<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">size</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">Size</span> {
 		<span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">size</span> <span class="op">=</span> <span class="ident">Size</span> {
 			<span class="ident">width</span>: <span class="number">0</span>,
 			<span class="ident">height</span>: <span class="number">0</span>
 		};
 		<span class="kw">unsafe</span> {
-			<span class="ident">lottie_animation_get_size</span>(<span class="self">self</span>.<span class="number">0</span>, <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">size</span>.<span class="ident">width</span>, <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">size</span>.<span class="ident">height</span>);
+			<span class="ident">lottie_animation_get_size</span>(<span class="self">self</span>.<span class="number">0</span>, <span class="kw-2">&amp;mut</span> <span class="ident">size</span>.<span class="ident">width</span>, <span class="kw-2">&amp;mut</span> <span class="ident">size</span>.<span class="ident">height</span>);
 		}
 		<span class="ident">size</span>
 	}
 
 	<span class="doccomment">/// Return the total duration of this animation in seconds.</span>
-	<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">duration</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">f64</span> {
+	<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">duration</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">f64</span> {
 		<span class="kw">unsafe</span> { <span class="ident">lottie_animation_get_duration</span>(<span class="self">self</span>.<span class="number">0</span>) }
 	}
 
 	<span class="doccomment">/// Return the total number of frames in this animation.</span>
-	<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">totalframe</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">u64</span> {
+	<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">totalframe</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">u64</span> {
 		<span class="kw">unsafe</span> { <span class="ident">lottie_animation_get_totalframe</span>(<span class="self">self</span>.<span class="number">0</span>) }
 	}
 
 	<span class="doccomment">/// Return the default framerate of this animation.</span>
-	<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">framerate</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">f64</span> {
+	<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">framerate</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">f64</span> {
 		<span class="kw">unsafe</span> { <span class="ident">lottie_animation_get_framerate</span>(<span class="self">self</span>.<span class="number">0</span>) }
 	}
 
-	<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">render_tree</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">frame_num</span>: <span class="ident">u64</span>, <span class="ident">size</span>: <span class="ident">Size</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">LayerNode</span> {
+	<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">render_tree</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">frame_num</span>: <span class="ident">u64</span>, <span class="ident">size</span>: <span class="ident">Size</span>) -&gt; <span class="ident">LayerNode</span> {
 		<span class="kw">unsafe</span> {
 			<span class="ident">LayerNode</span>(<span class="ident">lottie_animation_render_tree</span>(
 				<span class="self">self</span>.<span class="number">0</span>,
@@ -318,7 +320,7 @@
 	}
 
 	<span class="doccomment">/// Maps position to frame number and returns it.</span>
-	<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">frame_at_pos</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">pos</span>: <span class="ident">f32</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">u64</span> {
+	<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">frame_at_pos</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">pos</span>: <span class="ident">f32</span>) -&gt; <span class="ident">u64</span> {
 		<span class="kw">unsafe</span> { <span class="ident">lottie_animation_get_frame_at_pos</span>(<span class="self">self</span>.<span class="number">0</span>, <span class="ident">pos</span>) }
 	}
 
@@ -330,11 +332,11 @@
 	<span class="doccomment">///</span>
 	<span class="doccomment">/// This operation will fail only if the buffer&#39;s capacity isn&#39;t large enough.</span>
 	<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">render</span>(
-		<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>,
+		<span class="kw-2">&amp;mut</span> <span class="self">self</span>,
 		<span class="ident">frame_num</span>: <span class="ident">u64</span>,
-		<span class="ident">buffer</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">Argb</span><span class="op">&gt;</span>,
+		<span class="ident">buffer</span>: <span class="kw-2">&amp;mut</span> <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">Argb</span><span class="op">&gt;</span>,
 		<span class="ident">size</span>: <span class="ident">Size</span>
-	) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">RenderError</span><span class="op">&gt;</span> {
+	) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">RenderError</span><span class="op">&gt;</span> {
 		<span class="kw">let</span> <span class="ident">buffer_len</span> <span class="op">=</span> (<span class="ident">size</span>.<span class="ident">width</span> <span class="op">*</span> <span class="ident">size</span>.<span class="ident">height</span>) <span class="kw">as</span> <span class="ident">usize</span>;
 		<span class="kw">if</span> <span class="ident">buffer</span>.<span class="ident">capacity</span>() <span class="op">&lt;</span> <span class="ident">buffer_len</span> {
 			<span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">RenderError</span>);
@@ -343,7 +345,7 @@
 			<span class="ident">lottie_animation_render</span>(
 				<span class="self">self</span>.<span class="number">0</span>,
 				<span class="ident">frame_num</span>,
-				<span class="ident">buffer</span>.<span class="ident">as_mut_ptr</span>() <span class="kw">as</span> <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">u32</span>,
+				<span class="ident">buffer</span>.<span class="ident">as_mut_ptr</span>() <span class="kw">as</span> <span class="kw-2">*mut</span> <span class="ident">u32</span>,
 				<span class="ident">size</span>.<span class="ident">width</span>,
 				<span class="ident">size</span>.<span class="ident">height</span>,
 				<span class="ident">size</span>.<span class="ident">width</span> <span class="op">*</span> <span class="number">4</span>
@@ -357,8 +359,7 @@
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>)]</span>
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">RenderError</span>;
 
-<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">LayerNode</span>(<span class="kw-2">*</span><span class="kw">const</span> <span class="ident">LOTLayerNode</span>);
+<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">LayerNode</span>(<span class="kw-2">*const</span> <span class="ident">LOTLayerNode</span>);
 </code></pre></div>
-</section><section id="search" class="content hidden"></section><div id="rustdoc-vars" data-root-path="../../" data-current-crate="rlottie" data-search-index-js="../../search-index.js" data-search-js="../../search.js"></div>
-    <script src="../../main.js"></script><script src="../../source-script.js"></script><script src="../../source-files.js"></script>
+</section><section id="search" class="content hidden"></section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="rlottie" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.59.0 (9d1b2106e 2022-02-23)" ></div>
 </body></html>
