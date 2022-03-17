@@ -3,7 +3,7 @@
 [package]
 workspace = ".."
 name = "rlottie"
-version = "0.2.2"
+version = "0.3.0"
 license = "MIT"
 include = ["build.rs", "src/**/*.rs", "/LICENSE"]
 

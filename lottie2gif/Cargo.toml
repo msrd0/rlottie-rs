@@ -3,7 +3,7 @@
 [package]
 workspace = ".."
 name = "lottie2gif"
-version = "0.2.1"
+version = "0.3.0"
 license = "MIT"
 include = ["src/**/*.rs", "/LICENSE"]
 
@@ -22,4 +22,4 @@ required-features = ["clap"]
 clap = { version = "3.0", features = ["derive"], optional = true }
 gif = "0.11.3"
 rgb = { version = "0.8.32", default-features = false }
-rlottie = { path = "../rlottie", version = "0.2.1" }
+rlottie = { path = "../rlottie", version = "0.3.0" }
