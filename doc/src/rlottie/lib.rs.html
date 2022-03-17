@@ -181,6 +181,7 @@
 <span id="177">177</span>
 <span id="178">178</span>
 <span id="179">179</span>
+<span id="180">180</span>
 </pre><pre class="rust"><code><span class="doccomment">//! Safe Rust bindings to rlottie.</span>
 
 <span class="kw">use</span> <span class="ident">rlottie_sys</span>::<span class="kw-2">*</span>;
@@ -283,14 +284,15 @@
 
 	<span class="doccomment">/// Return the default viewport size of this animation.</span>
 	<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">size</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">Size</span> {
-		<span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">size</span> <span class="op">=</span> <span class="ident">Size</span> {
-			<span class="ident">width</span>: <span class="number">0</span>,
-			<span class="ident">height</span>: <span class="number">0</span>
-		};
+		<span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">width</span>: <span class="ident">rlottie_sys::size_t</span> <span class="op">=</span> <span class="number">0</span>;
+		<span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">height</span>: <span class="ident">rlottie_sys::size_t</span> <span class="op">=</span> <span class="number">0</span>;
 		<span class="kw">unsafe</span> {
-			<span class="ident">lottie_animation_get_size</span>(<span class="self">self</span>.<span class="number">0</span>, <span class="kw-2">&amp;mut</span> <span class="ident">size</span>.<span class="ident">width</span>, <span class="kw-2">&amp;mut</span> <span class="ident">size</span>.<span class="ident">height</span>);
+			<span class="ident">lottie_animation_get_size</span>(<span class="self">self</span>.<span class="number">0</span>, <span class="kw-2">&amp;mut</span> <span class="ident">width</span>, <span class="kw-2">&amp;mut</span> <span class="ident">height</span>);
 		}
-		<span class="ident">size</span>
+		<span class="ident">Size</span> {
+			<span class="ident">width</span>: <span class="ident">width</span>.<span class="ident">into</span>(),
+			<span class="ident">height</span>: <span class="ident">height</span>.<span class="ident">into</span>()
+		}
 	}
 
 	<span class="doccomment">/// Return the total duration of this animation in seconds.</span>
