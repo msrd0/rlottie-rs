@@ -4,7 +4,7 @@
 #![deny(unreachable_pub)]
 
 use gif::{DisposalMethod, Encoder, EncodingError, Frame, Repeat};
-use rlottie::Argb;
+use rgb::{alt::BGRA8, RGBA8};
 use std::{io::Write, slice};
 
 pub use rlottie::Animation;
@@ -21,26 +21,17 @@ pub struct Color {
 	/// The blue component of the color.
 	pub b: u8,
 
-	/// Set this to true to enable a transparent background. Note that since GIF does not support
-	/// semi-transparent pixels, those will be rendered as if the background color was not
-	/// transparent.
+	/// Set this to true to enable a transparent background. Note that since GIF
+	/// does not support semi-transparent pixels, those will be rendered as if the
+	/// background color was not transparent.
 	pub alpha: bool
 }
 
-#[derive(Clone, Copy, Default)]
-#[repr(C)]
-struct Rgba {
-	r: u8,
-	g: u8,
-	b: u8,
-	a: u8
-}
-
-/// It is very important that [`Rgba`] and `[u8; 4]` have exactly the same size. This mod does
-/// nothing other than fail to compile if that was not the case.
+/// It is very important that [`RGBA8`] and `[u8; 4]` have exactly the same size.
+/// This mod does nothing other than fail to compile if that was not the case.
 #[allow(dead_code)]
 mod rgba_size {
-	use super::Rgba;
+	use rgb::RGBA8;
 	use std::{marker::PhantomData, mem};
 
 	#[derive(Default)]
@@ -57,7 +48,7 @@ mod rgba_size {
 	}
 
 	const _: () = {
-		AssertSize::<{ mem::size_of::<Rgba>() }>::new().assert_size_u8_4();
+		AssertSize::<{ mem::size_of::<RGBA8>() }>::new().assert_size_u8_4();
 		AssertSize::<{ mem::size_of::<[u8; 4]>() }>::new().assert_size_u8_4();
 	};
 }
@@ -105,7 +96,7 @@ macro_rules! auto_vectorize {
 }
 
 auto_vectorize! {
-	pub(crate) fn argb_to_rgba(bg: Color, buffer_argb: &[Argb], buffer_rgba: &mut [Rgba]) {
+	pub(crate) fn argb_to_rgba(bg: Color, buffer_argb: &[BGRA8], buffer_rgba: &mut [RGBA8]) {
 		let bg_r = bg.r as u32;
 		let bg_g = bg.g as u32;
 		let bg_b = bg.b as u32;
@@ -154,7 +145,7 @@ pub fn convert<W: Write>(mut player: Animation, bg: Color, out: W) -> Result<(),
 	let delay = (100.0 / framerate).round() as u16;
 	let buffer_len = size.width() as usize * size.height() as usize;
 	let mut buffer_argb = Vec::with_capacity(buffer_len);
-	let mut buffer_rgba = vec![Rgba::default(); buffer_len];
+	let mut buffer_rgba = vec![RGBA8::default(); buffer_len];
 	let frame_count = player.totalframe();
 
 	let mut gif = Encoder::new(out, size.width() as _, size.height() as _, &[])?;

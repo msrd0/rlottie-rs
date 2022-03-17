@@ -14,4 +14,5 @@ edition = "2021"
 rust-version = "1.56"
 
 [dependencies]
+rgb = { version = "0.8.32", default-features = false }
 rlottie-sys = { path = "../rlottie-sys", version = "0.1.0" }

@@ -1,5 +1,6 @@
 //! Safe Rust bindings to rlottie.
 
+use rgb::alt::BGRA8;
 use rlottie_sys::*;
 use std::{ffi::CString, os::unix::ffi::OsStrExt, path::Path, ptr};
 
@@ -28,28 +29,11 @@ impl Size {
 	}
 }
 
-/// An ARGB color value.
-#[derive(Clone, Copy, Debug, Eq, PartialEq)]
-#[repr(C)]
-pub struct Argb {
-	/// The blue component of the color.
-	pub b: u8,
-
-	/// The green component of the color.
-	pub g: u8,
-
-	/// The red component of the color.
-	pub r: u8,
-
-	/// The alpha component of the color.
-	pub a: u8
-}
-
-/// It is very important that [`Argb`] and `u32` have exactly the same size. This mod does nothing
-/// other than fail to compile if that was not the case.
+/// It is very important that [`BGRA8`] and `u32` have exactly the same size. This
+/// mod does nothing other than fail to compile if that was not the case.
 #[allow(dead_code)]
-mod argb_size {
-	use super::Argb;
+mod bgra8_size {
+	use rgb::alt::BGRA8;
 	use std::{marker::PhantomData, mem};
 
 	#[derive(Default)]
@@ -66,7 +50,7 @@ mod argb_size {
 	}
 
 	const _: () = {
-		AssertSize::<{ mem::size_of::<Argb>() }>::new().assert_size_u32();
+		AssertSize::<{ mem::size_of::<BGRA8>() }>::new().assert_size_u32();
 		AssertSize::<{ mem::size_of::<u32>() }>::new().assert_size_u32();
 	};
 }
@@ -83,8 +67,8 @@ impl Drop for Animation {
 }
 
 impl Animation {
-	/// Read a lottie animation from file. This file needs to be in JSON format; if you want to
-	/// read telegram's tgs files, you need to decompress them first.
+	/// Read a lottie animation from file. This file needs to be in JSON format; if
+	/// you want to read telegram's tgs files, you need to decompress them first.
 	pub fn from_file<P>(path: P) -> Option<Self>
 	where
 		P: AsRef<Path>
@@ -94,7 +78,8 @@ impl Animation {
 		(ptr != ptr::null_mut()).then(|| Self(ptr))
 	}
 
-	/// Read a file from memory. External resources are resolved relative to `resource_path`.
+	/// Read a file from memory. External resources are resolved relative to
+	/// `resource_path`.
 	pub fn from_data<P>(data: String, key: String, resource_path: P) -> Option<Self>
 	where
 		P: AsRef<Path>
@@ -142,15 +127,16 @@ impl Animation {
 
 	/// Render the contents of a frame into the buffer at a certain viewport size.
 	///
-	/// The buffer's capacity must be at least `size.width * size.height`. It's initial length
-	/// or content doesn't matter. The first `size.width * size.height` bytes of the buffer
-	/// will be written to; and it's length will be set exactly to `size.width * size.height`.
+	/// The buffer's capacity must be at least `size.width * size.height`. It's
+	/// initial length or content doesn't matter. The first `size.width * size.height`
+	/// bytes of the buffer will be written to; and it's length will be set exactly
+	/// to `size.width * size.height`.
 	///
 	/// This operation will fail only if the buffer's capacity isn't large enough.
 	pub fn render(
 		&mut self,
 		frame_num: u64,
-		buffer: &mut Vec<Argb>,
+		buffer: &mut Vec<BGRA8>,
 		size: Size
 	) -> Result<(), RenderError> {
 		let buffer_len = (size.width * size.height) as usize;
