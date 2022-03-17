@@ -178,10 +178,6 @@
 <span id="174">174</span>
 <span id="175">175</span>
 <span id="176">176</span>
-<span id="177">177</span>
-<span id="178">178</span>
-<span id="179">179</span>
-<span id="180">180</span>
 </pre><pre class="rust"><code><span class="doccomment">//! Safe Rust bindings to rlottie.</span>
 
 <span class="kw">use</span> <span class="ident">rlottie_sys</span>::<span class="kw-2">*</span>;
@@ -198,8 +194,18 @@
 <span class="doccomment">/// The size type used by lottie [`Animation`].</span>
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Clone</span>, <span class="ident">Copy</span>, <span class="ident">Debug</span>, <span class="ident">Eq</span>, <span class="ident">Ord</span>, <span class="ident">PartialEq</span>, <span class="ident">PartialOrd</span>)]</span>
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">Size</span> {
-	<span class="kw">pub</span> <span class="ident">width</span>: <span class="ident">u64</span>,
-	<span class="kw">pub</span> <span class="ident">height</span>: <span class="ident">u64</span>
+	<span class="ident">width</span>: <span class="ident">size_t</span>,
+	<span class="ident">height</span>: <span class="ident">size_t</span>
+}
+
+<span class="kw">impl</span> <span class="ident">Size</span> {
+	<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">width</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">u64</span> {
+		<span class="self">self</span>.<span class="ident">width</span>.<span class="ident">into</span>()
+	}
+
+	<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">height</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">u64</span> {
+		<span class="self">self</span>.<span class="ident">height</span>.<span class="ident">into</span>()
+	}
 }
 
 <span class="doccomment">/// An ARGB color value.</span>
@@ -284,15 +290,14 @@
 
 	<span class="doccomment">/// Return the default viewport size of this animation.</span>
 	<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">size</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">Size</span> {
-		<span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">width</span>: <span class="ident">rlottie_sys::size_t</span> <span class="op">=</span> <span class="number">0</span>;
-		<span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">height</span>: <span class="ident">rlottie_sys::size_t</span> <span class="op">=</span> <span class="number">0</span>;
+		<span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">size</span> <span class="op">=</span> <span class="ident">Size</span> {
+			<span class="ident">width</span>: <span class="number">0</span>,
+			<span class="ident">height</span>: <span class="number">0</span>
+		};
 		<span class="kw">unsafe</span> {
-			<span class="ident">lottie_animation_get_size</span>(<span class="self">self</span>.<span class="number">0</span>, <span class="kw-2">&amp;mut</span> <span class="ident">width</span>, <span class="kw-2">&amp;mut</span> <span class="ident">height</span>);
+			<span class="ident">lottie_animation_get_size</span>(<span class="self">self</span>.<span class="number">0</span>, <span class="kw-2">&amp;mut</span> <span class="ident">size</span>.<span class="ident">width</span>, <span class="kw-2">&amp;mut</span> <span class="ident">size</span>.<span class="ident">height</span>);
 		}
-		<span class="ident">Size</span> {
-			<span class="ident">width</span>: <span class="ident">width</span>.<span class="ident">into</span>(),
-			<span class="ident">height</span>: <span class="ident">height</span>.<span class="ident">into</span>()
-		}
+		<span class="ident">size</span>
 	}
 
 	<span class="doccomment">/// Return the total duration of this animation in seconds.</span>
@@ -302,7 +307,7 @@
 
 	<span class="doccomment">/// Return the total number of frames in this animation.</span>
 	<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">totalframe</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">u64</span> {
-		<span class="kw">unsafe</span> { <span class="ident">lottie_animation_get_totalframe</span>(<span class="self">self</span>.<span class="number">0</span>) }
+		<span class="kw">unsafe</span> { <span class="ident">lottie_animation_get_totalframe</span>(<span class="self">self</span>.<span class="number">0</span>) }.<span class="ident">into</span>()
 	}
 
 	<span class="doccomment">/// Return the default framerate of this animation.</span>
@@ -310,20 +315,9 @@
 		<span class="kw">unsafe</span> { <span class="ident">lottie_animation_get_framerate</span>(<span class="self">self</span>.<span class="number">0</span>) }
 	}
 
-	<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">render_tree</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">frame_num</span>: <span class="ident">u64</span>, <span class="ident">size</span>: <span class="ident">Size</span>) -&gt; <span class="ident">LayerNode</span> {
-		<span class="kw">unsafe</span> {
-			<span class="ident">LayerNode</span>(<span class="ident">lottie_animation_render_tree</span>(
-				<span class="self">self</span>.<span class="number">0</span>,
-				<span class="ident">frame_num</span>,
-				<span class="ident">size</span>.<span class="ident">width</span>,
-				<span class="ident">size</span>.<span class="ident">height</span>
-			))
-		}
-	}
-
 	<span class="doccomment">/// Maps position to frame number and returns it.</span>
 	<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">frame_at_pos</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">pos</span>: <span class="ident">f32</span>) -&gt; <span class="ident">u64</span> {
-		<span class="kw">unsafe</span> { <span class="ident">lottie_animation_get_frame_at_pos</span>(<span class="self">self</span>.<span class="number">0</span>, <span class="ident">pos</span>) }
+		<span class="kw">unsafe</span> { <span class="ident">lottie_animation_get_frame_at_pos</span>(<span class="self">self</span>.<span class="number">0</span>, <span class="ident">pos</span>) }.<span class="ident">into</span>()
 	}
 
 	<span class="doccomment">/// Render the contents of a frame into the buffer at a certain viewport size.</span>
@@ -360,8 +354,6 @@
 
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>)]</span>
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">RenderError</span>;
-
-<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">LayerNode</span>(<span class="kw-2">*const</span> <span class="ident">LOTLayerNode</span>);
 </code></pre></div>
 </section><section id="search" class="content hidden"></section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="rlottie" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.59.0 (9d1b2106e 2022-02-23)" ></div>
 </body></html>
