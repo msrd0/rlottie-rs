@@ -164,11 +164,23 @@
 <span id="160">160</span>
 <span id="161">161</span>
 <span id="162">162</span>
-</pre><pre class="rust"><code><span class="doccomment">//! Safe Rust bindings to rlottie.</span>
+<span id="163">163</span>
+<span id="164">164</span>
+<span id="165">165</span>
+<span id="166">166</span>
+<span id="167">167</span>
+<span id="168">168</span>
+<span id="169">169</span>
+<span id="170">170</span>
+</pre><pre class="rust"><code><span class="attribute">#![<span class="ident">warn</span>(<span class="ident">rust_2018_idioms</span>)]</span>
+<span class="attribute">#![<span class="ident">deny</span>(<span class="ident">unreachable_pub</span>)]</span>
+<span class="attribute">#![<span class="ident">cfg_attr</span>(<span class="ident">target_pointer_width</span> <span class="op">=</span> <span class="string">&quot;64&quot;</span>, <span class="ident">allow</span>(<span class="ident">clippy::useless_conversion</span>))]</span>
+
+<span class="doccomment">//! Safe Rust bindings to rlottie.</span>
 
 <span class="kw">use</span> <span class="ident">rgb::alt::BGRA8</span>;
 <span class="kw">use</span> <span class="ident">rlottie_sys</span>::<span class="kw-2">*</span>;
-<span class="kw">use</span> <span class="ident">std</span>::{<span class="ident">ffi::CString</span>, <span class="ident">os::unix::ffi::OsStrExt</span>, <span class="ident">path::Path</span>, <span class="ident">ptr</span>};
+<span class="kw">use</span> <span class="ident">std</span>::{<span class="ident">ffi::CString</span>, <span class="ident">os::unix::ffi::OsStrExt</span>, <span class="ident">path::Path</span>};
 
 <span class="kw">fn</span> <span class="ident">path_to_cstr</span><span class="op">&lt;</span><span class="ident">P</span><span class="op">&gt;</span>(<span class="ident">path</span>: <span class="ident">P</span>) -&gt; <span class="ident">CString</span>
 <span class="kw">where</span>
@@ -241,7 +253,7 @@
 	{
 		<span class="kw">let</span> <span class="ident">path</span> <span class="op">=</span> <span class="ident">path_to_cstr</span>(<span class="ident">path</span>);
 		<span class="kw">let</span> <span class="ident">ptr</span> <span class="op">=</span> <span class="kw">unsafe</span> { <span class="ident">lottie_animation_from_file</span>(<span class="ident">path</span>.<span class="ident">as_ptr</span>()) };
-		(<span class="ident">ptr</span> <span class="op">!</span><span class="op">=</span> <span class="ident">ptr::null_mut</span>()).<span class="ident">then</span>(<span class="op">|</span><span class="op">|</span> <span class="self">Self</span>(<span class="ident">ptr</span>))
+		(<span class="op">!</span><span class="ident">ptr</span>.<span class="ident">is_null</span>()).<span class="ident">then</span>(<span class="op">|</span><span class="op">|</span> <span class="self">Self</span>(<span class="ident">ptr</span>))
 	}
 
 	<span class="doccomment">/// Read a file from memory. External resources are resolved relative to</span>
@@ -254,9 +266,13 @@
 		<span class="kw">let</span> <span class="ident">key</span> <span class="op">=</span> <span class="ident">CString::new</span>(<span class="ident">key</span>).<span class="ident">expect</span>(<span class="string">&quot;key must not contain nul&quot;</span>);
 		<span class="kw">let</span> <span class="ident">resource_path</span> <span class="op">=</span> <span class="ident">path_to_cstr</span>(<span class="ident">resource_path</span>);
 		<span class="kw">let</span> <span class="ident">ptr</span> <span class="op">=</span> <span class="kw">unsafe</span> {
-			<span class="ident">lottie_animation_from_data</span>(<span class="ident">data</span>.<span class="ident">as_ptr</span>(), <span class="ident">key</span>.<span class="ident">as_ptr</span>(), <span class="ident">resource_path</span>.<span class="ident">as_ptr</span>())
+			<span class="ident">lottie_animation_from_data</span>(
+				<span class="ident">data</span>.<span class="ident">as_ptr</span>(),
+				<span class="ident">key</span>.<span class="ident">as_ptr</span>(),
+				<span class="ident">resource_path</span>.<span class="ident">as_ptr</span>()
+			)
 		};
-		(<span class="ident">ptr</span> <span class="op">!</span><span class="op">=</span> <span class="ident">ptr::null_mut</span>()).<span class="ident">then</span>(<span class="op">|</span><span class="op">|</span> <span class="self">Self</span>(<span class="ident">ptr</span>))
+		(<span class="op">!</span><span class="ident">ptr</span>.<span class="ident">is_null</span>()).<span class="ident">then</span>(<span class="op">|</span><span class="op">|</span> <span class="self">Self</span>(<span class="ident">ptr</span>))
 	}
 
 	<span class="doccomment">/// Return the default viewport size of this animation.</span>
