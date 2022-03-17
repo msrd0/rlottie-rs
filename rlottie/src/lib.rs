@@ -1,8 +1,12 @@
+#![warn(rust_2018_idioms)]
+#![deny(unreachable_pub)]
+#![cfg_attr(target_pointer_width = "64", allow(clippy::useless_conversion))]
+
 //! Safe Rust bindings to rlottie.
 
 use rgb::alt::BGRA8;
 use rlottie_sys::*;
-use std::{ffi::CString, os::unix::ffi::OsStrExt, path::Path, ptr};
+use std::{ffi::CString, os::unix::ffi::OsStrExt, path::Path};
 
 fn path_to_cstr<P>(path: P) -> CString
 where
@@ -75,7 +79,7 @@ impl Animation {
 	{
 		let path = path_to_cstr(path);
 		let ptr = unsafe { lottie_animation_from_file(path.as_ptr()) };
-		(ptr != ptr::null_mut()).then(|| Self(ptr))
+		(!ptr.is_null()).then(|| Self(ptr))
 	}
 
 	/// Read a file from memory. External resources are resolved relative to
@@ -94,7 +98,7 @@ impl Animation {
 				resource_path.as_ptr()
 			)
 		};
-		(ptr != ptr::null_mut()).then(|| Self(ptr))
+		(!ptr.is_null()).then(|| Self(ptr))
 	}
 
 	/// Return the default viewport size of this animation.
