@@ -160,7 +160,7 @@ impl Animation {
 		unsafe {
 			lottie_animation_render(
 				self.0,
-				frame_num,
+				frame_num.try_into().unwrap(),
 				buffer.as_mut_ptr() as *mut u32,
 				size.width,
 				size.height,
