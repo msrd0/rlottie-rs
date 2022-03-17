@@ -88,7 +88,11 @@ impl Animation {
 		let key = CString::new(key).expect("key must not contain nul");
 		let resource_path = path_to_cstr(resource_path);
 		let ptr = unsafe {
-			lottie_animation_from_data(data.as_ptr(), key.as_ptr(), resource_path.as_ptr())
+			lottie_animation_from_data(
+				data.as_ptr(),
+				key.as_ptr(),
+				resource_path.as_ptr()
+			)
 		};
 		(ptr != ptr::null_mut()).then(|| Self(ptr))
 	}

@@ -139,7 +139,11 @@ auto_vectorize! {
 /// for background color, the rgb value is required. This is because semi-transparent
 /// pixels will be converted to non-transparent pixels, adding onto the background
 /// color. Only fully transparent pixels will remain transparent.
-pub fn convert<W: Write>(mut player: Animation, bg: Color, out: W) -> Result<(), EncodingError> {
+pub fn convert<W: Write>(
+	mut player: Animation,
+	bg: Color,
+	out: W
+) -> Result<(), EncodingError> {
 	let size = player.size();
 	let framerate = player.framerate();
 	let delay = (100.0 / framerate).round() as u16;
@@ -158,9 +162,17 @@ pub fn convert<W: Write>(mut player: Animation, bg: Color, out: W) -> Result<(),
 			// Safety: The pointer is valid and align since it comes from a vec, and we don't
 			// use the vec while the slice exists.
 			let buffer_rgba = unsafe {
-				slice::from_raw_parts_mut(buffer_rgba.as_mut_ptr() as *mut u8, buffer_len * 4)
+				slice::from_raw_parts_mut(
+					buffer_rgba.as_mut_ptr() as *mut u8,
+					buffer_len * 4
+				)
 			};
-			Frame::from_rgba_speed(size.width() as _, size.height() as _, buffer_rgba, 10)
+			Frame::from_rgba_speed(
+				size.width() as _,
+				size.height() as _,
+				buffer_rgba,
+				10
+			)
 		};
 		frame.delay = delay;
 		if bg.alpha {
