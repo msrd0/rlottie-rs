@@ -14,8 +14,18 @@ where
 /// The size type used by lottie [`Animation`].
 #[derive(Clone, Copy, Debug, Eq, Ord, PartialEq, PartialOrd)]
 pub struct Size {
-	pub width: u64,
-	pub height: u64
+	width: size_t,
+	height: size_t
+}
+
+impl Size {
+	pub fn width(&self) -> u64 {
+		self.width.into()
+	}
+
+	pub fn height(&self) -> u64 {
+		self.height.into()
+	}
 }
 
 /// An ARGB color value.
@@ -100,15 +110,14 @@ impl Animation {
 
 	/// Return the default viewport size of this animation.
 	pub fn size(&self) -> Size {
-		let mut width: rlottie_sys::size_t = 0;
-		let mut height: rlottie_sys::size_t = 0;
+		let mut size = Size {
+			width: 0,
+			height: 0
+		};
 		unsafe {
-			lottie_animation_get_size(self.0, &mut width, &mut height);
+			lottie_animation_get_size(self.0, &mut size.width, &mut size.height);
 		}
-		Size {
-			width: width.into(),
-			height: height.into()
-		}
+		size
 	}
 
 	/// Return the total duration of this animation in seconds.
@@ -118,7 +127,7 @@ impl Animation {
 
 	/// Return the total number of frames in this animation.
 	pub fn totalframe(&self) -> u64 {
-		unsafe { lottie_animation_get_totalframe(self.0) }
+		unsafe { lottie_animation_get_totalframe(self.0) }.into()
 	}
 
 	/// Return the default framerate of this animation.
@@ -126,20 +135,9 @@ impl Animation {
 		unsafe { lottie_animation_get_framerate(self.0) }
 	}
 
-	pub fn render_tree(&mut self, frame_num: u64, size: Size) -> LayerNode {
-		unsafe {
-			LayerNode(lottie_animation_render_tree(
-				self.0,
-				frame_num,
-				size.width,
-				size.height
-			))
-		}
-	}
-
 	/// Maps position to frame number and returns it.
 	pub fn frame_at_pos(&self, pos: f32) -> u64 {
-		unsafe { lottie_animation_get_frame_at_pos(self.0, pos) }
+		unsafe { lottie_animation_get_frame_at_pos(self.0, pos) }.into()
 	}
 
 	/// Render the contents of a frame into the buffer at a certain viewport size.
@@ -176,5 +174,3 @@ impl Animation {
 
 #[derive(Debug)]
 pub struct RenderError;
-
-pub struct LayerNode(*const LOTLayerNode);

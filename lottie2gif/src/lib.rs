@@ -152,12 +152,12 @@ pub fn convert<W: Write>(mut player: Animation, bg: Color, out: W) -> Result<(),
 	let size = player.size();
 	let framerate = player.framerate();
 	let delay = (100.0 / framerate).round() as u16;
-	let buffer_len = size.width as usize * size.height as usize;
+	let buffer_len = size.width() as usize * size.height() as usize;
 	let mut buffer_argb = Vec::with_capacity(buffer_len);
 	let mut buffer_rgba = vec![Rgba::default(); buffer_len];
 	let frame_count = player.totalframe();
 
-	let mut gif = Encoder::new(out, size.width as _, size.height as _, &[])?;
+	let mut gif = Encoder::new(out, size.width() as _, size.height() as _, &[])?;
 	gif.set_repeat(Repeat::Infinite)?;
 	for frame in 0 .. frame_count {
 		player.render(frame, &mut buffer_argb, size).unwrap();
@@ -169,7 +169,7 @@ pub fn convert<W: Write>(mut player: Animation, bg: Color, out: W) -> Result<(),
 			let buffer_rgba = unsafe {
 				slice::from_raw_parts_mut(buffer_rgba.as_mut_ptr() as *mut u8, buffer_len * 4)
 			};
-			Frame::from_rgba_speed(size.width as _, size.height as _, buffer_rgba, 10)
+			Frame::from_rgba_speed(size.width() as _, size.height() as _, buffer_rgba, 10)
 		};
 		frame.delay = delay;
 		if bg.alpha {
