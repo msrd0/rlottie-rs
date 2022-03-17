@@ -100,14 +100,15 @@ impl Animation {
 
 	/// Return the default viewport size of this animation.
 	pub fn size(&self) -> Size {
-		let mut size = Size {
-			width: 0,
-			height: 0
-		};
+		let mut width: rlottie_sys::size_t = 0;
+		let mut height: rlottie_sys::size_t = 0;
 		unsafe {
-			lottie_animation_get_size(self.0, &mut size.width, &mut size.height);
+			lottie_animation_get_size(self.0, &mut width, &mut height);
 		}
-		size
+		Size {
+			width: width.into(),
+			height: height.into()
+		}
 	}
 
 	/// Return the total duration of this animation in seconds.
