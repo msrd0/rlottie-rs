@@ -164,22 +164,9 @@
 <span id="160">160</span>
 <span id="161">161</span>
 <span id="162">162</span>
-<span id="163">163</span>
-<span id="164">164</span>
-<span id="165">165</span>
-<span id="166">166</span>
-<span id="167">167</span>
-<span id="168">168</span>
-<span id="169">169</span>
-<span id="170">170</span>
-<span id="171">171</span>
-<span id="172">172</span>
-<span id="173">173</span>
-<span id="174">174</span>
-<span id="175">175</span>
-<span id="176">176</span>
 </pre><pre class="rust"><code><span class="doccomment">//! Safe Rust bindings to rlottie.</span>
 
+<span class="kw">use</span> <span class="ident">rgb::alt::BGRA8</span>;
 <span class="kw">use</span> <span class="ident">rlottie_sys</span>::<span class="kw-2">*</span>;
 <span class="kw">use</span> <span class="ident">std</span>::{<span class="ident">ffi::CString</span>, <span class="ident">os::unix::ffi::OsStrExt</span>, <span class="ident">path::Path</span>, <span class="ident">ptr</span>};
 
@@ -208,28 +195,11 @@
 	}
 }
 
-<span class="doccomment">/// An ARGB color value.</span>
-<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Clone</span>, <span class="ident">Copy</span>, <span class="ident">Debug</span>, <span class="ident">Eq</span>, <span class="ident">PartialEq</span>)]</span>
-<span class="attribute">#[<span class="ident">repr</span>(<span class="ident">C</span>)]</span>
-<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">Argb</span> {
-	<span class="doccomment">/// The blue component of the color.</span>
-	<span class="kw">pub</span> <span class="ident">b</span>: <span class="ident">u8</span>,
-
-	<span class="doccomment">/// The green component of the color.</span>
-	<span class="kw">pub</span> <span class="ident">g</span>: <span class="ident">u8</span>,
-
-	<span class="doccomment">/// The red component of the color.</span>
-	<span class="kw">pub</span> <span class="ident">r</span>: <span class="ident">u8</span>,
-
-	<span class="doccomment">/// The alpha component of the color.</span>
-	<span class="kw">pub</span> <span class="ident">a</span>: <span class="ident">u8</span>
-}
-
-<span class="doccomment">/// It is very important that [`Argb`] and `u32` have exactly the same size. This mod does nothing</span>
-<span class="doccomment">/// other than fail to compile if that was not the case.</span>
+<span class="doccomment">/// It is very important that [`BGRA8`] and `u32` have exactly the same size. This</span>
+<span class="doccomment">/// mod does nothing other than fail to compile if that was not the case.</span>
 <span class="attribute">#[<span class="ident">allow</span>(<span class="ident">dead_code</span>)]</span>
-<span class="kw">mod</span> <span class="ident">argb_size</span> {
-	<span class="kw">use</span> <span class="ident"><span class="kw">super</span>::Argb</span>;
+<span class="kw">mod</span> <span class="ident">bgra8_size</span> {
+	<span class="kw">use</span> <span class="ident">rgb::alt::BGRA8</span>;
 	<span class="kw">use</span> <span class="ident">std</span>::{<span class="ident">marker::PhantomData</span>, <span class="ident">mem</span>};
 
 	<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Default</span>)]</span>
@@ -246,7 +216,7 @@
 	}
 
 	<span class="kw">const</span> <span class="kw">_</span>: () <span class="op">=</span> {
-		<span class="ident">AssertSize</span>::<span class="op">&lt;</span>{ <span class="ident">mem::size_of</span>::<span class="op">&lt;</span><span class="ident">Argb</span><span class="op">&gt;</span>() }<span class="op">&gt;</span><span class="ident">::new</span>().<span class="ident">assert_size_u32</span>();
+		<span class="ident">AssertSize</span>::<span class="op">&lt;</span>{ <span class="ident">mem::size_of</span>::<span class="op">&lt;</span><span class="ident">BGRA8</span><span class="op">&gt;</span>() }<span class="op">&gt;</span><span class="ident">::new</span>().<span class="ident">assert_size_u32</span>();
 		<span class="ident">AssertSize</span>::<span class="op">&lt;</span>{ <span class="ident">mem::size_of</span>::<span class="op">&lt;</span><span class="ident">u32</span><span class="op">&gt;</span>() }<span class="op">&gt;</span><span class="ident">::new</span>().<span class="ident">assert_size_u32</span>();
 	};
 }
@@ -263,8 +233,8 @@
 }
 
 <span class="kw">impl</span> <span class="ident">Animation</span> {
-	<span class="doccomment">/// Read a lottie animation from file. This file needs to be in JSON format; if you want to</span>
-	<span class="doccomment">/// read telegram&#39;s tgs files, you need to decompress them first.</span>
+	<span class="doccomment">/// Read a lottie animation from file. This file needs to be in JSON format; if</span>
+	<span class="doccomment">/// you want to read telegram&#39;s tgs files, you need to decompress them first.</span>
 	<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">from_file</span><span class="op">&lt;</span><span class="ident">P</span><span class="op">&gt;</span>(<span class="ident">path</span>: <span class="ident">P</span>) -&gt; <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span>
 	<span class="kw">where</span>
 		<span class="ident">P</span>: <span class="ident">AsRef</span><span class="op">&lt;</span><span class="ident">Path</span><span class="op">&gt;</span>
@@ -274,7 +244,8 @@
 		(<span class="ident">ptr</span> <span class="op">!</span><span class="op">=</span> <span class="ident">ptr::null_mut</span>()).<span class="ident">then</span>(<span class="op">|</span><span class="op">|</span> <span class="self">Self</span>(<span class="ident">ptr</span>))
 	}
 
-	<span class="doccomment">/// Read a file from memory. External resources are resolved relative to `resource_path`.</span>
+	<span class="doccomment">/// Read a file from memory. External resources are resolved relative to</span>
+	<span class="doccomment">/// `resource_path`.</span>
 	<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">from_data</span><span class="op">&lt;</span><span class="ident">P</span><span class="op">&gt;</span>(<span class="ident">data</span>: <span class="ident">String</span>, <span class="ident">key</span>: <span class="ident">String</span>, <span class="ident">resource_path</span>: <span class="ident">P</span>) -&gt; <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span>
 	<span class="kw">where</span>
 		<span class="ident">P</span>: <span class="ident">AsRef</span><span class="op">&lt;</span><span class="ident">Path</span><span class="op">&gt;</span>
@@ -322,15 +293,16 @@
 
 	<span class="doccomment">/// Render the contents of a frame into the buffer at a certain viewport size.</span>
 	<span class="doccomment">///</span>
-	<span class="doccomment">/// The buffer&#39;s capacity must be at least `size.width * size.height`. It&#39;s initial length</span>
-	<span class="doccomment">/// or content doesn&#39;t matter. The first `size.width * size.height` bytes of the buffer</span>
-	<span class="doccomment">/// will be written to; and it&#39;s length will be set exactly to `size.width * size.height`.</span>
+	<span class="doccomment">/// The buffer&#39;s capacity must be at least `size.width * size.height`. It&#39;s</span>
+	<span class="doccomment">/// initial length or content doesn&#39;t matter. The first `size.width * size.height`</span>
+	<span class="doccomment">/// bytes of the buffer will be written to; and it&#39;s length will be set exactly</span>
+	<span class="doccomment">/// to `size.width * size.height`.</span>
 	<span class="doccomment">///</span>
 	<span class="doccomment">/// This operation will fail only if the buffer&#39;s capacity isn&#39;t large enough.</span>
 	<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">render</span>(
 		<span class="kw-2">&amp;mut</span> <span class="self">self</span>,
 		<span class="ident">frame_num</span>: <span class="ident">u64</span>,
-		<span class="ident">buffer</span>: <span class="kw-2">&amp;mut</span> <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">Argb</span><span class="op">&gt;</span>,
+		<span class="ident">buffer</span>: <span class="kw-2">&amp;mut</span> <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">BGRA8</span><span class="op">&gt;</span>,
 		<span class="ident">size</span>: <span class="ident">Size</span>
 	) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">RenderError</span><span class="op">&gt;</span> {
 		<span class="kw">let</span> <span class="ident">buffer_len</span> <span class="op">=</span> (<span class="ident">size</span>.<span class="ident">width</span> <span class="op">*</span> <span class="ident">size</span>.<span class="ident">height</span>) <span class="kw">as</span> <span class="ident">usize</span>;
