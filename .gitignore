@@ -1,5 +1,17 @@
+# rust/cargo
 target/
 Cargo.lock
+
+# emacs
 *~
 \#*
 .#*
+
+# intellij
+.idea/
+
+# local test files
+lottie2webp/*.json
+lottie2webp/*.webp
+lottie2gif/*.json
+lottie2gif/*.gif
