@@ -199,45 +199,6 @@
 <span id="195">195</span>
 <span id="196">196</span>
 <span id="197">197</span>
-<span id="198">198</span>
-<span id="199">199</span>
-<span id="200">200</span>
-<span id="201">201</span>
-<span id="202">202</span>
-<span id="203">203</span>
-<span id="204">204</span>
-<span id="205">205</span>
-<span id="206">206</span>
-<span id="207">207</span>
-<span id="208">208</span>
-<span id="209">209</span>
-<span id="210">210</span>
-<span id="211">211</span>
-<span id="212">212</span>
-<span id="213">213</span>
-<span id="214">214</span>
-<span id="215">215</span>
-<span id="216">216</span>
-<span id="217">217</span>
-<span id="218">218</span>
-<span id="219">219</span>
-<span id="220">220</span>
-<span id="221">221</span>
-<span id="222">222</span>
-<span id="223">223</span>
-<span id="224">224</span>
-<span id="225">225</span>
-<span id="226">226</span>
-<span id="227">227</span>
-<span id="228">228</span>
-<span id="229">229</span>
-<span id="230">230</span>
-<span id="231">231</span>
-<span id="232">232</span>
-<span id="233">233</span>
-<span id="234">234</span>
-<span id="235">235</span>
-<span id="236">236</span>
 </pre><pre class="rust"><code><span class="doccomment">//! Convert lottie animations to GIF files.</span>
 
 <span class="attribute">#![<span class="ident">warn</span>(<span class="ident">rust_2018_idioms</span>)]</span>
@@ -252,6 +213,9 @@
 };
 
 <span class="kw">pub</span> <span class="kw">use</span> <span class="ident">rlottie::Animation</span>;
+
+<span class="attribute">#[<span class="ident">macro_use</span>]</span>
+<span class="kw">mod</span> <span class="ident">util</span>;
 
 <span class="doccomment">/// Color definition used for the background color of the GIF.</span>
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Clone</span>, <span class="ident">Copy</span>, <span class="ident">Debug</span>)]</span>
@@ -321,48 +285,6 @@
 	<span class="kw">const</span> <span class="kw">_</span>: () <span class="op">=</span> {
 		<span class="ident">AssertSize</span>::<span class="op">&lt;</span>{ <span class="ident">mem::size_of</span>::<span class="op">&lt;</span><span class="ident">RGBA8</span><span class="op">&gt;</span>() }<span class="op">&gt;</span><span class="ident">::new</span>().<span class="ident">assert_size_u8_4</span>();
 		<span class="ident">AssertSize</span>::<span class="op">&lt;</span>{ <span class="ident">mem::size_of</span>::<span class="op">&lt;</span>[<span class="ident">u8</span>; <span class="number">4</span>]<span class="op">&gt;</span>() }<span class="op">&gt;</span><span class="ident">::new</span>().<span class="ident">assert_size_u8_4</span>();
-	};
-}
-
-<span class="macro">macro_rules!</span> <span class="ident">auto_vectorize</span> {
-	(
-		<span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">ident</span>:<span class="ident">ident</span>($(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">arg_ident</span>:<span class="ident">ident</span> : <span class="macro-nonterminal">$</span><span class="macro-nonterminal">arg_ty</span>:<span class="ident">ty</span>),<span class="kw-2">*</span>) $(-&gt; <span class="macro-nonterminal">$</span><span class="macro-nonterminal">ret</span>:<span class="ident">ty</span>)<span class="question-mark">?</span> {
-			$(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">body</span>:<span class="ident">tt</span>)<span class="op">*</span>
-		}
-	) =&gt; {
-		<span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">ident</span>($(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">arg_ident</span>: <span class="macro-nonterminal">$</span><span class="macro-nonterminal">arg_ty</span>),<span class="kw-2">*</span>) $(-&gt; <span class="macro-nonterminal">$</span><span class="macro-nonterminal">ret</span>)<span class="question-mark">?</span> {
-			<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">any</span>(<span class="ident">target_arch</span> <span class="op">=</span> <span class="string">&quot;x86&quot;</span>, <span class="ident">target_arch</span> <span class="op">=</span> <span class="string">&quot;x86_64&quot;</span>))]</span>
-			<span class="attribute">#[<span class="ident">target_feature</span>(<span class="ident">enable</span> <span class="op">=</span> <span class="string">&quot;avx2&quot;</span>)]</span>
-			<span class="attribute">#[<span class="ident">target_feature</span>(<span class="ident">enable</span> <span class="op">=</span> <span class="string">&quot;bmi1&quot;</span>)]</span>
-			<span class="attribute">#[<span class="ident">target_feature</span>(<span class="ident">enable</span> <span class="op">=</span> <span class="string">&quot;bmi2&quot;</span>)]</span>
-			<span class="attribute">#[<span class="ident">allow</span>(<span class="ident">unused_unsafe</span>)]</span>
-			<span class="kw">unsafe</span> <span class="kw">fn</span> <span class="ident">avx2</span>($(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">arg_ident</span>: <span class="macro-nonterminal">$</span><span class="macro-nonterminal">arg_ty</span>),<span class="kw-2">*</span>) $(-&gt; <span class="macro-nonterminal">$</span><span class="macro-nonterminal">ret</span>)<span class="question-mark">?</span> {
-				$(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">body</span>)<span class="op">*</span>
-			}
-
-			<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">any</span>(<span class="ident">target_arch</span> <span class="op">=</span> <span class="string">&quot;x86&quot;</span>, <span class="ident">target_arch</span> <span class="op">=</span> <span class="string">&quot;x86_64&quot;</span>))]</span>
-			<span class="attribute">#[<span class="ident">target_feature</span>(<span class="ident">enable</span> <span class="op">=</span> <span class="string">&quot;sse4.1&quot;</span>)]</span>
-			<span class="attribute">#[<span class="ident">allow</span>(<span class="ident">unused_unsafe</span>)]</span>
-			<span class="kw">unsafe</span> <span class="kw">fn</span> <span class="ident">sse4_1</span>($(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">arg_ident</span>: <span class="macro-nonterminal">$</span><span class="macro-nonterminal">arg_ty</span>),<span class="kw-2">*</span>) $(-&gt; <span class="macro-nonterminal">$</span><span class="macro-nonterminal">ret</span>)<span class="question-mark">?</span> {
-				$(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">body</span>)<span class="op">*</span>
-			}
-
-			<span class="kw">fn</span> <span class="ident">fallback</span>($(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">arg_ident</span>: <span class="macro-nonterminal">$</span><span class="macro-nonterminal">arg_ty</span>),<span class="kw-2">*</span>) $(-&gt; <span class="macro-nonterminal">$</span><span class="macro-nonterminal">ret</span>)<span class="question-mark">?</span> {
-				$(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">body</span>)<span class="op">*</span>
-			}
-
-			<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">any</span>(<span class="ident">target_arch</span> <span class="op">=</span> <span class="string">&quot;x86&quot;</span>, <span class="ident">target_arch</span> <span class="op">=</span> <span class="string">&quot;x86_64&quot;</span>))]</span>
-			<span class="kw">if</span> <span class="macro">is_x86_feature_detected!</span>(<span class="string">&quot;avx2&quot;</span>) {
-				<span class="kw">return</span> <span class="kw">unsafe</span> { <span class="ident">avx2</span>($(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">arg_ident</span>),<span class="kw-2">*</span>) };
-			}
-
-			<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">any</span>(<span class="ident">target_arch</span> <span class="op">=</span> <span class="string">&quot;x86&quot;</span>, <span class="ident">target_arch</span> <span class="op">=</span> <span class="string">&quot;x86_64&quot;</span>))]</span>
-			<span class="kw">if</span> <span class="macro">is_x86_feature_detected!</span>(<span class="string">&quot;sse4.1&quot;</span>) {
-				<span class="kw">return</span> <span class="kw">unsafe</span> { <span class="ident">sse4_1</span>($(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">arg_ident</span>),<span class="kw-2">*</span>) };
-			}
-
-			<span class="ident">fallback</span>($(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">arg_ident</span>),<span class="kw-2">*</span>)
-		}
 	};
 }
 
