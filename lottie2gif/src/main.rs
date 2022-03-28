@@ -29,12 +29,8 @@ fn main() {
 	let path = args.lottie_file_name;
 	let file_stem = path.file_stem().expect("Missing file stem");
 	let bg_color = u32::from_str_radix(&args.bg_color, 16).expect("Invalid bgColor");
-	let bg = Color {
-		r: ((bg_color >> 16) & 0xFF) as u8,
-		g: ((bg_color >> 8) & 0xFF) as u8,
-		b: (bg_color & 0xFF) as u8,
-		alpha: !args.bg_non_transparent
-	};
+	let bg = Color::from_hex(bg_color, !args.bg_non_transparent)
+		.expect("Invalid bgColor");
 
 	println!("Converting file {} ...", path.display());
 	let player = Animation::from_file(&path).expect("Failed to open file");

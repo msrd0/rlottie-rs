@@ -5,7 +5,11 @@
 
 use gif::{DisposalMethod, Encoder, EncodingError, Frame, Repeat};
 use rgb::{alt::BGRA8, RGBA8};
-use std::{io::Write, slice};
+use std::{
+	fmt::{self, Display, Formatter},
+	io::Write,
+	slice
+};
 
 pub use rlottie::Animation;
 
@@ -26,6 +30,33 @@ pub struct Color {
 	/// background color was not transparent.
 	pub alpha: bool
 }
+
+impl Color {
+	pub fn from_hex(hex: u32, alpha: bool) -> Result<Self, InvalidHex> {
+		if hex >> 24 != 0 {
+			return Err(InvalidHex);
+		}
+		Ok(Self {
+			r: ((hex >> 16) & 0xFF) as u8,
+			g: ((hex >> 8) & 0xFF) as u8,
+			b: (hex & 0xFF) as u8,
+			alpha
+		})
+	}
+}
+
+/// Error type returned if an invalid hex value was passed to [`Color::from_hex`].
+#[derive(Clone, Copy, Debug)]
+#[non_exhaustive]
+pub struct InvalidHex;
+
+impl Display for InvalidHex {
+	fn fmt(&self, f: &mut Formatter<'_>) -> fmt::Result {
+		write!(f, "invalid hex")
+	}
+}
+
+impl std::error::Error for InvalidHex {}
 
 /// It is very important that [`RGBA8`] and `[u8; 4]` have exactly the same size.
 /// This mod does nothing other than fail to compile if that was not the case.
@@ -182,4 +213,24 @@ pub fn convert<W: Write>(
 	}
 
 	Ok(())
+}
+
+#[cfg(test)]
+mod tests {
+	use super::*;
+
+	#[test]
+	fn color_from_hex() {
+		let color = Color::from_hex(0x010203, true).unwrap();
+		assert_eq!(color.r, 1);
+		assert_eq!(color.g, 2);
+		assert_eq!(color.b, 3);
+		assert!(color.alpha);
+	}
+
+	#[test]
+	fn color_from_invalid_hex() {
+		let color = Color::from_hex(0xFF00FF00, true);
+		assert!(color.is_err());
+	}
 }
