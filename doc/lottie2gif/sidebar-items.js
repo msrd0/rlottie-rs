@@ -1,1 +1,1 @@
-initSidebarItems({"fn":[["convert","Convert a lottie animation to a GIF file."]],"struct":[["Animation","A lottie animation."],["Color","Color definition used for the background color of the GIF."]]});
+initSidebarItems({"fn":[["convert","Convert a lottie animation to a GIF file."]],"struct":[["Animation","A lottie animation."],["Color","Color definition used for the background color of the GIF."],["InvalidHex","Error type returned if an invalid hex value was passed to [`Color::from_hex`]."]]});

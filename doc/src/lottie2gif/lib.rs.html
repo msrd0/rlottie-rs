@@ -187,6 +187,57 @@
 <span id="183">183</span>
 <span id="184">184</span>
 <span id="185">185</span>
+<span id="186">186</span>
+<span id="187">187</span>
+<span id="188">188</span>
+<span id="189">189</span>
+<span id="190">190</span>
+<span id="191">191</span>
+<span id="192">192</span>
+<span id="193">193</span>
+<span id="194">194</span>
+<span id="195">195</span>
+<span id="196">196</span>
+<span id="197">197</span>
+<span id="198">198</span>
+<span id="199">199</span>
+<span id="200">200</span>
+<span id="201">201</span>
+<span id="202">202</span>
+<span id="203">203</span>
+<span id="204">204</span>
+<span id="205">205</span>
+<span id="206">206</span>
+<span id="207">207</span>
+<span id="208">208</span>
+<span id="209">209</span>
+<span id="210">210</span>
+<span id="211">211</span>
+<span id="212">212</span>
+<span id="213">213</span>
+<span id="214">214</span>
+<span id="215">215</span>
+<span id="216">216</span>
+<span id="217">217</span>
+<span id="218">218</span>
+<span id="219">219</span>
+<span id="220">220</span>
+<span id="221">221</span>
+<span id="222">222</span>
+<span id="223">223</span>
+<span id="224">224</span>
+<span id="225">225</span>
+<span id="226">226</span>
+<span id="227">227</span>
+<span id="228">228</span>
+<span id="229">229</span>
+<span id="230">230</span>
+<span id="231">231</span>
+<span id="232">232</span>
+<span id="233">233</span>
+<span id="234">234</span>
+<span id="235">235</span>
+<span id="236">236</span>
 </pre><pre class="rust"><code><span class="doccomment">//! Convert lottie animations to GIF files.</span>
 
 <span class="attribute">#![<span class="ident">warn</span>(<span class="ident">rust_2018_idioms</span>)]</span>
@@ -194,7 +245,11 @@
 
 <span class="kw">use</span> <span class="ident">gif</span>::{<span class="ident">DisposalMethod</span>, <span class="ident">Encoder</span>, <span class="ident">EncodingError</span>, <span class="ident">Frame</span>, <span class="ident">Repeat</span>};
 <span class="kw">use</span> <span class="ident">rgb</span>::{<span class="ident">alt::BGRA8</span>, <span class="ident">RGBA8</span>};
-<span class="kw">use</span> <span class="ident">std</span>::{<span class="ident">io::Write</span>, <span class="ident">slice</span>};
+<span class="kw">use</span> <span class="ident">std</span>::{
+	<span class="ident">fmt</span>::{<span class="self">self</span>, <span class="ident">Display</span>, <span class="ident">Formatter</span>},
+	<span class="ident">io::Write</span>,
+	<span class="ident">slice</span>
+};
 
 <span class="kw">pub</span> <span class="kw">use</span> <span class="ident">rlottie::Animation</span>;
 
@@ -215,6 +270,33 @@
 	<span class="doccomment">/// background color was not transparent.</span>
 	<span class="kw">pub</span> <span class="ident">alpha</span>: <span class="ident">bool</span>
 }
+
+<span class="kw">impl</span> <span class="ident">Color</span> {
+	<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">from_hex</span>(<span class="ident">hex</span>: <span class="ident">u32</span>, <span class="ident">alpha</span>: <span class="ident">bool</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="self">Self</span>, <span class="ident">InvalidHex</span><span class="op">&gt;</span> {
+		<span class="kw">if</span> <span class="ident">hex</span> <span class="op">&gt;</span><span class="op">&gt;</span> <span class="number">24</span> <span class="op">!</span><span class="op">=</span> <span class="number">0</span> {
+			<span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">InvalidHex</span>);
+		}
+		<span class="prelude-val">Ok</span>(<span class="self">Self</span> {
+			<span class="ident">r</span>: ((<span class="ident">hex</span> <span class="op">&gt;</span><span class="op">&gt;</span> <span class="number">16</span>) <span class="op">&amp;</span> <span class="number">0xFF</span>) <span class="kw">as</span> <span class="ident">u8</span>,
+			<span class="ident">g</span>: ((<span class="ident">hex</span> <span class="op">&gt;</span><span class="op">&gt;</span> <span class="number">8</span>) <span class="op">&amp;</span> <span class="number">0xFF</span>) <span class="kw">as</span> <span class="ident">u8</span>,
+			<span class="ident">b</span>: (<span class="ident">hex</span> <span class="op">&amp;</span> <span class="number">0xFF</span>) <span class="kw">as</span> <span class="ident">u8</span>,
+			<span class="ident">alpha</span>
+		})
+	}
+}
+
+<span class="doccomment">/// Error type returned if an invalid hex value was passed to [`Color::from_hex`].</span>
+<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Clone</span>, <span class="ident">Copy</span>, <span class="ident">Debug</span>)]</span>
+<span class="attribute">#[<span class="ident">non_exhaustive</span>]</span>
+<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">InvalidHex</span>;
+
+<span class="kw">impl</span> <span class="ident">Display</span> <span class="kw">for</span> <span class="ident">InvalidHex</span> {
+	<span class="kw">fn</span> <span class="ident">fmt</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">f</span>: <span class="kw-2">&amp;mut</span> <span class="ident">Formatter</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>) -&gt; <span class="ident">fmt::Result</span> {
+		<span class="macro">write!</span>(<span class="ident">f</span>, <span class="string">&quot;invalid hex&quot;</span>)
+	}
+}
+
+<span class="kw">impl</span> <span class="ident">std::error::Error</span> <span class="kw">for</span> <span class="ident">InvalidHex</span> {}
 
 <span class="doccomment">/// It is very important that [`RGBA8`] and `[u8; 4]` have exactly the same size.</span>
 <span class="doccomment">/// This mod does nothing other than fail to compile if that was not the case.</span>
@@ -371,6 +453,26 @@
 	}
 
 	<span class="prelude-val">Ok</span>(())
+}
+
+<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">test</span>)]</span>
+<span class="kw">mod</span> <span class="ident">tests</span> {
+	<span class="kw">use</span> <span class="kw">super</span>::<span class="kw-2">*</span>;
+
+	<span class="attribute">#[<span class="ident">test</span>]</span>
+	<span class="kw">fn</span> <span class="ident">color_from_hex</span>() {
+		<span class="kw">let</span> <span class="ident">color</span> <span class="op">=</span> <span class="ident">Color::from_hex</span>(<span class="number">0x010203</span>, <span class="bool-val">true</span>).<span class="ident">unwrap</span>();
+		<span class="macro">assert_eq!</span>(<span class="ident">color</span>.<span class="ident">r</span>, <span class="number">1</span>);
+		<span class="macro">assert_eq!</span>(<span class="ident">color</span>.<span class="ident">g</span>, <span class="number">2</span>);
+		<span class="macro">assert_eq!</span>(<span class="ident">color</span>.<span class="ident">b</span>, <span class="number">3</span>);
+		<span class="macro">assert!</span>(<span class="ident">color</span>.<span class="ident">alpha</span>);
+	}
+
+	<span class="attribute">#[<span class="ident">test</span>]</span>
+	<span class="kw">fn</span> <span class="ident">color_from_invalid_hex</span>() {
+		<span class="kw">let</span> <span class="ident">color</span> <span class="op">=</span> <span class="ident">Color::from_hex</span>(<span class="number">0xFF00FF00</span>, <span class="bool-val">true</span>);
+		<span class="macro">assert!</span>(<span class="ident">color</span>.<span class="ident">is_err</span>());
+	}
 }
 </code></pre></div>
 </section><section id="search" class="content hidden"></section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="lottie2gif" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.59.0 (9d1b2106e 2022-02-23)" ></div>
