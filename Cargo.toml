@@ -3,6 +3,7 @@
 [workspace]
 members = [
 	"lottie2gif",
+	"lottie2webp",
 	"rlottie",
 	"rlottie-sys"
 ]

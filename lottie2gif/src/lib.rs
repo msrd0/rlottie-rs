@@ -151,7 +151,7 @@ pub fn convert<W: Write>(
 		argb_to_rgba(bg, &buffer_argb, &mut buffer_rgba);
 
 		let mut frame = {
-			// Safety: The pointer is valid and align since it comes from a vec, and we don't
+			// Safety: The pointer is valid and aligned since it comes from a vec, and we don't
 			// use the vec while the slice exists.
 			let buffer_rgba = unsafe {
 				slice::from_raw_parts_mut(

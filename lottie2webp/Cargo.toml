@@ -1,0 +1,25 @@
+# -*- eval: (cargo-minor-mode 1) -*-
+
+[package]
+workspace = ".."
+name = "lottie2webp"
+version = "0.1.0"
+license = "MIT"
+include = ["src/**/*.rs", "/LICENSE"]
+
+description = "Convert lottie files to WEBP"
+repository = "https://github.com/msrd0/rlottie-rs"
+
+edition = "2021"
+rust-version = "1.56"
+autobins = false
+
+[[bin]]
+name = "lottie2webp"
+required-features = ["clap"]
+
+[dependencies]
+clap = { version = "3.0", features = ["derive"], optional = true }
+rgb = { version = "0.8.32", default-features = false }
+rlottie = { path = "../rlottie", version = "0.3.0" }
+webp-animation = "0.5.0"
