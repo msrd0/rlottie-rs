@@ -172,6 +172,17 @@
 <span id="168">168</span>
 <span id="169">169</span>
 <span id="170">170</span>
+<span id="171">171</span>
+<span id="172">172</span>
+<span id="173">173</span>
+<span id="174">174</span>
+<span id="175">175</span>
+<span id="176">176</span>
+<span id="177">177</span>
+<span id="178">178</span>
+<span id="179">179</span>
+<span id="180">180</span>
+<span id="181">181</span>
 </pre><pre class="rust"><code><span class="attribute">#![<span class="ident">warn</span>(<span class="ident">rust_2018_idioms</span>)]</span>
 <span class="attribute">#![<span class="ident">deny</span>(<span class="ident">unreachable_pub</span>)]</span>
 <span class="attribute">#![<span class="ident">cfg_attr</span>(<span class="ident">target_pointer_width</span> <span class="op">=</span> <span class="string">&quot;64&quot;</span>, <span class="ident">allow</span>(<span class="ident">clippy::useless_conversion</span>))]</span>
@@ -180,7 +191,12 @@
 
 <span class="kw">use</span> <span class="ident">rgb::alt::BGRA8</span>;
 <span class="kw">use</span> <span class="ident">rlottie_sys</span>::<span class="kw-2">*</span>;
-<span class="kw">use</span> <span class="ident">std</span>::{<span class="ident">ffi::CString</span>, <span class="ident">os::unix::ffi::OsStrExt</span>, <span class="ident">path::Path</span>};
+<span class="kw">use</span> <span class="ident">std</span>::{
+	<span class="ident">ffi::CString</span>,
+	<span class="ident">fmt</span>::{<span class="self">self</span>, <span class="ident">Debug</span>},
+	<span class="ident">os::unix::ffi::OsStrExt</span>,
+	<span class="ident">path::Path</span>
+};
 
 <span class="kw">fn</span> <span class="ident">path_to_cstr</span><span class="op">&lt;</span><span class="ident">P</span><span class="op">&gt;</span>(<span class="ident">path</span>: <span class="ident">P</span>) -&gt; <span class="ident">CString</span>
 <span class="kw">where</span>
@@ -235,6 +251,12 @@
 
 <span class="doccomment">/// A lottie animation.</span>
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">Animation</span>(<span class="kw-2">*mut</span> <span class="ident">Lottie_Animation_S</span>);
+
+<span class="kw">impl</span> <span class="ident">Debug</span> <span class="kw">for</span> <span class="ident">Animation</span> {
+	<span class="kw">fn</span> <span class="ident">fmt</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">f</span>: <span class="kw-2">&amp;mut</span> <span class="ident">fmt::Formatter</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>) -&gt; <span class="ident">fmt::Result</span> {
+		<span class="ident">f</span>.<span class="ident">debug_struct</span>(<span class="string">&quot;Animation&quot;</span>).<span class="ident">finish_non_exhaustive</span>()
+	}
+}
 
 <span class="kw">impl</span> <span class="ident">Drop</span> <span class="kw">for</span> <span class="ident">Animation</span> {
 	<span class="kw">fn</span> <span class="ident">drop</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>) {
