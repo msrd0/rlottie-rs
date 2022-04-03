@@ -19,20 +19,20 @@ mod util;
 mod rgba_size {
 	use rgb::RGBA8;
 	use std::{marker::PhantomData, mem};
-	
+
 	#[derive(Default)]
 	struct AssertSize<const N: usize>(PhantomData<[(); N]>);
-	
+
 	impl<const N: usize> AssertSize<N> {
 		const fn new() -> Self {
 			Self(PhantomData)
 		}
 	}
-	
+
 	impl AssertSize<4> {
 		const fn assert_size_u8_4(self) {}
 	}
-	
+
 	const _: () = {
 		AssertSize::<{ mem::size_of::<RGBA8>() }>::new().assert_size_u8_4();
 		AssertSize::<{ mem::size_of::<[u8; 4]>() }>::new().assert_size_u8_4();

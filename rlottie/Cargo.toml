@@ -3,7 +3,7 @@
 [package]
 workspace = ".."
 name = "rlottie"
-version = "0.3.1"
+version = "0.4.0"
 license = "MIT"
 include = ["build.rs", "src/**/*.rs", "/LICENSE"]
 
@@ -15,4 +15,4 @@ rust-version = "1.56"
 
 [dependencies]
 rgb = { version = "0.8.32", default-features = false }
-rlottie-sys = { path = "../rlottie-sys", version = "0.1.0" }
+rlottie-sys = { path = "../rlottie-sys", version = "0.2.0" }
