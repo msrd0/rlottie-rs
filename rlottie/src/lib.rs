@@ -6,7 +6,12 @@
 
 use rgb::alt::BGRA8;
 use rlottie_sys::*;
-use std::{ffi::CString, os::unix::ffi::OsStrExt, path::Path};
+use std::{
+	ffi::CString,
+	fmt::{self, Debug},
+	os::unix::ffi::OsStrExt,
+	path::Path
+};
 
 fn path_to_cstr<P>(path: P) -> CString
 where
@@ -61,6 +66,12 @@ mod bgra8_size {
 
 /// A lottie animation.
 pub struct Animation(*mut Lottie_Animation_S);
+
+impl Debug for Animation {
+	fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+		f.debug_struct("Animation").finish_non_exhaustive()
+	}
+}
 
 impl Drop for Animation {
 	fn drop(&mut self) {
