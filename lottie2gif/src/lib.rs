@@ -1,10 +1,11 @@
 //! Convert lottie animations to GIF files.
 
 #![warn(rust_2018_idioms)]
-#![deny(unreachable_pub)]
+#![deny(elided_lifetimes_in_paths, unreachable_pub)]
 
 use gif::{DisposalMethod, Encoder, EncodingError, Frame, Repeat};
 use rgb::{alt::BGRA8, RGBA8};
+use rlottie::Surface;
 use std::{
 	fmt::{self, Display, Formatter},
 	io::Write,
@@ -12,7 +13,6 @@ use std::{
 };
 
 pub use rlottie::Animation;
-use rlottie::Surface;
 
 #[macro_use]
 mod util;

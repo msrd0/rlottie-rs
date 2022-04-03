@@ -1,7 +1,14 @@
+//! Convert lottie animations to WEBP files.
+
+#![warn(rust_2018_idioms)]
+#![deny(elided_lifetimes_in_paths, unreachable_pub)]
+
 use rgb::{alt::BGRA8, RGBA8};
-use rlottie::{Animation, Surface};
+use rlottie::Surface;
 use std::slice;
 use webp_animation::{Encoder, WebPData};
+
+pub use rlottie::Animation;
 
 #[macro_use]
 mod util;
