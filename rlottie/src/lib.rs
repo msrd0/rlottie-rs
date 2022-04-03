@@ -1,6 +1,5 @@
 #![warn(rust_2018_idioms)]
-#![deny(unreachable_pub)]
-#![cfg_attr(target_pointer_width = "64", allow(clippy::useless_conversion))]
+#![deny(elided_lifetimes_in_paths, unreachable_pub)]
 
 //! Safe Rust bindings to rlottie.
 
@@ -24,17 +23,21 @@ where
 /// The size type used by lottie [`Animation`].
 #[derive(Clone, Copy, Debug, Eq, Ord, PartialEq, PartialOrd)]
 pub struct Size {
-	width: size_t,
-	height: size_t
+	pub width: usize,
+	pub height: usize
 }
 
 impl Size {
-	pub fn width(&self) -> u64 {
-		self.width.into()
+	pub const fn new(width: usize, height: usize) -> Self {
+		Self { width, height }
 	}
 
-	pub fn height(&self) -> u64 {
-		self.height.into()
+	pub const fn width(&self) -> usize {
+		self.width
+	}
+
+	pub const fn height(&self) -> usize {
+		self.height
 	}
 }
 
@@ -130,8 +133,8 @@ impl Animation {
 	}
 
 	/// Return the total number of frames in this animation.
-	pub fn totalframe(&self) -> u64 {
-		unsafe { lottie_animation_get_totalframe(self.0) }.into()
+	pub fn totalframe(&self) -> usize {
+		unsafe { lottie_animation_get_totalframe(self.0) }
 	}
 
 	/// Return the default framerate of this animation.
@@ -140,8 +143,8 @@ impl Animation {
 	}
 
 	/// Maps position to frame number and returns it.
-	pub fn frame_at_pos(&self, pos: f32) -> u64 {
-		unsafe { lottie_animation_get_frame_at_pos(self.0, pos) }.into()
+	pub fn frame_at_pos(&self, pos: f32) -> usize {
+		unsafe { lottie_animation_get_frame_at_pos(self.0, pos) }
 	}
 
 	/// Render the contents of a frame into the buffer at a certain viewport size.
@@ -154,7 +157,7 @@ impl Animation {
 	/// This operation will fail only if the buffer's capacity isn't large enough.
 	pub fn render(
 		&mut self,
-		frame_num: u64,
+		frame_num: usize,
 		buffer: &mut Vec<BGRA8>,
 		size: Size
 	) -> Result<(), RenderError> {
@@ -165,7 +168,7 @@ impl Animation {
 		unsafe {
 			lottie_animation_render(
 				self.0,
-				frame_num.try_into().unwrap(),
+				frame_num,
 				buffer.as_mut_ptr() as *mut u32,
 				size.width,
 				size.height,
