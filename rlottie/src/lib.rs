@@ -60,6 +60,7 @@ mod bgra8_size {
 }
 
 /// A lottie animation.
+#[derive(Debug)]
 pub struct Animation(*mut Lottie_Animation_S);
 
 impl Drop for Animation {
