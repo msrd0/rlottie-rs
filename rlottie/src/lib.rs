@@ -31,14 +31,6 @@ impl Size {
 	pub const fn new(width: usize, height: usize) -> Self {
 		Self { width, height }
 	}
-
-	pub const fn width(&self) -> usize {
-		self.width
-	}
-
-	pub const fn height(&self) -> usize {
-		self.height
-	}
 }
 
 /// It is very important that [`BGRA8`] and `u32` have exactly the same size. This
@@ -65,6 +57,53 @@ mod bgra8_size {
 		AssertSize::<{ mem::size_of::<BGRA8>() }>::new().assert_size_u32();
 		AssertSize::<{ mem::size_of::<u32>() }>::new().assert_size_u32();
 	};
+}
+
+/// A surface has a fixed size and contains pixel data for it. You can render frames onto
+/// the surface.
+pub struct Surface {
+	data: Vec<BGRA8>,
+	size: Size
+}
+
+impl Surface {
+	/// Create a new surface with a fixed size.
+	pub fn new(size: Size) -> Self {
+		Self {
+			data: Vec::with_capacity(size.width * size.height),
+			size
+		}
+	}
+
+	/// Return the size of the surface.
+	pub fn size(&self) -> Size {
+		self.size
+	}
+
+	/// Return the width of the surface.
+	pub fn width(&self) -> usize {
+		self.size.width
+	}
+
+	/// Return the height of the surface.
+	pub fn height(&self) -> usize {
+		self.size.height
+	}
+
+	/// Return the pixel data of the surface.
+	pub fn data(&self) -> &[BGRA8] {
+		&self.data
+	}
+
+	/// Return a pointer to the pixel data.
+	fn as_mut_ptr(&mut self) -> *mut u32 {
+		self.data.as_mut_ptr() as *mut u32
+	}
+
+	/// Set the length of the pixel data to `width * height`.
+	unsafe fn set_len(&mut self) {
+		self.data.set_len(self.width() * self.height())
+	}
 }
 
 /// A lottie animation.
@@ -147,38 +186,18 @@ impl Animation {
 		unsafe { lottie_animation_get_frame_at_pos(self.0, pos) }
 	}
 
-	/// Render the contents of a frame into the buffer at a certain viewport size.
-	///
-	/// The buffer's capacity must be at least `size.width * size.height`. It's
-	/// initial length or content doesn't matter. The first `size.width * size.height`
-	/// bytes of the buffer will be written to; and it's length will be set exactly
-	/// to `size.width * size.height`.
-	///
-	/// This operation will fail only if the buffer's capacity isn't large enough.
-	pub fn render(
-		&mut self,
-		frame_num: usize,
-		buffer: &mut Vec<BGRA8>,
-		size: Size
-	) -> Result<(), RenderError> {
-		let buffer_len = (size.width * size.height) as usize;
-		if buffer.capacity() < buffer_len {
-			return Err(RenderError);
-		}
+	/// Render the contents of a frame onto the surface.
+	pub fn render(&mut self, frame_num: usize, surface: &mut Surface) {
 		unsafe {
 			lottie_animation_render(
 				self.0,
 				frame_num,
-				buffer.as_mut_ptr() as *mut u32,
-				size.width,
-				size.height,
-				size.width * 4
+				surface.as_mut_ptr(),
+				surface.width(),
+				surface.height(),
+				surface.width() * 4
 			);
-			buffer.set_len(buffer_len);
+			surface.set_len();
 		}
-		Ok(())
 	}
 }
-
-#[derive(Debug)]
-pub struct RenderError;
