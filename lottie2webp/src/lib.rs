@@ -13,6 +13,32 @@ pub use rlottie::Animation;
 #[macro_use]
 mod util;
 
+/// It is very important that [`RGBA8`] and `[u8; 4]` have exactly the same size.
+/// This mod does nothing other than fail to compile if that was not the case.
+#[allow(dead_code)]
+mod rgba_size {
+	use rgb::RGBA8;
+	use std::{marker::PhantomData, mem};
+	
+	#[derive(Default)]
+	struct AssertSize<const N: usize>(PhantomData<[(); N]>);
+	
+	impl<const N: usize> AssertSize<N> {
+		const fn new() -> Self {
+			Self(PhantomData)
+		}
+	}
+	
+	impl AssertSize<4> {
+		const fn assert_size_u8_4(self) {}
+	}
+	
+	const _: () = {
+		AssertSize::<{ mem::size_of::<RGBA8>() }>::new().assert_size_u8_4();
+		AssertSize::<{ mem::size_of::<[u8; 4]>() }>::new().assert_size_u8_4();
+	};
+}
+
 auto_vectorize! {
 	pub(crate) fn bgra_to_rgba(buf_bgra: &[BGRA8], buf_rgba: &mut [RGBA8]) {
 		for i in 0..buf_bgra.len() {
