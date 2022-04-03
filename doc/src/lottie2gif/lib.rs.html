@@ -199,13 +199,15 @@
 <span id="195">195</span>
 <span id="196">196</span>
 <span id="197">197</span>
+<span id="198">198</span>
 </pre><pre class="rust"><code><span class="doccomment">//! Convert lottie animations to GIF files.</span>
 
 <span class="attribute">#![<span class="ident">warn</span>(<span class="ident">rust_2018_idioms</span>)]</span>
-<span class="attribute">#![<span class="ident">deny</span>(<span class="ident">unreachable_pub</span>)]</span>
+<span class="attribute">#![<span class="ident">deny</span>(<span class="ident">elided_lifetimes_in_paths</span>, <span class="ident">unreachable_pub</span>)]</span>
 
 <span class="kw">use</span> <span class="ident">gif</span>::{<span class="ident">DisposalMethod</span>, <span class="ident">Encoder</span>, <span class="ident">EncodingError</span>, <span class="ident">Frame</span>, <span class="ident">Repeat</span>};
 <span class="kw">use</span> <span class="ident">rgb</span>::{<span class="ident">alt::BGRA8</span>, <span class="ident">RGBA8</span>};
+<span class="kw">use</span> <span class="ident">rlottie::Surface</span>;
 <span class="kw">use</span> <span class="ident">std</span>::{
 	<span class="ident">fmt</span>::{<span class="self">self</span>, <span class="ident">Display</span>, <span class="ident">Formatter</span>},
 	<span class="ident">io::Write</span>,
@@ -340,16 +342,16 @@
 	<span class="kw">let</span> <span class="ident">size</span> <span class="op">=</span> <span class="ident">player</span>.<span class="ident">size</span>();
 	<span class="kw">let</span> <span class="ident">framerate</span> <span class="op">=</span> <span class="ident">player</span>.<span class="ident">framerate</span>();
 	<span class="kw">let</span> <span class="ident">delay</span> <span class="op">=</span> (<span class="number">100.0</span> <span class="op">/</span> <span class="ident">framerate</span>).<span class="ident">round</span>() <span class="kw">as</span> <span class="ident">u16</span>;
-	<span class="kw">let</span> <span class="ident">buffer_len</span> <span class="op">=</span> <span class="ident">size</span>.<span class="ident">width</span>() <span class="kw">as</span> <span class="ident">usize</span> <span class="op">*</span> <span class="ident">size</span>.<span class="ident">height</span>() <span class="kw">as</span> <span class="ident">usize</span>;
-	<span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">buffer_argb</span> <span class="op">=</span> <span class="ident">Vec::with_capacity</span>(<span class="ident">buffer_len</span>);
+	<span class="kw">let</span> <span class="ident">buffer_len</span> <span class="op">=</span> <span class="ident">size</span>.<span class="ident">width</span> <span class="op">*</span> <span class="ident">size</span>.<span class="ident">height</span>;
+	<span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">surface</span> <span class="op">=</span> <span class="ident">Surface::new</span>(<span class="ident">size</span>);
 	<span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">buffer_rgba</span> <span class="op">=</span> <span class="macro">vec!</span>[<span class="ident">RGBA8::default</span>(); <span class="ident">buffer_len</span>];
 	<span class="kw">let</span> <span class="ident">frame_count</span> <span class="op">=</span> <span class="ident">player</span>.<span class="ident">totalframe</span>();
 
-	<span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">gif</span> <span class="op">=</span> <span class="ident">Encoder::new</span>(<span class="ident">out</span>, <span class="ident">size</span>.<span class="ident">width</span>() <span class="kw">as</span> <span class="kw">_</span>, <span class="ident">size</span>.<span class="ident">height</span>() <span class="kw">as</span> <span class="kw">_</span>, <span class="kw-2">&amp;</span>[])<span class="question-mark">?</span>;
+	<span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">gif</span> <span class="op">=</span> <span class="ident">Encoder::new</span>(<span class="ident">out</span>, <span class="ident">size</span>.<span class="ident">width</span> <span class="kw">as</span> <span class="kw">_</span>, <span class="ident">size</span>.<span class="ident">height</span> <span class="kw">as</span> <span class="kw">_</span>, <span class="kw-2">&amp;</span>[])<span class="question-mark">?</span>;
 	<span class="ident">gif</span>.<span class="ident">set_repeat</span>(<span class="ident">Repeat::Infinite</span>)<span class="question-mark">?</span>;
 	<span class="kw">for</span> <span class="ident">frame</span> <span class="kw">in</span> <span class="number">0</span> .. <span class="ident">frame_count</span> {
-		<span class="ident">player</span>.<span class="ident">render</span>(<span class="ident">frame</span>, <span class="kw-2">&amp;mut</span> <span class="ident">buffer_argb</span>, <span class="ident">size</span>).<span class="ident">unwrap</span>();
-		<span class="ident">argb_to_rgba</span>(<span class="ident">bg</span>, <span class="kw-2">&amp;</span><span class="ident">buffer_argb</span>, <span class="kw-2">&amp;mut</span> <span class="ident">buffer_rgba</span>);
+		<span class="ident">player</span>.<span class="ident">render</span>(<span class="ident">frame</span>, <span class="kw-2">&amp;mut</span> <span class="ident">surface</span>);
+		<span class="ident">argb_to_rgba</span>(<span class="ident">bg</span>, <span class="ident">surface</span>.<span class="ident">data</span>(), <span class="kw-2">&amp;mut</span> <span class="ident">buffer_rgba</span>);
 
 		<span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">frame</span> <span class="op">=</span> {
 			<span class="comment">// Safety: The pointer is valid and aligned since it comes from a vec, and we don&#39;t</span>
@@ -361,8 +363,8 @@
 				)
 			};
 			<span class="ident">Frame::from_rgba_speed</span>(
-				<span class="ident">size</span>.<span class="ident">width</span>() <span class="kw">as</span> <span class="kw">_</span>,
-				<span class="ident">size</span>.<span class="ident">height</span>() <span class="kw">as</span> <span class="kw">_</span>,
+				<span class="ident">size</span>.<span class="ident">width</span> <span class="kw">as</span> <span class="kw">_</span>,
+				<span class="ident">size</span>.<span class="ident">height</span> <span class="kw">as</span> <span class="kw">_</span>,
 				<span class="ident">buffer_rgba</span>,
 				<span class="number">10</span>
 			)

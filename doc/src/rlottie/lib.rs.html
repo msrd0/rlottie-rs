@@ -186,6 +186,25 @@
 <span id="182">182</span>
 <span id="183">183</span>
 <span id="184">184</span>
+<span id="185">185</span>
+<span id="186">186</span>
+<span id="187">187</span>
+<span id="188">188</span>
+<span id="189">189</span>
+<span id="190">190</span>
+<span id="191">191</span>
+<span id="192">192</span>
+<span id="193">193</span>
+<span id="194">194</span>
+<span id="195">195</span>
+<span id="196">196</span>
+<span id="197">197</span>
+<span id="198">198</span>
+<span id="199">199</span>
+<span id="200">200</span>
+<span id="201">201</span>
+<span id="202">202</span>
+<span id="203">203</span>
 </pre><pre class="rust"><code><span class="attribute">#![<span class="ident">warn</span>(<span class="ident">rust_2018_idioms</span>)]</span>
 <span class="attribute">#![<span class="ident">deny</span>(<span class="ident">elided_lifetimes_in_paths</span>, <span class="ident">unreachable_pub</span>)]</span>
 
@@ -219,14 +238,6 @@
 	<span class="kw">pub</span> <span class="kw">const</span> <span class="kw">fn</span> <span class="ident">new</span>(<span class="ident">width</span>: <span class="ident">usize</span>, <span class="ident">height</span>: <span class="ident">usize</span>) -&gt; <span class="self">Self</span> {
 		<span class="self">Self</span> { <span class="ident">width</span>, <span class="ident">height</span> }
 	}
-
-	<span class="kw">pub</span> <span class="kw">const</span> <span class="kw">fn</span> <span class="ident">width</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">usize</span> {
-		<span class="self">self</span>.<span class="ident">width</span>
-	}
-
-	<span class="kw">pub</span> <span class="kw">const</span> <span class="kw">fn</span> <span class="ident">height</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">usize</span> {
-		<span class="self">self</span>.<span class="ident">height</span>
-	}
 }
 
 <span class="doccomment">/// It is very important that [`BGRA8`] and `u32` have exactly the same size. This</span>
@@ -253,6 +264,53 @@
 		<span class="ident">AssertSize</span>::<span class="op">&lt;</span>{ <span class="ident">mem::size_of</span>::<span class="op">&lt;</span><span class="ident">BGRA8</span><span class="op">&gt;</span>() }<span class="op">&gt;</span><span class="ident">::new</span>().<span class="ident">assert_size_u32</span>();
 		<span class="ident">AssertSize</span>::<span class="op">&lt;</span>{ <span class="ident">mem::size_of</span>::<span class="op">&lt;</span><span class="ident">u32</span><span class="op">&gt;</span>() }<span class="op">&gt;</span><span class="ident">::new</span>().<span class="ident">assert_size_u32</span>();
 	};
+}
+
+<span class="doccomment">/// A surface has a fixed size and contains pixel data for it. You can render frames onto</span>
+<span class="doccomment">/// the surface.</span>
+<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">Surface</span> {
+	<span class="ident">data</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">BGRA8</span><span class="op">&gt;</span>,
+	<span class="ident">size</span>: <span class="ident">Size</span>
+}
+
+<span class="kw">impl</span> <span class="ident">Surface</span> {
+	<span class="doccomment">/// Create a new surface with a fixed size.</span>
+	<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span>(<span class="ident">size</span>: <span class="ident">Size</span>) -&gt; <span class="self">Self</span> {
+		<span class="self">Self</span> {
+			<span class="ident">data</span>: <span class="ident">Vec::with_capacity</span>(<span class="ident">size</span>.<span class="ident">width</span> <span class="op">*</span> <span class="ident">size</span>.<span class="ident">height</span>),
+			<span class="ident">size</span>
+		}
+	}
+
+	<span class="doccomment">/// Return the size of the surface.</span>
+	<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">size</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">Size</span> {
+		<span class="self">self</span>.<span class="ident">size</span>
+	}
+
+	<span class="doccomment">/// Return the width of the surface.</span>
+	<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">width</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">usize</span> {
+		<span class="self">self</span>.<span class="ident">size</span>.<span class="ident">width</span>
+	}
+
+	<span class="doccomment">/// Return the height of the surface.</span>
+	<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">height</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">usize</span> {
+		<span class="self">self</span>.<span class="ident">size</span>.<span class="ident">height</span>
+	}
+
+	<span class="doccomment">/// Return the pixel data of the surface.</span>
+	<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">data</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw-2">&amp;</span>[<span class="ident">BGRA8</span>] {
+		<span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">data</span>
+	}
+
+	<span class="doccomment">/// Return a pointer to the pixel data.</span>
+	<span class="kw">fn</span> <span class="ident">as_mut_ptr</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>) -&gt; <span class="kw-2">*mut</span> <span class="ident">u32</span> {
+		<span class="self">self</span>.<span class="ident">data</span>.<span class="ident">as_mut_ptr</span>() <span class="kw">as</span> <span class="kw-2">*mut</span> <span class="ident">u32</span>
+	}
+
+	<span class="doccomment">/// Set the length of the pixel data to `width * height`.</span>
+	<span class="kw">unsafe</span> <span class="kw">fn</span> <span class="ident">set_len</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>) {
+		<span class="self">self</span>.<span class="ident">data</span>.<span class="ident">set_len</span>(<span class="self">self</span>.<span class="ident">width</span>() <span class="op">*</span> <span class="self">self</span>.<span class="ident">height</span>())
+	}
 }
 
 <span class="doccomment">/// A lottie animation.</span>
@@ -335,41 +393,21 @@
 		<span class="kw">unsafe</span> { <span class="ident">lottie_animation_get_frame_at_pos</span>(<span class="self">self</span>.<span class="number">0</span>, <span class="ident">pos</span>) }
 	}
 
-	<span class="doccomment">/// Render the contents of a frame into the buffer at a certain viewport size.</span>
-	<span class="doccomment">///</span>
-	<span class="doccomment">/// The buffer&#39;s capacity must be at least `size.width * size.height`. It&#39;s</span>
-	<span class="doccomment">/// initial length or content doesn&#39;t matter. The first `size.width * size.height`</span>
-	<span class="doccomment">/// bytes of the buffer will be written to; and it&#39;s length will be set exactly</span>
-	<span class="doccomment">/// to `size.width * size.height`.</span>
-	<span class="doccomment">///</span>
-	<span class="doccomment">/// This operation will fail only if the buffer&#39;s capacity isn&#39;t large enough.</span>
-	<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">render</span>(
-		<span class="kw-2">&amp;mut</span> <span class="self">self</span>,
-		<span class="ident">frame_num</span>: <span class="ident">usize</span>,
-		<span class="ident">buffer</span>: <span class="kw-2">&amp;mut</span> <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">BGRA8</span><span class="op">&gt;</span>,
-		<span class="ident">size</span>: <span class="ident">Size</span>
-	) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">RenderError</span><span class="op">&gt;</span> {
-		<span class="kw">let</span> <span class="ident">buffer_len</span> <span class="op">=</span> (<span class="ident">size</span>.<span class="ident">width</span> <span class="op">*</span> <span class="ident">size</span>.<span class="ident">height</span>) <span class="kw">as</span> <span class="ident">usize</span>;
-		<span class="kw">if</span> <span class="ident">buffer</span>.<span class="ident">capacity</span>() <span class="op">&lt;</span> <span class="ident">buffer_len</span> {
-			<span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">RenderError</span>);
-		}
+	<span class="doccomment">/// Render the contents of a frame onto the surface.</span>
+	<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">render</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">frame_num</span>: <span class="ident">usize</span>, <span class="ident">surface</span>: <span class="kw-2">&amp;mut</span> <span class="ident">Surface</span>) {
 		<span class="kw">unsafe</span> {
 			<span class="ident">lottie_animation_render</span>(
 				<span class="self">self</span>.<span class="number">0</span>,
 				<span class="ident">frame_num</span>,
-				<span class="ident">buffer</span>.<span class="ident">as_mut_ptr</span>() <span class="kw">as</span> <span class="kw-2">*mut</span> <span class="ident">u32</span>,
-				<span class="ident">size</span>.<span class="ident">width</span>,
-				<span class="ident">size</span>.<span class="ident">height</span>,
-				<span class="ident">size</span>.<span class="ident">width</span> <span class="op">*</span> <span class="number">4</span>
+				<span class="ident">surface</span>.<span class="ident">as_mut_ptr</span>(),
+				<span class="ident">surface</span>.<span class="ident">width</span>(),
+				<span class="ident">surface</span>.<span class="ident">height</span>(),
+				<span class="ident">surface</span>.<span class="ident">width</span>() <span class="op">*</span> <span class="number">4</span>
 			);
-			<span class="ident">buffer</span>.<span class="ident">set_len</span>(<span class="ident">buffer_len</span>);
+			<span class="ident">surface</span>.<span class="ident">set_len</span>();
 		}
-		<span class="prelude-val">Ok</span>(())
 	}
 }
-
-<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>)]</span>
-<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">RenderError</span>;
 </code></pre></div>
 </section><section id="search" class="content hidden"></section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="rlottie" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.59.0 (9d1b2106e 2022-02-23)" ></div>
 </body></html>

@@ -1,1 +1,1 @@
-initSidebarItems({"fn":[["convert",""]]});
+initSidebarItems({"fn":[["convert",""]],"struct":[["Animation","A lottie animation."]]});
