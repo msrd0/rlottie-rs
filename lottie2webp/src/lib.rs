@@ -1,7 +1,14 @@
+//! Convert lottie animations to WEBP files.
+
+#![warn(rust_2018_idioms)]
+#![deny(elided_lifetimes_in_paths, unreachable_pub)]
+
 use rgb::{alt::BGRA8, RGBA8};
-use rlottie::Animation;
+use rlottie::Surface;
 use std::slice;
 use webp_animation::{Encoder, WebPData};
+
+pub use rlottie::Animation;
 
 #[macro_use]
 mod util;
@@ -21,16 +28,16 @@ pub fn convert(mut player: Animation) -> Result<WebPData, webp_animation::Error>
 	let size = player.size();
 	let framerate = player.framerate();
 	let delay = 1000.0 / framerate;
-	let buffer_len = size.width() as usize * size.height() as usize;
-	let mut buffer_argb = Vec::with_capacity(buffer_len);
+	let buffer_len = size.width * size.height;
+	let mut surface = Surface::new(size);
 	let mut buffer_rgba = vec![RGBA8::default(); buffer_len];
 	let frame_count = player.totalframe();
 
-	let mut webp = Encoder::new((size.width() as u32, size.height() as u32))?;
+	let mut webp = Encoder::new((size.width as _, size.height as _))?;
 	let mut timestamp: f64 = 0.0;
 	for frame in 0 .. frame_count {
-		player.render(frame, &mut buffer_argb, size).unwrap();
-		bgra_to_rgba(&buffer_argb, &mut buffer_rgba);
+		player.render(frame, &mut surface);
+		bgra_to_rgba(surface.data(), &mut buffer_rgba);
 
 		{
 			// Safety: The pointer is valid and aligned since it comes from a vec, and we don't

@@ -1,10 +1,11 @@
 //! Convert lottie animations to GIF files.
 
 #![warn(rust_2018_idioms)]
-#![deny(unreachable_pub)]
+#![deny(elided_lifetimes_in_paths, unreachable_pub)]
 
 use gif::{DisposalMethod, Encoder, EncodingError, Frame, Repeat};
 use rgb::{alt::BGRA8, RGBA8};
+use rlottie::Surface;
 use std::{
 	fmt::{self, Display, Formatter},
 	io::Write,
@@ -139,16 +140,16 @@ pub fn convert<W: Write>(
 	let size = player.size();
 	let framerate = player.framerate();
 	let delay = (100.0 / framerate).round() as u16;
-	let buffer_len = size.width() as usize * size.height() as usize;
-	let mut buffer_argb = Vec::with_capacity(buffer_len);
+	let buffer_len = size.width * size.height;
+	let mut surface = Surface::new(size);
 	let mut buffer_rgba = vec![RGBA8::default(); buffer_len];
 	let frame_count = player.totalframe();
 
-	let mut gif = Encoder::new(out, size.width() as _, size.height() as _, &[])?;
+	let mut gif = Encoder::new(out, size.width as _, size.height as _, &[])?;
 	gif.set_repeat(Repeat::Infinite)?;
 	for frame in 0 .. frame_count {
-		player.render(frame, &mut buffer_argb, size).unwrap();
-		argb_to_rgba(bg, &buffer_argb, &mut buffer_rgba);
+		player.render(frame, &mut surface);
+		argb_to_rgba(bg, surface.data(), &mut buffer_rgba);
 
 		let mut frame = {
 			// Safety: The pointer is valid and aligned since it comes from a vec, and we don't
@@ -160,8 +161,8 @@ pub fn convert<W: Write>(
 				)
 			};
 			Frame::from_rgba_speed(
-				size.width() as _,
-				size.height() as _,
+				size.width as _,
+				size.height as _,
 				buffer_rgba,
 				10
 			)
