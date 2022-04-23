@@ -9,6 +9,7 @@ include = ["src/**/*.rs", "/LICENSE"]
 
 description = "Convert lottie files to GIF"
 repository = "https://github.com/msrd0/rlottie-rs"
+documentation = "https://docs.msrd0.de/lottie2gif/0.4.0/lottie2gif/"
 
 edition = "2021"
 rust-version = "1.56"

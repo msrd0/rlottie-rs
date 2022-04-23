@@ -1,4 +1,4 @@
-# lottie2gif [![lottie2gif on crates.io](https://img.shields.io/crates/v/lottie2gif.svg)](https://crates.io/crates/lottie2gif) [![lottie2gif on docs.rs](https://docs.rs/lottie2gif/badge.svg)](https://docs.rs/lottie2gif) [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](https://mit-license.org/)
+# lottie2gif [![lottie2gif on crates.io](https://img.shields.io/crates/v/lottie2gif.svg)](https://crates.io/crates/lottie2gif) [![lottie2gif docs](https://img.shields.io/badge/docs-release-blue)](https://docs.msrd0.de/#lottie2gif) [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](https://mit-license.org/)
 
 This crate can be used as a binary as well as a library. To compile it as a binary, pass `--all-features` or `--feature clap` to cargo.
 

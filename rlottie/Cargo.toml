@@ -9,6 +9,7 @@ include = ["build.rs", "src/**/*.rs", "/LICENSE"]
 
 description = "A platform independent standalone library that plays Lottie Animation"
 repository = "https://github.com/msrd0/rlottie-rs"
+documentation = "https://docs.msrd0.de/rlottie/0.4.0/rlottie/"
 
 edition = "2021"
 rust-version = "1.56"
