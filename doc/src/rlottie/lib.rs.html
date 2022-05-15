@@ -208,6 +208,18 @@
 <span id="201">201</span>
 <span id="202">202</span>
 <span id="203">203</span>
+<span id="204">204</span>
+<span id="205">205</span>
+<span id="206">206</span>
+<span id="207">207</span>
+<span id="208">208</span>
+<span id="209">209</span>
+<span id="210">210</span>
+<span id="211">211</span>
+<span id="212">212</span>
+<span id="213">213</span>
+<span id="214">214</span>
+<span id="215">215</span>
 </pre><pre class="rust"><code><span class="attribute">#![<span class="ident">warn</span>(<span class="ident">rust_2018_idioms</span>)]</span>
 <span class="attribute">#![<span class="ident">deny</span>(<span class="ident">elided_lifetimes_in_paths</span>, <span class="ident">unreachable_pub</span>)]</span>
 
@@ -219,7 +231,8 @@
 	<span class="ident">ffi::CString</span>,
 	<span class="ident">fmt</span>::{<span class="self">self</span>, <span class="ident">Debug</span>},
 	<span class="ident">os::unix::ffi::OsStrExt</span>,
-	<span class="ident">path::Path</span>
+	<span class="ident">path::Path</span>,
+	<span class="ident">ptr::NonNull</span>
 };
 
 <span class="kw">fn</span> <span class="ident">path_to_cstr</span><span class="op">&lt;</span><span class="ident">P</span><span class="op">&gt;</span>(<span class="ident">path</span>: <span class="ident">P</span>) -&gt; <span class="ident">CString</span>
@@ -317,7 +330,7 @@
 }
 
 <span class="doccomment">/// A lottie animation.</span>
-<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">Animation</span>(<span class="kw-2">*mut</span> <span class="ident">Lottie_Animation_S</span>);
+<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">Animation</span>(<span class="ident">NonNull</span><span class="op">&lt;</span><span class="ident">Lottie_Animation_S</span><span class="op">&gt;</span>);
 
 <span class="kw">impl</span> <span class="ident">Debug</span> <span class="kw">for</span> <span class="ident">Animation</span> {
 	<span class="kw">fn</span> <span class="ident">fmt</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">f</span>: <span class="kw-2">&amp;mut</span> <span class="ident">fmt::Formatter</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>) -&gt; <span class="ident">fmt::Result</span> {
@@ -328,12 +341,19 @@
 <span class="kw">impl</span> <span class="ident">Drop</span> <span class="kw">for</span> <span class="ident">Animation</span> {
 	<span class="kw">fn</span> <span class="ident">drop</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>) {
 		<span class="kw">unsafe</span> {
-			<span class="ident">lottie_animation_destroy</span>(<span class="self">self</span>.<span class="number">0</span>);
+			<span class="ident">lottie_animation_destroy</span>(<span class="self">self</span>.<span class="number">0</span>.<span class="ident">as_ptr</span>());
 		}
 	}
 }
 
 <span class="kw">impl</span> <span class="ident">Animation</span> {
+	<span class="kw">fn</span> <span class="ident">from_ptr</span>(<span class="ident">ptr</span>: <span class="kw-2">*mut</span> <span class="ident">Lottie_Animation_S</span>) -&gt; <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span> {
+		(<span class="op">!</span><span class="ident">ptr</span>.<span class="ident">is_null</span>()).<span class="ident">then</span>(<span class="op">|</span><span class="op">|</span> {
+			<span class="comment">// Safety: This is only called if ptr is non null</span>
+			<span class="self">Self</span>(<span class="kw">unsafe</span> { <span class="ident">NonNull::new_unchecked</span>(<span class="ident">ptr</span>) })
+		})
+	}
+
 	<span class="doccomment">/// Read a lottie animation from file. This file needs to be in JSON format; if</span>
 	<span class="doccomment">/// you want to read telegram&#39;s tgs files, you need to decompress them first.</span>
 	<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">from_file</span><span class="op">&lt;</span><span class="ident">P</span><span class="op">&gt;</span>(<span class="ident">path</span>: <span class="ident">P</span>) -&gt; <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span>
@@ -342,7 +362,7 @@
 	{
 		<span class="kw">let</span> <span class="ident">path</span> <span class="op">=</span> <span class="ident">path_to_cstr</span>(<span class="ident">path</span>);
 		<span class="kw">let</span> <span class="ident">ptr</span> <span class="op">=</span> <span class="kw">unsafe</span> { <span class="ident">lottie_animation_from_file</span>(<span class="ident">path</span>.<span class="ident">as_ptr</span>()) };
-		(<span class="op">!</span><span class="ident">ptr</span>.<span class="ident">is_null</span>()).<span class="ident">then</span>(<span class="op">|</span><span class="op">|</span> <span class="self">Self</span>(<span class="ident">ptr</span>))
+		<span class="ident"><span class="self">Self</span>::from_ptr</span>(<span class="ident">ptr</span>)
 	}
 
 	<span class="doccomment">/// Read a file from memory. External resources are resolved relative to</span>
@@ -361,7 +381,7 @@
 				<span class="ident">resource_path</span>.<span class="ident">as_ptr</span>()
 			)
 		};
-		(<span class="op">!</span><span class="ident">ptr</span>.<span class="ident">is_null</span>()).<span class="ident">then</span>(<span class="op">|</span><span class="op">|</span> <span class="self">Self</span>(<span class="ident">ptr</span>))
+		<span class="ident"><span class="self">Self</span>::from_ptr</span>(<span class="ident">ptr</span>)
 	}
 
 	<span class="doccomment">/// Return the default viewport size of this animation.</span>
@@ -371,36 +391,40 @@
 			<span class="ident">height</span>: <span class="number">0</span>
 		};
 		<span class="kw">unsafe</span> {
-			<span class="ident">lottie_animation_get_size</span>(<span class="self">self</span>.<span class="number">0</span>, <span class="kw-2">&amp;mut</span> <span class="ident">size</span>.<span class="ident">width</span>, <span class="kw-2">&amp;mut</span> <span class="ident">size</span>.<span class="ident">height</span>);
+			<span class="ident">lottie_animation_get_size</span>(
+				<span class="self">self</span>.<span class="number">0</span>.<span class="ident">as_ptr</span>(),
+				<span class="kw-2">&amp;mut</span> <span class="ident">size</span>.<span class="ident">width</span>,
+				<span class="kw-2">&amp;mut</span> <span class="ident">size</span>.<span class="ident">height</span>
+			);
 		}
 		<span class="ident">size</span>
 	}
 
 	<span class="doccomment">/// Return the total duration of this animation in seconds.</span>
 	<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">duration</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">f64</span> {
-		<span class="kw">unsafe</span> { <span class="ident">lottie_animation_get_duration</span>(<span class="self">self</span>.<span class="number">0</span>) }
+		<span class="kw">unsafe</span> { <span class="ident">lottie_animation_get_duration</span>(<span class="self">self</span>.<span class="number">0</span>.<span class="ident">as_ptr</span>()) }
 	}
 
 	<span class="doccomment">/// Return the total number of frames in this animation.</span>
 	<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">totalframe</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">usize</span> {
-		<span class="kw">unsafe</span> { <span class="ident">lottie_animation_get_totalframe</span>(<span class="self">self</span>.<span class="number">0</span>) }
+		<span class="kw">unsafe</span> { <span class="ident">lottie_animation_get_totalframe</span>(<span class="self">self</span>.<span class="number">0</span>.<span class="ident">as_ptr</span>()) }
 	}
 
 	<span class="doccomment">/// Return the default framerate of this animation.</span>
 	<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">framerate</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">f64</span> {
-		<span class="kw">unsafe</span> { <span class="ident">lottie_animation_get_framerate</span>(<span class="self">self</span>.<span class="number">0</span>) }
+		<span class="kw">unsafe</span> { <span class="ident">lottie_animation_get_framerate</span>(<span class="self">self</span>.<span class="number">0</span>.<span class="ident">as_ptr</span>()) }
 	}
 
 	<span class="doccomment">/// Maps position to frame number and returns it.</span>
 	<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">frame_at_pos</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">pos</span>: <span class="ident">f32</span>) -&gt; <span class="ident">usize</span> {
-		<span class="kw">unsafe</span> { <span class="ident">lottie_animation_get_frame_at_pos</span>(<span class="self">self</span>.<span class="number">0</span>, <span class="ident">pos</span>) }
+		<span class="kw">unsafe</span> { <span class="ident">lottie_animation_get_frame_at_pos</span>(<span class="self">self</span>.<span class="number">0</span>.<span class="ident">as_ptr</span>(), <span class="ident">pos</span>) }
 	}
 
 	<span class="doccomment">/// Render the contents of a frame onto the surface.</span>
 	<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">render</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">frame_num</span>: <span class="ident">usize</span>, <span class="ident">surface</span>: <span class="kw-2">&amp;mut</span> <span class="ident">Surface</span>) {
 		<span class="kw">unsafe</span> {
 			<span class="ident">lottie_animation_render</span>(
-				<span class="self">self</span>.<span class="number">0</span>,
+				<span class="self">self</span>.<span class="number">0</span>.<span class="ident">as_ptr</span>(),
 				<span class="ident">frame_num</span>,
 				<span class="ident">surface</span>.<span class="ident">as_mut_ptr</span>(),
 				<span class="ident">surface</span>.<span class="ident">width</span>(),
