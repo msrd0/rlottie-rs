@@ -9,7 +9,8 @@ use std::{
 	ffi::CString,
 	fmt::{self, Debug},
 	os::unix::ffi::OsStrExt,
-	path::Path
+	path::Path,
+	ptr::NonNull
 };
 
 fn path_to_cstr<P>(path: P) -> CString
@@ -107,7 +108,7 @@ impl Surface {
 }
 
 /// A lottie animation.
-pub struct Animation(*mut Lottie_Animation_S);
+pub struct Animation(NonNull<Lottie_Animation_S>);
 
 impl Debug for Animation {
 	fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
@@ -118,12 +119,19 @@ impl Debug for Animation {
 impl Drop for Animation {
 	fn drop(&mut self) {
 		unsafe {
-			lottie_animation_destroy(self.0);
+			lottie_animation_destroy(self.0.as_ptr());
 		}
 	}
 }
 
 impl Animation {
+	fn from_ptr(ptr: *mut Lottie_Animation_S) -> Option<Self> {
+		(!ptr.is_null()).then(|| {
+			// Safety: This is only called if ptr is non null
+			Self(unsafe { NonNull::new_unchecked(ptr) })
+		})
+	}
+
 	/// Read a lottie animation from file. This file needs to be in JSON format; if
 	/// you want to read telegram's tgs files, you need to decompress them first.
 	pub fn from_file<P>(path: P) -> Option<Self>
@@ -132,7 +140,7 @@ impl Animation {
 	{
 		let path = path_to_cstr(path);
 		let ptr = unsafe { lottie_animation_from_file(path.as_ptr()) };
-		(!ptr.is_null()).then(|| Self(ptr))
+		Self::from_ptr(ptr)
 	}
 
 	/// Read a file from memory. External resources are resolved relative to
@@ -151,7 +159,7 @@ impl Animation {
 				resource_path.as_ptr()
 			)
 		};
-		(!ptr.is_null()).then(|| Self(ptr))
+		Self::from_ptr(ptr)
 	}
 
 	/// Return the default viewport size of this animation.
@@ -161,36 +169,40 @@ impl Animation {
 			height: 0
 		};
 		unsafe {
-			lottie_animation_get_size(self.0, &mut size.width, &mut size.height);
+			lottie_animation_get_size(
+				self.0.as_ptr(),
+				&mut size.width,
+				&mut size.height
+			);
 		}
 		size
 	}
 
 	/// Return the total duration of this animation in seconds.
 	pub fn duration(&self) -> f64 {
-		unsafe { lottie_animation_get_duration(self.0) }
+		unsafe { lottie_animation_get_duration(self.0.as_ptr()) }
 	}
 
 	/// Return the total number of frames in this animation.
 	pub fn totalframe(&self) -> usize {
-		unsafe { lottie_animation_get_totalframe(self.0) }
+		unsafe { lottie_animation_get_totalframe(self.0.as_ptr()) }
 	}
 
 	/// Return the default framerate of this animation.
 	pub fn framerate(&self) -> f64 {
-		unsafe { lottie_animation_get_framerate(self.0) }
+		unsafe { lottie_animation_get_framerate(self.0.as_ptr()) }
 	}
 
 	/// Maps position to frame number and returns it.
 	pub fn frame_at_pos(&self, pos: f32) -> usize {
-		unsafe { lottie_animation_get_frame_at_pos(self.0, pos) }
+		unsafe { lottie_animation_get_frame_at_pos(self.0.as_ptr(), pos) }
 	}
 
 	/// Render the contents of a frame onto the surface.
 	pub fn render(&mut self, frame_num: usize, surface: &mut Surface) {
 		unsafe {
 			lottie_animation_render(
-				self.0,
+				self.0.as_ptr(),
 				frame_num,
 				surface.as_mut_ptr(),
 				surface.width(),
