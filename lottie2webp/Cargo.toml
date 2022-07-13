@@ -3,13 +3,13 @@
 [package]
 workspace = ".."
 name = "lottie2webp"
-version = "0.2.0"
+version = "0.2.1"
 license = "MIT"
 include = ["src/**/*.rs", "/LICENSE"]
 
-description = "Convert lottie files to WEBP"
+description = "DEPRECATED - use lottieconv crate instead"
 repository = "https://github.com/msrd0/rlottie-rs"
-documentation = "https://docs.msrd0.de/lottie2webp/0.2.0/lottie2webp/"
+documentation = "https://docs.msrd0.de/lottie2webp/0.2.1/lottie2webp/"
 
 edition = "2021"
 rust-version = "1.56"

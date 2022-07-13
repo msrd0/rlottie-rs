@@ -1,4 +1,4 @@
-//! Convert lottie animations to GIF files.
+//! DEPRECATED - use lottieconv crate instead
 
 #![warn(rust_2018_idioms)]
 #![deny(elided_lifetimes_in_paths, unreachable_pub)]
@@ -132,6 +132,7 @@ auto_vectorize! {
 /// for background color, the rgb value is required. This is because semi-transparent
 /// pixels will be converted to non-transparent pixels, adding onto the background
 /// color. Only fully transparent pixels will remain transparent.
+#[deprecated = "Use lottieconv crate instead"]
 pub fn convert<W: Write>(
 	mut player: Animation,
 	bg: Color,

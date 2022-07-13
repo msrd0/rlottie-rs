@@ -1,4 +1,4 @@
-//! Convert lottie animations to WEBP files.
+//! DEPRECATED - use lottieconv crate instead
 
 #![warn(rust_2018_idioms)]
 #![deny(elided_lifetimes_in_paths, unreachable_pub)]
@@ -50,6 +50,7 @@ auto_vectorize! {
 	}
 }
 
+#[deprecated = "Use lottieconv crate instead"]
 pub fn convert(mut player: Animation) -> Result<WebPData, webp_animation::Error> {
 	let size = player.size();
 	let framerate = player.framerate();
