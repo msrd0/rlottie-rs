@@ -1,1 +1,1 @@
-window.ALL_CRATES = ["lottie2gif","lottie2webp","rlottie","rlottie_sys"];
+window.ALL_CRATES = ["lottie2gif","lottie2webp","lottieconv","rlottie","rlottie_sys"];

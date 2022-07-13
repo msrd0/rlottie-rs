@@ -1,3 +1,3 @@
 (function() {var implementors = {};
-implementors["lottie2gif"] = [{"text":"impl <a class=\"trait\" href=\"https://doc.rust-lang.org/1.60.0/core/fmt/trait.Display.html\" title=\"trait core::fmt::Display\">Display</a> for <a class=\"struct\" href=\"lottie2gif/struct.InvalidHex.html\" title=\"struct lottie2gif::InvalidHex\">InvalidHex</a>","synthetic":false,"types":["lottie2gif::InvalidHex"]}];
+implementors["lottie2gif"] = [{"text":"impl <a class=\"trait\" href=\"https://doc.rust-lang.org/1.62.0/core/fmt/trait.Display.html\" title=\"trait core::fmt::Display\">Display</a> for <a class=\"struct\" href=\"lottie2gif/struct.InvalidHex.html\" title=\"struct lottie2gif::InvalidHex\">InvalidHex</a>","synthetic":false,"types":["lottie2gif::InvalidHex"]}];
 if (window.register_implementors) {window.register_implementors(implementors);} else {window.pending_implementors = implementors;}})()
