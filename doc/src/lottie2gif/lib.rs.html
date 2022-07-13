@@ -203,7 +203,8 @@
 <span id="196">196</span>
 <span id="197">197</span>
 <span id="198">198</span>
-</pre><pre class="rust"><code><span class="doccomment">//! Convert lottie animations to GIF files.</span>
+<span id="199">199</span>
+</pre><pre class="rust"><code><span class="doccomment">//! DEPRECATED - use lottieconv crate instead</span>
 
 <span class="attribute">#![<span class="ident">warn</span>(<span class="ident">rust_2018_idioms</span>)]</span>
 <span class="attribute">#![<span class="ident">deny</span>(<span class="ident">elided_lifetimes_in_paths</span>, <span class="ident">unreachable_pub</span>)]</span>
@@ -337,6 +338,7 @@
 <span class="doccomment">/// for background color, the rgb value is required. This is because semi-transparent</span>
 <span class="doccomment">/// pixels will be converted to non-transparent pixels, adding onto the background</span>
 <span class="doccomment">/// color. Only fully transparent pixels will remain transparent.</span>
+<span class="attribute">#[<span class="ident">deprecated</span> <span class="op">=</span> <span class="string">&quot;Use lottieconv crate instead&quot;</span>]</span>
 <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">convert</span><span class="op">&lt;</span><span class="ident">W</span>: <span class="ident">Write</span><span class="op">&gt;</span>(
 	<span class="kw-2">mut</span> <span class="ident">player</span>: <span class="ident">Animation</span>,
 	<span class="ident">bg</span>: <span class="ident">Color</span>,
