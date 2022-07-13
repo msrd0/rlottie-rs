@@ -1,0 +1,44 @@
+# lottieconv [![lottieconv on crates.io](https://img.shields.io/crates/v/lottieconv.svg)](https://crates.io/crates/lottieconv) [![lottieconv docs](https://img.shields.io/badge/docs-release-blue)](https://docs.msrd0.de/#lottieconv) [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](https://mit-license.org/)
+
+This crate can act both as a library to convert lottie files to either webp or gif
+files, as well as binaries to do the conversion.
+
+## lottie2gif
+
+This requires the features `clap` and `gif` to be active.
+
+```
+lottieconv
+Convert lottie files GIF
+
+USAGE:
+    lottie2gif [OPTIONS] <lottieFileName> [bgColor]
+
+ARGS:
+    <lottieFileName>    The location of the lottie file
+    <bgColor>           The background color in hexadecimal format [default: 0]
+
+OPTIONS:
+    -h, --help               Print help information
+        --non-transparent    Disable background transparency
+    -o, --out <output>       The output file
+```
+
+## lottie2webp
+
+This requires the features `clap` and `webp` to be active.
+
+```
+lottieconv
+Convert lottie files WEBP
+
+USAGE:
+    lottie2webp [OPTIONS] <lottieFileName>
+
+ARGS:
+    <lottieFileName>    The location of the lottie file
+
+OPTIONS:
+    -h, --help            Print help information
+    -o, --out <output>    The output file
+```
