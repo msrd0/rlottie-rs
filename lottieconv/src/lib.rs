@@ -3,12 +3,14 @@
 
 //! Convert lottie animations to GIF or WEBP format.
 
-use rgb::{RGBA, RGBA8};
+use rgb::RGBA8;
 use rlottie::Surface;
-use std::{io::Write, slice};
+use std::slice;
 
+#[doc(no_inline)]
 pub use rlottie::{Animation, Size};
 
+#[cfg(any(feature = "gif", feature = "webp"))]
 #[macro_use]
 mod util;
 
@@ -63,6 +65,9 @@ pub struct Builder {
 }
 
 impl Converter<DummyConvert> {
+	/// Return a new converter builder.
+	#[allow(clippy::new_ret_no_self)]
+	#[must_use]
 	pub fn new(player: Animation) -> Builder {
 		Builder {
 			size: player.size(),
@@ -72,11 +77,16 @@ impl Converter<DummyConvert> {
 }
 
 impl Builder {
+	/// Change the size of the output image.
+	#[must_use = "Configuring a converter is useless without calling .convert()"]
 	pub fn with_size(mut self, size: Size) -> Self {
 		self.size = size;
 		self
 	}
 }
+
+#[cfg(feature = "gif")]
+pub type Rgba = rgb::RGBA<u8, bool>;
 
 #[cfg(feature = "gif")]
 impl Builder {
@@ -87,9 +97,10 @@ impl Builder {
 	/// for background color, the rgb value is required. This is because semi-transparent
 	/// pixels will be converted to non-transparent pixels, adding onto the background
 	/// color. Only fully transparent pixels will remain transparent.
-	pub fn gif<W: Write>(
+	#[must_use = "Creating a gif converter is useless without calling .convert()"]
+	pub fn gif<W: std::io::Write>(
 		self,
-		bg: RGBA<u8, bool>,
+		bg: Rgba,
 		out: W
 	) -> gif::Result<Converter<Convert2Gif<W>>> {
 		let framerate = self.player.framerate();
@@ -104,6 +115,7 @@ impl Builder {
 #[cfg(feature = "webp")]
 impl Builder {
 	/// Create a converter for lottie animation to a WEBP file.
+	#[must_use = "Creating a webp converter is useless without calling .convert()"]
 	pub fn webp(self) -> webp::Result<Converter<Convert2Webp>> {
 		let framerate = self.player.framerate();
 		Ok(Converter {

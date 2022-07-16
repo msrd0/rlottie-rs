@@ -1,11 +1,11 @@
-use crate::convert::Convert;
+use crate::{convert::Convert, Rgba};
 use gif_crate::{DisposalMethod, Encoder, EncodingError, Frame, Repeat};
-use rgb::{alt::BGRA8, RGBA, RGBA8};
+use rgb::{alt::BGRA8, RGBA8};
 use rlottie::Size;
 use std::io::Write;
 
 auto_vectorize! {
-	pub(crate) fn argb_to_rgba(bg: RGBA<u8, bool>, buffer_argb: &[BGRA8], buffer_rgba: &mut [RGBA8]) {
+	pub(crate) fn argb_to_rgba(bg: Rgba, buffer_argb: &[BGRA8], buffer_rgba: &mut [RGBA8]) {
 		let bg_r = bg.r as u32;
 		let bg_g = bg.g as u32;
 		let bg_b = bg.b as u32;
@@ -44,7 +44,7 @@ auto_vectorize! {
 pub(super) type Result<T> = std::result::Result<T, EncodingError>;
 
 pub struct Convert2Gif<W: Write> {
-	bg: RGBA<u8, bool>,
+	bg: Rgba,
 	width: u16,
 	height: u16,
 	encoder: Encoder<W>,
@@ -52,12 +52,7 @@ pub struct Convert2Gif<W: Write> {
 }
 
 impl<W: Write> Convert2Gif<W> {
-	pub(super) fn new(
-		bg: RGBA<u8, bool>,
-		out: W,
-		size: Size,
-		framerate: f64
-	) -> Result<Self> {
+	pub(super) fn new(bg: Rgba, out: W, size: Size, framerate: f64) -> Result<Self> {
 		let width = size.width as u16;
 		let height = size.height as u16;
 		let mut encoder = Encoder::new(out, width, height, &[])?;
