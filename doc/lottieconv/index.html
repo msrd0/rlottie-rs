@@ -22,7 +22,7 @@ animation. This requires the <code>gif</code> feature which is enabled by defaul
 <p>This example shows how to use this crate to convert a lottie animation to a webp
 animation. This requires the <code>webp</code> feature which is enabled by default.</p>
 
-<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">use</span> <span class="ident">lottieconv</span>::{<span class="ident">Animation</span>, <span class="ident">Converter</span>};
+<div class='information'><div class='tooltip edition' data-edition="2018">ⓘ</div></div><div class="example-wrap"><pre class="rust rust-example-rendered edition"><code><span class="kw">use</span> <span class="ident">lottieconv</span>::{<span class="ident">Animation</span>, <span class="ident">Converter</span>};
 <span class="kw">use</span> <span class="ident">std</span>::{<span class="ident">fs::File</span>, <span class="ident">io::Write</span> <span class="kw">as</span> <span class="kw">_</span>};
 
 <span class="kw">let</span> <span class="ident">animation</span> <span class="op">=</span> <span class="ident">Animation::from_file</span>(<span class="string">&quot;animation.json&quot;</span>)<span class="question-mark">?</span>;
