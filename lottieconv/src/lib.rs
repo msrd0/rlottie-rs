@@ -103,6 +103,7 @@ mod rgba_size {
 
 /// This type is used to perform the conversion. It does nothing unless you
 /// call [`.convert()`](Self::convert).
+#[must_use = "A Converter does nothing unless you call .convert()"]
 pub struct Converter<C: Convert> {
 	player: Animation,
 	size: Size,
@@ -130,7 +131,7 @@ impl Converter<DummyConvert> {
 
 impl Builder {
 	/// Change the size of the output image.
-	#[must_use = "Configuring a converter is useless without calling .convert()"]
+	#[must_use]
 	pub fn with_size(mut self, size: Size) -> Self {
 		self.size = size;
 		self
@@ -150,7 +151,6 @@ impl Builder {
 	/// for background color, the rgb value is required. This is because semi-transparent
 	/// pixels will be converted to non-transparent pixels, adding onto the background
 	/// color. Only fully transparent pixels will remain transparent.
-	#[must_use = "Creating a gif converter is useless without calling .convert()"]
 	pub fn gif<W: std::io::Write>(
 		self,
 		bg: Rgba,
@@ -168,7 +168,6 @@ impl Builder {
 #[cfg(feature = "webp")]
 impl Builder {
 	/// Create a converter for lottie animation to a WEBP file.
-	#[must_use = "Creating a webp converter is useless without calling .convert()"]
 	pub fn webp(self) -> webp::Result<Converter<Convert2Webp>> {
 		let framerate = self.player.framerate();
 		Ok(Converter {
@@ -180,6 +179,12 @@ impl Builder {
 }
 
 impl<C: Convert> Converter<C> {
+	/// Convert lottie animation to the requested format.
+	///
+	/// The return type of this function depends on the output format. For webp, it
+	/// returns the image data ([`WebPData`](webp_animation::WebPData)). For gif, it
+	/// returns `()` as the data is written directly to the writer that was passed
+	/// to the `.gif(..)` function.
 	pub fn convert(mut self) -> Result<C::Out, C::Err> {
 		let buffer_len = self.size.width * self.size.height;
 		let mut surface = Surface::new(self.size);
