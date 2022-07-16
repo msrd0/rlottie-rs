@@ -1,7 +1,55 @@
+#![allow(clippy::tabs_in_doc_comments)]
 #![warn(rust_2018_idioms)]
 #![deny(elided_lifetimes_in_paths, unreachable_pub)]
 
 //! Convert lottie animations to GIF or WEBP format.
+//!
+//! ## Examples
+//!
+//! This example shows how to use this crate to convert a lottie animation to a gif
+//! animation. This requires the `gif` feature which is enabled by default.
+//!
+//! ```rust,edition2018,no_run
+//! use lottieconv::{Animation, Converter, Rgba};
+//! use std::fs::File;
+//!
+//! # fn first() -> Option<()> {
+//! let animation = Animation::from_file("animation.json")?;
+//! # None
+//! # }
+//! # fn second() -> Result<(), std::io::Error> {
+//! let mut out = File::create("animation.gif")?;
+//! # Ok(())
+//! # }
+//! # fn third(animation: Animation, mut out: File) -> Result<(), gif_crate::EncodingError> {
+//! Converter::new(animation)
+//! 	.gif(Rgba::new_alpha(0, 0, 0, true), &mut out)?
+//! 	.convert()?;
+//! # Ok(())
+//! # }
+//! ```
+//!
+//! This example shows how to use this crate to convert a lottie animation to a webp
+//! animation. This requires the `webp` feature which is enabled by default.
+//!
+//! ```rust,edition2018^,no_run
+//! use lottieconv::{Animation, Converter};
+//! use std::{fs::File, io::Write as _};
+//!
+//! # fn first() -> Option<()> {
+//! let animation = Animation::from_file("animation.json")?;
+//! # None
+//! # }
+//! # fn second(animation: Animation) -> Result<(), webp_animation::Error> {
+//! let webp_data = Converter::new(animation).webp()?.convert()?;
+//! # Ok(())
+//! # }
+//! # fn third(webp_data: webp_animation::WebPData) -> Result<(), std::io::Error> {
+//! let mut out = File::create("animation.webp")?;
+//! out.write_all(&webp_data)?;
+//! # Ok(())
+//! # }
+//! ```
 
 use rgb::RGBA8;
 use rlottie::Surface;
@@ -53,12 +101,16 @@ mod rgba_size {
 	};
 }
 
+/// This type is used to perform the conversion. It does nothing unless you
+/// call [`.convert()`](Self::convert).
 pub struct Converter<C: Convert> {
 	player: Animation,
 	size: Size,
 	convert: C
 }
 
+/// This type is used to build a [`Converter`]. It is created using
+/// [`Converter::new()`].
 pub struct Builder {
 	player: Animation,
 	size: Size
@@ -86,6 +138,7 @@ impl Builder {
 }
 
 #[cfg(feature = "gif")]
+/// This type is used to define the background of a GIF.
 pub type Rgba = rgb::RGBA<u8, bool>;
 
 #[cfg(feature = "gif")]
