@@ -146,17 +146,31 @@
 <span id="139">139</span>
 <span id="140">140</span>
 <span id="141">141</span>
+<span id="142">142</span>
+<span id="143">143</span>
+<span id="144">144</span>
+<span id="145">145</span>
+<span id="146">146</span>
+<span id="147">147</span>
+<span id="148">148</span>
+<span id="149">149</span>
+<span id="150">150</span>
+<span id="151">151</span>
+<span id="152">152</span>
+<span id="153">153</span>
 </pre><pre class="rust"><code><span class="attribute">#![<span class="ident">warn</span>(<span class="ident">rust_2018_idioms</span>)]</span>
 <span class="attribute">#![<span class="ident">deny</span>(<span class="ident">elided_lifetimes_in_paths</span>, <span class="ident">unreachable_pub</span>)]</span>
 
 <span class="doccomment">//! Convert lottie animations to GIF or WEBP format.</span>
 
-<span class="kw">use</span> <span class="ident">rgb</span>::{<span class="ident">RGBA</span>, <span class="ident">RGBA8</span>};
+<span class="kw">use</span> <span class="ident">rgb::RGBA8</span>;
 <span class="kw">use</span> <span class="ident">rlottie::Surface</span>;
-<span class="kw">use</span> <span class="ident">std</span>::{<span class="ident">io::Write</span>, <span class="ident">slice</span>};
+<span class="kw">use</span> <span class="ident">std::slice</span>;
 
+<span class="attribute">#[<span class="ident">doc</span>(<span class="ident">no_inline</span>)]</span>
 <span class="kw">pub</span> <span class="kw">use</span> <span class="ident">rlottie</span>::{<span class="ident">Animation</span>, <span class="ident">Size</span>};
 
+<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">any</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;gif&quot;</span>, <span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;webp&quot;</span>))]</span>
 <span class="attribute">#[<span class="ident">macro_use</span>]</span>
 <span class="kw">mod</span> <span class="ident">util</span>;
 
@@ -211,6 +225,9 @@
 }
 
 <span class="kw">impl</span> <span class="ident">Converter</span><span class="op">&lt;</span><span class="ident">DummyConvert</span><span class="op">&gt;</span> {
+	<span class="doccomment">/// Return a new converter builder.</span>
+	<span class="attribute">#[<span class="ident">allow</span>(<span class="ident">clippy::new_ret_no_self</span>)]</span>
+	<span class="attribute">#[<span class="ident">must_use</span>]</span>
 	<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span>(<span class="ident">player</span>: <span class="ident">Animation</span>) -&gt; <span class="ident">Builder</span> {
 		<span class="ident">Builder</span> {
 			<span class="ident">size</span>: <span class="ident">player</span>.<span class="ident">size</span>(),
@@ -220,11 +237,16 @@
 }
 
 <span class="kw">impl</span> <span class="ident">Builder</span> {
+	<span class="doccomment">/// Change the size of the output image.</span>
+	<span class="attribute">#[<span class="ident">must_use</span> <span class="op">=</span> <span class="string">&quot;Configuring a converter is useless without calling .convert()&quot;</span>]</span>
 	<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">with_size</span>(<span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">size</span>: <span class="ident">Size</span>) -&gt; <span class="self">Self</span> {
 		<span class="self">self</span>.<span class="ident">size</span> <span class="op">=</span> <span class="ident">size</span>;
 		<span class="self">self</span>
 	}
 }
+
+<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;gif&quot;</span>)]</span>
+<span class="kw">pub</span> <span class="kw">type</span> <span class="ident">Rgba</span> <span class="op">=</span> <span class="ident">rgb::RGBA</span><span class="op">&lt;</span><span class="ident">u8</span>, <span class="ident">bool</span><span class="op">&gt;</span>;
 
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;gif&quot;</span>)]</span>
 <span class="kw">impl</span> <span class="ident">Builder</span> {
@@ -235,9 +257,10 @@
 	<span class="doccomment">/// for background color, the rgb value is required. This is because semi-transparent</span>
 	<span class="doccomment">/// pixels will be converted to non-transparent pixels, adding onto the background</span>
 	<span class="doccomment">/// color. Only fully transparent pixels will remain transparent.</span>
-	<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">gif</span><span class="op">&lt;</span><span class="ident">W</span>: <span class="ident">Write</span><span class="op">&gt;</span>(
+	<span class="attribute">#[<span class="ident">must_use</span> <span class="op">=</span> <span class="string">&quot;Creating a gif converter is useless without calling .convert()&quot;</span>]</span>
+	<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">gif</span><span class="op">&lt;</span><span class="ident">W</span>: <span class="ident">std::io::Write</span><span class="op">&gt;</span>(
 		<span class="self">self</span>,
-		<span class="ident">bg</span>: <span class="ident">RGBA</span><span class="op">&lt;</span><span class="ident">u8</span>, <span class="ident">bool</span><span class="op">&gt;</span>,
+		<span class="ident">bg</span>: <span class="ident">Rgba</span>,
 		<span class="ident">out</span>: <span class="ident">W</span>
 	) -&gt; <span class="ident">gif::Result</span><span class="op">&lt;</span><span class="ident">Converter</span><span class="op">&lt;</span><span class="ident">Convert2Gif</span><span class="op">&lt;</span><span class="ident">W</span><span class="op">&gt;</span><span class="op">&gt;</span><span class="op">&gt;</span> {
 		<span class="kw">let</span> <span class="ident">framerate</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">player</span>.<span class="ident">framerate</span>();
@@ -252,6 +275,7 @@
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;webp&quot;</span>)]</span>
 <span class="kw">impl</span> <span class="ident">Builder</span> {
 	<span class="doccomment">/// Create a converter for lottie animation to a WEBP file.</span>
+	<span class="attribute">#[<span class="ident">must_use</span> <span class="op">=</span> <span class="string">&quot;Creating a webp converter is useless without calling .convert()&quot;</span>]</span>
 	<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">webp</span>(<span class="self">self</span>) -&gt; <span class="ident">webp::Result</span><span class="op">&lt;</span><span class="ident">Converter</span><span class="op">&lt;</span><span class="ident">Convert2Webp</span><span class="op">&gt;</span><span class="op">&gt;</span> {
 		<span class="kw">let</span> <span class="ident">framerate</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">player</span>.<span class="ident">framerate</span>();
 		<span class="prelude-val">Ok</span>(<span class="ident">Converter</span> {

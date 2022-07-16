@@ -1,1 +1,1 @@
-initSidebarItems({"struct":[["Animation","A lottie animation."],["Builder",""],["Converter",""],["Size","The size type used by lottie [`Animation`]."]]});
+initSidebarItems({"struct":[["Builder",""],["Converter",""]],"type":[["Rgba",""]]});
