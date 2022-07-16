@@ -1,1 +1,1 @@
-initSidebarItems({"struct":[["Builder",""],["Converter",""]],"type":[["Rgba",""]]});
+initSidebarItems({"struct":[["Builder","This type is used to build a [`Converter`]. It is created using [`Converter::new()`]."],["Converter","This type is used to perform the conversion. It does nothing unless you call `.convert()`."]],"type":[["Rgba","This type is used to define the background of a GIF."]]});
