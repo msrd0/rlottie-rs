@@ -32,7 +32,7 @@
 //! This example shows how to use this crate to convert a lottie animation to a webp
 //! animation. This requires the `webp` feature which is enabled by default.
 //!
-//! ```rust,edition2018^,no_run
+//! ```rust,edition2018,no_run
 //! use lottieconv::{Animation, Converter};
 //! use std::{fs::File, io::Write as _};
 //!
