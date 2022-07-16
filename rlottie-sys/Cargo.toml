@@ -3,18 +3,18 @@
 [package]
 workspace = ".."
 name = "rlottie-sys"
-version = "0.2.1"
+version = "0.2.2"
 license = "MIT"
 include = ["src/**/*.rs", "/build.rs", "/wrapper.h", "/LICENSE"]
 
 description = "A platform independent standalone library that plays Lottie Animation"
 repository = "https://github.com/msrd0/rlottie-rs"
-documentation = "https://docs.msrd0.de/rlottie-sys/0.2.1/rlottie-sys/"
+documentation = "https://docs.msrd0.de/rlottie-sys/0.2.2/rlottie-sys/"
 
 edition = "2021"
 rust-version = "1.56"
 links = "rlottie"
 
 [build-dependencies]
-bindgen = { version = "0.60.1", default-features = false }
+bindgen = { version = "0.60.1", features = ["runtime"], default-features = false }
 pkg-config = "0.3.22"
