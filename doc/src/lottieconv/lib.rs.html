@@ -211,6 +211,11 @@
 <span id="204">204</span>
 <span id="205">205</span>
 <span id="206">206</span>
+<span id="207">207</span>
+<span id="208">208</span>
+<span id="209">209</span>
+<span id="210">210</span>
+<span id="211">211</span>
 </pre><pre class="rust"><code><span class="attribute">#![<span class="ident">allow</span>(<span class="ident">clippy::tabs_in_doc_comments</span>)]</span>
 <span class="attribute">#![<span class="ident">warn</span>(<span class="ident">rust_2018_idioms</span>)]</span>
 <span class="attribute">#![<span class="ident">deny</span>(<span class="ident">elided_lifetimes_in_paths</span>, <span class="ident">unreachable_pub</span>)]</span>
@@ -316,6 +321,7 @@
 
 <span class="doccomment">/// This type is used to perform the conversion. It does nothing unless you</span>
 <span class="doccomment">/// call [`.convert()`](Self::convert).</span>
+<span class="attribute">#[<span class="ident">must_use</span> <span class="op">=</span> <span class="string">&quot;A Converter does nothing unless you call .convert()&quot;</span>]</span>
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">Converter</span><span class="op">&lt;</span><span class="ident">C</span>: <span class="ident">Convert</span><span class="op">&gt;</span> {
 	<span class="ident">player</span>: <span class="ident">Animation</span>,
 	<span class="ident">size</span>: <span class="ident">Size</span>,
@@ -343,7 +349,7 @@
 
 <span class="kw">impl</span> <span class="ident">Builder</span> {
 	<span class="doccomment">/// Change the size of the output image.</span>
-	<span class="attribute">#[<span class="ident">must_use</span> <span class="op">=</span> <span class="string">&quot;Configuring a converter is useless without calling .convert()&quot;</span>]</span>
+	<span class="attribute">#[<span class="ident">must_use</span>]</span>
 	<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">with_size</span>(<span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">size</span>: <span class="ident">Size</span>) -&gt; <span class="self">Self</span> {
 		<span class="self">self</span>.<span class="ident">size</span> <span class="op">=</span> <span class="ident">size</span>;
 		<span class="self">self</span>
@@ -363,7 +369,6 @@
 	<span class="doccomment">/// for background color, the rgb value is required. This is because semi-transparent</span>
 	<span class="doccomment">/// pixels will be converted to non-transparent pixels, adding onto the background</span>
 	<span class="doccomment">/// color. Only fully transparent pixels will remain transparent.</span>
-	<span class="attribute">#[<span class="ident">must_use</span> <span class="op">=</span> <span class="string">&quot;Creating a gif converter is useless without calling .convert()&quot;</span>]</span>
 	<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">gif</span><span class="op">&lt;</span><span class="ident">W</span>: <span class="ident">std::io::Write</span><span class="op">&gt;</span>(
 		<span class="self">self</span>,
 		<span class="ident">bg</span>: <span class="ident">Rgba</span>,
@@ -381,7 +386,6 @@
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;webp&quot;</span>)]</span>
 <span class="kw">impl</span> <span class="ident">Builder</span> {
 	<span class="doccomment">/// Create a converter for lottie animation to a WEBP file.</span>
-	<span class="attribute">#[<span class="ident">must_use</span> <span class="op">=</span> <span class="string">&quot;Creating a webp converter is useless without calling .convert()&quot;</span>]</span>
 	<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">webp</span>(<span class="self">self</span>) -&gt; <span class="ident">webp::Result</span><span class="op">&lt;</span><span class="ident">Converter</span><span class="op">&lt;</span><span class="ident">Convert2Webp</span><span class="op">&gt;</span><span class="op">&gt;</span> {
 		<span class="kw">let</span> <span class="ident">framerate</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">player</span>.<span class="ident">framerate</span>();
 		<span class="prelude-val">Ok</span>(<span class="ident">Converter</span> {
@@ -393,6 +397,12 @@
 }
 
 <span class="kw">impl</span><span class="op">&lt;</span><span class="ident">C</span>: <span class="ident">Convert</span><span class="op">&gt;</span> <span class="ident">Converter</span><span class="op">&lt;</span><span class="ident">C</span><span class="op">&gt;</span> {
+	<span class="doccomment">/// Convert lottie animation to the requested format.</span>
+	<span class="doccomment">///</span>
+	<span class="doccomment">/// The return type of this function depends on the output format. For webp, it</span>
+	<span class="doccomment">/// returns the image data ([`WebPData`](webp_animation::WebPData)). For gif, it</span>
+	<span class="doccomment">/// returns `()` as the data is written directly to the writer that was passed</span>
+	<span class="doccomment">/// to the `.gif(..)` function.</span>
 	<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">convert</span>(<span class="kw-2">mut</span> <span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">C::Out</span>, <span class="ident">C::Err</span><span class="op">&gt;</span> {
 		<span class="kw">let</span> <span class="ident">buffer_len</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">size</span>.<span class="ident">width</span> <span class="op">*</span> <span class="self">self</span>.<span class="ident">size</span>.<span class="ident">height</span>;
 		<span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">surface</span> <span class="op">=</span> <span class="ident">Surface::new</span>(<span class="self">self</span>.<span class="ident">size</span>);
