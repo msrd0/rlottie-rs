@@ -132,8 +132,11 @@ impl Animation {
 		})
 	}
 
-	/// Read a lottie animation from file. This file needs to be in JSON format; if
-	/// you want to read telegram's tgs files, you need to decompress them first.
+	/// Constructs an animation object from file path. This file needs to be in JSON
+	/// format; if you want to read telegram's tgs files, you need to decompress
+	/// them first.
+	///
+	/// Note that the rlottie library might cache the file and/or its resources.
 	pub fn from_file<P>(path: P) -> Option<Self>
 	where
 		P: AsRef<Path>
@@ -143,19 +146,31 @@ impl Animation {
 		Self::from_ptr(ptr)
 	}
 
-	/// Read a file from memory. External resources are resolved relative to
-	/// `resource_path`.
-	pub fn from_data<P>(data: String, key: String, resource_path: P) -> Option<Self>
+	/// Constructs an animation object from JSON string data. External resources are
+	/// resolved relative to `resource_path`.
+	///
+	/// Note that the `cache_key` might be used by the rlottie library to cache the
+	/// json data and/or its resources.
+	///
+	/// This method will panic if json_data or cache_key contain nul bytes.
+	pub fn from_data<D, K, P>(
+		json_data: D,
+		cache_key: K,
+		resource_path: P
+	) -> Option<Self>
 	where
+		D: Into<Vec<u8>>,
+		K: Into<Vec<u8>>,
 		P: AsRef<Path>
 	{
-		let data = CString::new(data).expect("data must not contain nul");
-		let key = CString::new(key).expect("key must not contain nul");
+		let json_data =
+			CString::new(json_data).expect("json_data must not contain nul");
+		let cache_key = CString::new(cache_key).expect("key must not contain nul");
 		let resource_path = path_to_cstr(resource_path);
 		let ptr = unsafe {
 			lottie_animation_from_data(
-				data.as_ptr(),
-				key.as_ptr(),
+				json_data.as_ptr(),
+				cache_key.as_ptr(),
 				resource_path.as_ptr()
 			)
 		};
