@@ -220,6 +220,21 @@
 <span id="213">213</span>
 <span id="214">214</span>
 <span id="215">215</span>
+<span id="216">216</span>
+<span id="217">217</span>
+<span id="218">218</span>
+<span id="219">219</span>
+<span id="220">220</span>
+<span id="221">221</span>
+<span id="222">222</span>
+<span id="223">223</span>
+<span id="224">224</span>
+<span id="225">225</span>
+<span id="226">226</span>
+<span id="227">227</span>
+<span id="228">228</span>
+<span id="229">229</span>
+<span id="230">230</span>
 </pre><pre class="rust"><code><span class="attribute">#![<span class="ident">warn</span>(<span class="ident">rust_2018_idioms</span>)]</span>
 <span class="attribute">#![<span class="ident">deny</span>(<span class="ident">elided_lifetimes_in_paths</span>, <span class="ident">unreachable_pub</span>)]</span>
 
@@ -354,8 +369,11 @@
 		})
 	}
 
-	<span class="doccomment">/// Read a lottie animation from file. This file needs to be in JSON format; if</span>
-	<span class="doccomment">/// you want to read telegram&#39;s tgs files, you need to decompress them first.</span>
+	<span class="doccomment">/// Constructs an animation object from file path. This file needs to be in JSON</span>
+	<span class="doccomment">/// format; if you want to read telegram&#39;s tgs files, you need to decompress</span>
+	<span class="doccomment">/// them first.</span>
+	<span class="doccomment">///</span>
+	<span class="doccomment">/// Note that the rlottie library might cache the file and/or its resources.</span>
 	<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">from_file</span><span class="op">&lt;</span><span class="ident">P</span><span class="op">&gt;</span>(<span class="ident">path</span>: <span class="ident">P</span>) -&gt; <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span>
 	<span class="kw">where</span>
 		<span class="ident">P</span>: <span class="ident">AsRef</span><span class="op">&lt;</span><span class="ident">Path</span><span class="op">&gt;</span>
@@ -365,19 +383,31 @@
 		<span class="ident"><span class="self">Self</span>::from_ptr</span>(<span class="ident">ptr</span>)
 	}
 
-	<span class="doccomment">/// Read a file from memory. External resources are resolved relative to</span>
-	<span class="doccomment">/// `resource_path`.</span>
-	<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">from_data</span><span class="op">&lt;</span><span class="ident">P</span><span class="op">&gt;</span>(<span class="ident">data</span>: <span class="ident">String</span>, <span class="ident">key</span>: <span class="ident">String</span>, <span class="ident">resource_path</span>: <span class="ident">P</span>) -&gt; <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span>
+	<span class="doccomment">/// Constructs an animation object from JSON string data. External resources are</span>
+	<span class="doccomment">/// resolved relative to `resource_path`.</span>
+	<span class="doccomment">///</span>
+	<span class="doccomment">/// Note that the `cache_key` might be used by the rlottie library to cache the</span>
+	<span class="doccomment">/// json data and/or its resources.</span>
+	<span class="doccomment">///</span>
+	<span class="doccomment">/// This method will panic if json_data or cache_key contain nul bytes.</span>
+	<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">from_data</span><span class="op">&lt;</span><span class="ident">D</span>, <span class="ident">K</span>, <span class="ident">P</span><span class="op">&gt;</span>(
+		<span class="ident">json_data</span>: <span class="ident">D</span>,
+		<span class="ident">cache_key</span>: <span class="ident">K</span>,
+		<span class="ident">resource_path</span>: <span class="ident">P</span>
+	) -&gt; <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span>
 	<span class="kw">where</span>
+		<span class="ident">D</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;</span><span class="op">&gt;</span>,
+		<span class="ident">K</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;</span><span class="op">&gt;</span>,
 		<span class="ident">P</span>: <span class="ident">AsRef</span><span class="op">&lt;</span><span class="ident">Path</span><span class="op">&gt;</span>
 	{
-		<span class="kw">let</span> <span class="ident">data</span> <span class="op">=</span> <span class="ident">CString::new</span>(<span class="ident">data</span>).<span class="ident">expect</span>(<span class="string">&quot;data must not contain nul&quot;</span>);
-		<span class="kw">let</span> <span class="ident">key</span> <span class="op">=</span> <span class="ident">CString::new</span>(<span class="ident">key</span>).<span class="ident">expect</span>(<span class="string">&quot;key must not contain nul&quot;</span>);
+		<span class="kw">let</span> <span class="ident">json_data</span> <span class="op">=</span>
+			<span class="ident">CString::new</span>(<span class="ident">json_data</span>).<span class="ident">expect</span>(<span class="string">&quot;json_data must not contain nul&quot;</span>);
+		<span class="kw">let</span> <span class="ident">cache_key</span> <span class="op">=</span> <span class="ident">CString::new</span>(<span class="ident">cache_key</span>).<span class="ident">expect</span>(<span class="string">&quot;key must not contain nul&quot;</span>);
 		<span class="kw">let</span> <span class="ident">resource_path</span> <span class="op">=</span> <span class="ident">path_to_cstr</span>(<span class="ident">resource_path</span>);
 		<span class="kw">let</span> <span class="ident">ptr</span> <span class="op">=</span> <span class="kw">unsafe</span> {
 			<span class="ident">lottie_animation_from_data</span>(
-				<span class="ident">data</span>.<span class="ident">as_ptr</span>(),
-				<span class="ident">key</span>.<span class="ident">as_ptr</span>(),
+				<span class="ident">json_data</span>.<span class="ident">as_ptr</span>(),
+				<span class="ident">cache_key</span>.<span class="ident">as_ptr</span>(),
 				<span class="ident">resource_path</span>.<span class="ident">as_ptr</span>()
 			)
 		};
