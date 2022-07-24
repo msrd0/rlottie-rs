@@ -235,10 +235,64 @@
 <span id="228">228</span>
 <span id="229">229</span>
 <span id="230">230</span>
-</pre><pre class="rust"><code><span class="attribute">#![<span class="ident">warn</span>(<span class="ident">rust_2018_idioms</span>)]</span>
+<span id="231">231</span>
+<span id="232">232</span>
+<span id="233">233</span>
+<span id="234">234</span>
+<span id="235">235</span>
+<span id="236">236</span>
+<span id="237">237</span>
+<span id="238">238</span>
+<span id="239">239</span>
+<span id="240">240</span>
+<span id="241">241</span>
+<span id="242">242</span>
+<span id="243">243</span>
+<span id="244">244</span>
+<span id="245">245</span>
+<span id="246">246</span>
+<span id="247">247</span>
+<span id="248">248</span>
+<span id="249">249</span>
+<span id="250">250</span>
+<span id="251">251</span>
+<span id="252">252</span>
+<span id="253">253</span>
+<span id="254">254</span>
+<span id="255">255</span>
+<span id="256">256</span>
+<span id="257">257</span>
+<span id="258">258</span>
+<span id="259">259</span>
+<span id="260">260</span>
+<span id="261">261</span>
+<span id="262">262</span>
+</pre><pre class="rust"><code><span class="attribute">#![<span class="ident">allow</span>(<span class="ident">clippy::tabs_in_doc_comments</span>)]</span>
+<span class="attribute">#![<span class="ident">warn</span>(<span class="ident">rust_2018_idioms</span>)]</span>
 <span class="attribute">#![<span class="ident">deny</span>(<span class="ident">elided_lifetimes_in_paths</span>, <span class="ident">unreachable_pub</span>)]</span>
 
 <span class="doccomment">//! Safe Rust bindings to rlottie.</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! # Example</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! ```rust,edition2021,no_run</span>
+<span class="doccomment">//! use rlottie::{Animation, Surface};</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! # fn first(path_to_lottie_json: std::path::PathBuf) -&gt; Option&lt;()&gt; {</span>
+<span class="doccomment">//! let mut animation = Animation::from_file(path_to_lottie_json)?;</span>
+<span class="doccomment">//! # Some(())</span>
+<span class="doccomment">//! # }</span>
+<span class="doccomment">//! # fn second(mut animation: Animation) {</span>
+<span class="doccomment">//! let size = animation.size();</span>
+<span class="doccomment">//! let mut surface = Surface::new(size);</span>
+<span class="doccomment">//! for frame in 0 .. animation.totalframe() {</span>
+<span class="doccomment">//! 	animation.render(frame, &amp;mut surface);</span>
+<span class="doccomment">//! 	for (x, y, color) in surface.pixels() {</span>
+<span class="doccomment">//! 		println!(&quot;frame {frame} at ({x}, {y}): {color:?}&quot;);</span>
+<span class="doccomment">//! 	}</span>
+<span class="doccomment">//! }</span>
+<span class="doccomment">//! # }</span>
+<span class="doccomment">//! ```</span>
 
 <span class="kw">use</span> <span class="ident">rgb::alt::BGRA8</span>;
 <span class="kw">use</span> <span class="ident">rlottie_sys</span>::<span class="kw-2">*</span>;
@@ -331,6 +385,16 @@
 	<span class="doccomment">/// Return the pixel data of the surface.</span>
 	<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">data</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw-2">&amp;</span>[<span class="ident">BGRA8</span>] {
 		<span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">data</span>
+	}
+
+	<span class="doccomment">/// Returns an iterator over the pixels of the surface.</span>
+	<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">pixels</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw">impl</span> <span class="ident">Iterator</span><span class="op">&lt;</span><span class="ident">Item</span> <span class="op">=</span> (<span class="ident">usize</span>, <span class="ident">usize</span>, <span class="ident">BGRA8</span>)<span class="op">&gt;</span> <span class="op">+</span> <span class="lifetime">&#39;_</span> {
+		<span class="kw">let</span> <span class="ident">width</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">width</span>();
+		<span class="self">self</span>.<span class="ident">data</span>().<span class="ident">iter</span>().<span class="ident">enumerate</span>().<span class="ident">map</span>(<span class="kw">move</span> <span class="op">|</span>(<span class="ident">i</span>, <span class="ident">color</span>)<span class="op">|</span> {
+			<span class="kw">let</span> <span class="ident">x</span> <span class="op">=</span> <span class="ident">i</span> <span class="op">%</span> <span class="ident">width</span>;
+			<span class="kw">let</span> <span class="ident">y</span> <span class="op">=</span> <span class="ident">i</span> <span class="op">/</span> <span class="ident">width</span>;
+			(<span class="ident">x</span>, <span class="ident">y</span>, <span class="kw-2">*</span><span class="ident">color</span>)
+		})
 	}
 
 	<span class="doccomment">/// Return a pointer to the pixel data.</span>
