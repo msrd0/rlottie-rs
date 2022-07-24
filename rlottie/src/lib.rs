@@ -1,7 +1,29 @@
+#![allow(clippy::tabs_in_doc_comments)]
 #![warn(rust_2018_idioms)]
 #![deny(elided_lifetimes_in_paths, unreachable_pub)]
 
 //! Safe Rust bindings to rlottie.
+//!
+//! # Example
+//!
+//! ```rust,edition2021,no_run
+//! use rlottie::{Animation, Surface};
+//!
+//! # fn first(path_to_lottie_json: std::path::PathBuf) -> Option<()> {
+//! let mut animation = Animation::from_file(path_to_lottie_json)?;
+//! # Some(())
+//! # }
+//! # fn second(mut animation: Animation) {
+//! let size = animation.size();
+//! let mut surface = Surface::new(size);
+//! for frame in 0 .. animation.totalframe() {
+//! 	animation.render(frame, &mut surface);
+//! 	for (x, y, color) in surface.pixels() {
+//! 		println!("frame {frame} at ({x}, {y}): {color:?}");
+//! 	}
+//! }
+//! # }
+//! ```
 
 use rgb::alt::BGRA8;
 use rlottie_sys::*;
@@ -94,6 +116,16 @@ impl Surface {
 	/// Return the pixel data of the surface.
 	pub fn data(&self) -> &[BGRA8] {
 		&self.data
+	}
+
+	/// Returns an iterator over the pixels of the surface.
+	pub fn pixels(&self) -> impl Iterator<Item = (usize, usize, BGRA8)> + '_ {
+		let width = self.width();
+		self.data().iter().enumerate().map(move |(i, color)| {
+			let x = i % width;
+			let y = i / width;
+			(x, y, *color)
+		})
 	}
 
 	/// Return a pointer to the pixel data.
