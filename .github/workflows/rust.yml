@@ -8,6 +8,7 @@ on:
 
 jobs:
   test:
+    name: Test (on Ubuntu Latest)
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -15,6 +16,20 @@ jobs:
       - uses: msrd0/install-rlottie-action@v1
       - run: cargo test --workspace
   
+  test-alpine:
+    name: Test (on Alpine Latest)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: jirutka/setup-alpine@v1
+        with:
+          packages: build-base clang-libs cmake make
+      - uses: msrd0/install-rlottie-action@v1
+        with:
+          shell: alpine.sh {0}
+      - run: cargo test --workspace
+        shell: alpine.sh {0}
+
   rustfmt:
     runs-on: ubuntu-latest
     steps:
