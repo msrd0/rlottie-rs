@@ -23,14 +23,27 @@ jobs:
       - uses: actions/checkout@v2
       - uses: jirutka/setup-alpine@v1
         with:
-          packages: build-base clang-libs cmake make sudo
-      - run: |
+          packages: build-base clang-libs cmake make rustup sudo
+      - name: Setup sudo
+        run: |
           echo "$USER ALL=(ALL) NOPASSWD: ALL" >/etc/sudoers.d/$USER
         shell: alpine.sh -r {0}
       - uses: msrd0/install-rlottie-action@v1
         with:
           shell: alpine.sh {0}
-      - run: cargo test --workspace
+      - name: Setup Rust
+        run: |
+          export CARGO_HOME=target/cargo
+          rustup-init -qy --default-host x86_64-unknown-linux-musl --default-toolchain none </dev/null
+          source $CARGO_HOME/env
+          rustup toolchain install stable --profile minimal
+          cargo -V
+        shell: alpine.sh {0}
+      - name: Run Tests
+        run: |
+          export CARGO_HOME=target/cargo
+          source $CARGO_HOME/env
+          cargo test --workspace
         shell: alpine.sh {0}
 
   rustfmt:
