@@ -23,7 +23,7 @@ jobs:
       - uses: actions/checkout@v2
       - uses: jirutka/setup-alpine@v1
         with:
-          packages: build-base clang-libs cmake make rustup sudo
+          packages: build-base clang-libs cmake make pkgconf rustup sudo
       - name: Setup sudo
         run: |
           echo "$USER ALL=(ALL) NOPASSWD: ALL" >/etc/sudoers.d/$USER
