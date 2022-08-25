@@ -24,7 +24,8 @@ jobs:
       - uses: jirutka/setup-alpine@v1
         with:
           packages: build-base clang-libs cmake make sudo
-      - run: echo "$USER ALL=(ALL) NOPASSWD: ALL" >/etc/sudoers.d/$USER
+      - run: |
+          echo "$USER ALL=(ALL) NOPASSWD: ALL" >/etc/sudoers.d/$USER
         shell: alpine.sh -r {0}
       - uses: msrd0/install-rlottie-action@v1
         with:
