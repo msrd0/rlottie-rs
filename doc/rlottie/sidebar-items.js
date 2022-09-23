@@ -1,1 +1,1 @@
-initSidebarItems({"struct":[["Animation","A lottie animation."],["Size","The size type used by lottie [`Animation`]."],["Surface","A surface has a fixed size and contains pixel data for it. You can render frames onto the surface."]]});
+window.SIDEBAR_ITEMS = {"struct":[["Animation","A lottie animation."],["Size","The size type used by lottie [`Animation`]."],["Surface","A surface has a fixed size and contains pixel data for it. You can render frames onto the surface."]]};
