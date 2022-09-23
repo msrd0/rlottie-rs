@@ -34,7 +34,7 @@ jobs:
         env:
           RUSTDOCFLAGS: "--default-theme ayu"
       - run: tar c target/doc/ | zstd -10 -o rustdoc.tar.zst
-      - uses: actions/upload-artifact@v2
+      - uses: actions/upload-artifact@v3
         with:
           name: rustdoc
           path: rustdoc.tar.zst
