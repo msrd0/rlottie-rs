@@ -39,3 +39,14 @@ fn main() {
 	let mut out = File::create(&webp_path).expect("Failed to create output file");
 	out.write_all(&webp).expect("Failed to write output file");
 }
+
+#[cfg(test)]
+mod tests {
+	use super::*;
+
+	#[test]
+	fn verify_cli() {
+		use clap::CommandFactory;
+		Args::command().debug_assert()
+	}
+}
