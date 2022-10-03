@@ -68,3 +68,14 @@ fn main() {
 		.and_then(Converter::convert)
 		.expect("Conversion failed");
 }
+
+#[cfg(test)]
+mod tests {
+	use super::*;
+
+	#[test]
+	fn verify_cli() {
+		use clap::CommandFactory;
+		Args::command().debug_assert()
+	}
+}
