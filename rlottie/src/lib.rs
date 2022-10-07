@@ -26,6 +26,7 @@
 //! ```
 
 use rgb::alt::BGRA8;
+pub use rgb::RGB;
 use rlottie_sys::*;
 use std::{
 	ffi::CString,
@@ -34,6 +35,13 @@ use std::{
 	path::Path,
 	ptr::NonNull
 };
+
+fn color_is_valid(color: RGB<f64>) -> bool {
+	let RGB { r, g, b } = color;
+	(0.0 ..= 1.0).contains(&r)
+		&& (0.0 ..= 1.0).contains(&g)
+		&& (0.0 ..= 1.0).contains(&b)
+}
 
 fn path_to_cstr<P>(path: P) -> CString
 where
@@ -257,6 +265,120 @@ impl Animation {
 				surface.width() * 4
 			);
 			surface.set_len();
+		}
+	}
+
+	pub fn set_fill_color(&mut self, keypath: &str, color: RGB<f64>) {
+		assert!(color_is_valid(color), "color is not valid");
+		let keypath = CString::new(keypath).unwrap();
+		let RGB { r, g, b } = color;
+		unsafe {
+			lottie_animation_property_override(
+                self.0.as_ptr(),
+                rlottie_sys::Lottie_Animation_Property::LOTTIE_ANIMATION_PROPERTY_FILLCOLOR,
+                keypath.as_ptr(),
+                r,
+                g,
+                b,
+            );
+		}
+	}
+
+	pub fn set_fill_opacity(&mut self, keypath: &str, opacity: f64) {
+		assert!(
+			(0.0 ..= 100.0).contains(&opacity),
+			"opacity values must be between 0.0 and 100.0"
+		);
+		let keypath = CString::new(keypath).unwrap();
+		unsafe {
+			lottie_animation_property_override(
+                self.0.as_ptr(),
+                rlottie_sys::Lottie_Animation_Property::LOTTIE_ANIMATION_PROPERTY_FILLOPACITY,
+                keypath.as_ptr(),
+                opacity,
+            );
+		}
+	}
+
+	pub fn set_stroke_color(&mut self, keypath: &str, color: RGB<f64>) {
+		assert!(color_is_valid(color), "color is not valid");
+		let keypath = CString::new(keypath).unwrap();
+		let RGB { r, g, b } = color;
+		unsafe {
+			lottie_animation_property_override(
+                self.0.as_ptr(),
+                rlottie_sys::Lottie_Animation_Property::LOTTIE_ANIMATION_PROPERTY_STROKECOLOR,
+                keypath.as_ptr(),
+                r,
+                g,
+                b,
+            );
+		}
+	}
+
+	pub fn set_stroke_opacity(&mut self, keypath: &str, opacity: f64) {
+		assert!(
+			(0.0 ..= 100.0).contains(&opacity),
+			"opacity values must be between 0.0 and 100.0"
+		);
+		let keypath = CString::new(keypath).unwrap();
+		unsafe {
+			lottie_animation_property_override(
+                self.0.as_ptr(),
+                rlottie_sys::Lottie_Animation_Property::LOTTIE_ANIMATION_PROPERTY_STROKEOPACITY,
+                keypath.as_ptr(),
+                opacity,
+            );
+		}
+	}
+
+	pub fn set_stroke_width(&mut self, keypath: &str, width: f64) {
+		let keypath = CString::new(keypath).unwrap();
+		unsafe {
+			lottie_animation_property_override(
+                self.0.as_ptr(),
+                rlottie_sys::Lottie_Animation_Property::LOTTIE_ANIMATION_PROPERTY_STROKEWIDTH,
+                keypath.as_ptr(),
+                width,
+            );
+		}
+	}
+
+	pub fn set_tr_position(&mut self, keypath: &str, x: f64, y: f64) {
+		let keypath = CString::new(keypath).unwrap();
+		unsafe {
+			lottie_animation_property_override(
+                self.0.as_ptr(),
+                rlottie_sys::Lottie_Animation_Property::LOTTIE_ANIMATION_PROPERTY_TR_POSITION,
+                keypath.as_ptr(),
+                x,
+                y,
+            );
+		}
+	}
+
+	pub fn set_tr_scale(&mut self, keypath: &str, width: f64, height: f64) {
+		let keypath = CString::new(keypath).unwrap();
+		unsafe {
+			lottie_animation_property_override(
+                self.0.as_ptr(),
+                rlottie_sys::Lottie_Animation_Property::LOTTIE_ANIMATION_PROPERTY_TR_SCALE,
+                keypath.as_ptr(),
+                width,
+                height,
+            );
+		}
+	}
+
+	pub fn set_tr_rotation(&mut self, keypath: &str, rotation: f64) {
+		let keypath = CString::new(keypath).unwrap();
+		unsafe {
+			lottie_animation_property_override(
+                self.0.as_ptr(),
+                rlottie_sys::Lottie_Animation_Property::LOTTIE_ANIMATION_PROPERTY_TR_ROTATION,
+                keypath.as_ptr(),
+                rotation,
+            );
 		}
 	}
 }
