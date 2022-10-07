@@ -26,6 +26,7 @@
 //! ```
 
 use rgb::alt::BGRA8;
+pub use rgb::RGB;
 use rlottie_sys::*;
 use std::{
 	ffi::CString,
@@ -34,6 +35,13 @@ use std::{
 	path::Path,
 	ptr::NonNull
 };
+
+fn color_is_valid(color: RGB<f64>) -> bool {
+	let RGB { r, g, b } = color;
+	(0.0 ..= 1.0).contains(&r)
+		&& (0.0 ..= 1.0).contains(&g)
+		&& (0.0 ..= 1.0).contains(&b)
+}
 
 fn path_to_cstr<P>(path: P) -> CString
 where
@@ -260,89 +268,117 @@ impl Animation {
 		}
 	}
 
-	/// Overrides dynamic property of animation
-	pub fn property_override(&mut self, keypath: &str, property: Property) {
+	pub fn set_fill_color(&mut self, keypath: &str, color: RGB<f64>) {
+		assert!(color_is_valid(color), "color is not valid");
 		let keypath = CString::new(keypath).unwrap();
+		let RGB { r, g, b } = color;
 		unsafe {
-			match property {
-                Property::FillColor(red, green, blue) => lottie_animation_property_override(
-                    self.0.as_ptr(),
-                    rlottie_sys::Lottie_Animation_Property::LOTTIE_ANIMATION_PROPERTY_FILLCOLOR,
-                    keypath.as_ptr(),
-                    red,
-                    green,
-                    blue,
-                ),
-                Property::FillOpacity(opacity) => lottie_animation_property_override(
-                    self.0.as_ptr(),
-                    rlottie_sys::Lottie_Animation_Property::LOTTIE_ANIMATION_PROPERTY_FILLOPACITY,
-                    keypath.as_ptr(),
-                    opacity,
-                ),
-                Property::StrokeColor(red, green, blue) => lottie_animation_property_override(
-                    self.0.as_ptr(),
-                    rlottie_sys::Lottie_Animation_Property::LOTTIE_ANIMATION_PROPERTY_STROKECOLOR,
-                    keypath.as_ptr(),
-                    red,
-                    green,
-                    blue,
-                ),
-                Property::StrokeOpacity(opacity) => lottie_animation_property_override(
-                    self.0.as_ptr(),
-                    rlottie_sys::Lottie_Animation_Property::LOTTIE_ANIMATION_PROPERTY_STROKEOPACITY,
-                    keypath.as_ptr(),
-                    opacity,
-                ),
-                Property::StrokeWidth(width) => lottie_animation_property_override(
-                    self.0.as_ptr(),
-                    rlottie_sys::Lottie_Animation_Property::LOTTIE_ANIMATION_PROPERTY_STROKEWIDTH,
-                    keypath.as_ptr(),
-                    width,
-                ),
-                Property::TrPosition(x, y) => lottie_animation_property_override(
-                    self.0.as_ptr(),
-                    rlottie_sys::Lottie_Animation_Property::LOTTIE_ANIMATION_PROPERTY_TR_POSITION,
-                    keypath.as_ptr(),
-                    x,
-                    y,
-                ),
-                Property::TrScale(w, h) => lottie_animation_property_override(
-                    self.0.as_ptr(),
-                    rlottie_sys::Lottie_Animation_Property::LOTTIE_ANIMATION_PROPERTY_TR_SCALE,
-                    keypath.as_ptr(),
-                    w,
-                    h,
-                ),
-                Property::TrRotation(angle) => lottie_animation_property_override(
-                    self.0.as_ptr(),
-                    rlottie_sys::Lottie_Animation_Property::LOTTIE_ANIMATION_PROPERTY_TR_ROTATION,
-                    keypath.as_ptr(),
-                    angle,
-                ),
-            }
+			lottie_animation_property_override(
+                self.0.as_ptr(),
+                rlottie_sys::Lottie_Animation_Property::LOTTIE_ANIMATION_PROPERTY_FILLCOLOR,
+                keypath.as_ptr(),
+                r,
+                g,
+                b,
+            );
 		}
 	}
-}
 
-#[non_exhaustive]
-pub enum Property {
-	/// r, g, b in 0.0..=1.0
-	FillColor(f64, f64, f64),
-	/// opacity in 0.0..=100.0
-	FillOpacity(f64),
-	/// r, g, b in 0.0..=1.0
-	StrokeColor(f64, f64, f64),
-	/// opacity in 0.0..=100.0
-	StrokeOpacity(f64),
-	/// Any width > 0.0
-	StrokeWidth(f64),
-	/// Only in samsung version
-	TrPosition(f64, f64),
-	/// Only in samsung version
-	TrScale(f64, f64),
-	/// Only in samsung version
-	TrRotation(f64)
-	// Unimplemented in c bindings yet
-	// TrAnchor,
-	// TrOpacity,
+	pub fn set_fill_opacity(&mut self, keypath: &str, opacity: f64) {
+		assert!(
+			(0.0 ..= 100.0).contains(&opacity),
+			"opacity values must be between 0.0 and 100.0"
+		);
+		let keypath = CString::new(keypath).unwrap();
+		unsafe {
+			lottie_animation_property_override(
+                self.0.as_ptr(),
+                rlottie_sys::Lottie_Animation_Property::LOTTIE_ANIMATION_PROPERTY_FILLOPACITY,
+                keypath.as_ptr(),
+                opacity,
+            );
+		}
+	}
+
+	pub fn set_stroke_color(&mut self, keypath: &str, color: RGB<f64>) {
+		assert!(color_is_valid(color), "color is not valid");
+		let keypath = CString::new(keypath).unwrap();
+		let RGB { r, g, b } = color;
+		unsafe {
+			lottie_animation_property_override(
+                self.0.as_ptr(),
+                rlottie_sys::Lottie_Animation_Property::LOTTIE_ANIMATION_PROPERTY_STROKECOLOR,
+                keypath.as_ptr(),
+                r,
+                g,
+                b,
+            );
+		}
+	}
+
+	pub fn set_stroke_opacity(&mut self, keypath: &str, opacity: f64) {
+		assert!(
+			(0.0 ..= 100.0).contains(&opacity),
+			"opacity values must be between 0.0 and 100.0"
+		);
+		let keypath = CString::new(keypath).unwrap();
+		unsafe {
+			lottie_animation_property_override(
+                self.0.as_ptr(),
+                rlottie_sys::Lottie_Animation_Property::LOTTIE_ANIMATION_PROPERTY_STROKEOPACITY,
+                keypath.as_ptr(),
+                opacity,
+            );
+		}
+	}
+
+	pub fn set_stroke_width(&mut self, keypath: &str, width: f64) {
+		let keypath = CString::new(keypath).unwrap();
+		unsafe {
+			lottie_animation_property_override(
+                self.0.as_ptr(),
+                rlottie_sys::Lottie_Animation_Property::LOTTIE_ANIMATION_PROPERTY_STROKEWIDTH,
+                keypath.as_ptr(),
+                width,
+            );
+		}
+	}
+
+	pub fn set_tr_position(&mut self, keypath: &str, x: f64, y: f64) {
+		let keypath = CString::new(keypath).unwrap();
+		unsafe {
+			lottie_animation_property_override(
+                self.0.as_ptr(),
+                rlottie_sys::Lottie_Animation_Property::LOTTIE_ANIMATION_PROPERTY_TR_POSITION,
+                keypath.as_ptr(),
+                x,
+                y,
+            );
+		}
+	}
+
+	pub fn set_tr_scale(&mut self, keypath: &str, width: f64, height: f64) {
+		let keypath = CString::new(keypath).unwrap();
+		unsafe {
+			lottie_animation_property_override(
+                self.0.as_ptr(),
+                rlottie_sys::Lottie_Animation_Property::LOTTIE_ANIMATION_PROPERTY_TR_SCALE,
+                keypath.as_ptr(),
+                width,
+                height,
+            );
+		}
+	}
+
+	pub fn set_tr_rotation(&mut self, keypath: &str, rotation: f64) {
+		let keypath = CString::new(keypath).unwrap();
+		unsafe {
+			lottie_animation_property_override(
+                self.0.as_ptr(),
+                rlottie_sys::Lottie_Animation_Property::LOTTIE_ANIMATION_PROPERTY_TR_ROTATION,
+                keypath.as_ptr(),
+                rotation,
+            );
+		}
+	}
 }
