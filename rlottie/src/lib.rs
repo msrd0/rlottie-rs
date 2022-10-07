@@ -129,6 +129,12 @@ impl Surface {
 		&self.data
 	}
 
+	/// Return the pixel data of the surface. You should prefer [`data()`] unless you
+	/// absolutely need owned access to the data.
+	pub fn into_data(self) -> Vec<Bgra> {
+		self.data
+	}
+
 	/// Return the raw pixel data of the surface.
 	pub fn data_as_bytes(&self) -> &[u8] {
 		// Safety: We are not mutating the surface data for the lifetime of the returned
@@ -159,6 +165,12 @@ impl Surface {
 	/// Set the length of the pixel data to `width * height`.
 	unsafe fn set_len(&mut self) {
 		self.data.set_len(self.width() * self.height())
+	}
+}
+
+impl AsRef<[u8]> for Surface {
+	fn as_ref(&self) -> &[u8] {
+		self.data_as_bytes()
 	}
 }
 
