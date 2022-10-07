@@ -259,4 +259,90 @@ impl Animation {
 			surface.set_len();
 		}
 	}
+
+	/// Overrides dynamic property of animation
+	pub fn property_override(&mut self, keypath: &str, property: Property) {
+		let keypath = CString::new(keypath).unwrap();
+		unsafe {
+			match property {
+                Property::FillColor(red, green, blue) => lottie_animation_property_override(
+                    self.0.as_ptr(),
+                    rlottie_sys::Lottie_Animation_Property::LOTTIE_ANIMATION_PROPERTY_FILLCOLOR,
+                    keypath.as_ptr(),
+                    red,
+                    green,
+                    blue,
+                ),
+                Property::FillOpacity(opacity) => lottie_animation_property_override(
+                    self.0.as_ptr(),
+                    rlottie_sys::Lottie_Animation_Property::LOTTIE_ANIMATION_PROPERTY_FILLOPACITY,
+                    keypath.as_ptr(),
+                    opacity,
+                ),
+                Property::StrokeColor(red, green, blue) => lottie_animation_property_override(
+                    self.0.as_ptr(),
+                    rlottie_sys::Lottie_Animation_Property::LOTTIE_ANIMATION_PROPERTY_STROKECOLOR,
+                    keypath.as_ptr(),
+                    red,
+                    green,
+                    blue,
+                ),
+                Property::StrokeOpacity(opacity) => lottie_animation_property_override(
+                    self.0.as_ptr(),
+                    rlottie_sys::Lottie_Animation_Property::LOTTIE_ANIMATION_PROPERTY_STROKEOPACITY,
+                    keypath.as_ptr(),
+                    opacity,
+                ),
+                Property::StrokeWidth(width) => lottie_animation_property_override(
+                    self.0.as_ptr(),
+                    rlottie_sys::Lottie_Animation_Property::LOTTIE_ANIMATION_PROPERTY_STROKEWIDTH,
+                    keypath.as_ptr(),
+                    width,
+                ),
+                Property::TrPosition(x, y) => lottie_animation_property_override(
+                    self.0.as_ptr(),
+                    rlottie_sys::Lottie_Animation_Property::LOTTIE_ANIMATION_PROPERTY_TR_POSITION,
+                    keypath.as_ptr(),
+                    x,
+                    y,
+                ),
+                Property::TrScale(w, h) => lottie_animation_property_override(
+                    self.0.as_ptr(),
+                    rlottie_sys::Lottie_Animation_Property::LOTTIE_ANIMATION_PROPERTY_TR_SCALE,
+                    keypath.as_ptr(),
+                    w,
+                    h,
+                ),
+                Property::TrRotation(angle) => lottie_animation_property_override(
+                    self.0.as_ptr(),
+                    rlottie_sys::Lottie_Animation_Property::LOTTIE_ANIMATION_PROPERTY_TR_ROTATION,
+                    keypath.as_ptr(),
+                    angle,
+                ),
+            }
+		}
+	}
+}
+
+#[non_exhaustive]
+pub enum Property {
+	/// r, g, b in 0.0..=1.0
+	FillColor(f64, f64, f64),
+	/// opacity in 0.0..=100.0
+	FillOpacity(f64),
+	/// r, g, b in 0.0..=1.0
+	StrokeColor(f64, f64, f64),
+	/// opacity in 0.0..=100.0
+	StrokeOpacity(f64),
+	/// Any width > 0.0
+	StrokeWidth(f64),
+	/// Only in samsung version
+	TrPosition(f64, f64),
+	/// Only in samsung version
+	TrScale(f64, f64),
+	/// Only in samsung version
+	TrRotation(f64)
+	// Unimplemented in c bindings yet
+	// TrAnchor,
+	// TrOpacity,
 }
