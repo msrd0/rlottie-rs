@@ -8,20 +8,19 @@ files, as well as binaries to do the conversion.
 This requires the features `clap` and `gif` to be active.
 
 ```
-lottieconv
 Convert lottie files GIF
 
-USAGE:
-    lottie2gif [OPTIONS] <lottieFileName> [bgColor]
+Usage: lottie2gif [OPTIONS] <lottieFileName> [bgColor]
 
-ARGS:
-    <lottieFileName>    The location of the lottie file
-    <bgColor>           The background color in hexadecimal format [default: 0]
+Arguments:
+  <lottieFileName>  The location of the lottie file
+  [bgColor]         The background color in hexadecimal format [default: 0]
 
-OPTIONS:
-    -h, --help               Print help information
-        --non-transparent    Disable background transparency
-    -o, --out <output>       The output file
+Options:
+      --non-transparent  Disable background transparency
+  -o, --out <output>     The output file
+  -h, --help             Print help information
+
 ```
 
 ## lottie2webp
@@ -29,16 +28,15 @@ OPTIONS:
 This requires the features `clap` and `webp` to be active.
 
 ```
-lottieconv
 Convert lottie files WEBP
 
-USAGE:
-    lottie2webp [OPTIONS] <lottieFileName>
+Usage: lottie2webp [OPTIONS] <lottieFileName>
 
-ARGS:
-    <lottieFileName>    The location of the lottie file
+Arguments:
+  <lottieFileName>  The location of the lottie file
 
-OPTIONS:
-    -h, --help            Print help information
-    -o, --out <output>    The output file
+Options:
+  -o, --out <output>  The output file
+  -h, --help          Print help information
+
 ```
