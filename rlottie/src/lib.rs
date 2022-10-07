@@ -30,9 +30,11 @@ use rlottie_sys::*;
 use std::{
 	ffi::CString,
 	fmt::{self, Debug},
+	mem,
 	os::unix::ffi::OsStrExt,
 	path::Path,
-	ptr::NonNull
+	ptr::NonNull,
+	slice
 };
 
 pub type Bgra<T = u8> = BGRA<T>;
@@ -127,6 +129,24 @@ impl Surface {
 		&self.data
 	}
 
+	/// Return the pixel data of the surface. You should prefer [`data()`] unless you
+	/// absolutely need owned access to the data.
+	pub fn into_data(self) -> Vec<Bgra> {
+		self.data
+	}
+
+	/// Return the raw pixel data of the surface.
+	pub fn data_as_bytes(&self) -> &[u8] {
+		// Safety: We are not mutating the surface data for the lifetime of the returned
+		// slice, and the memory was properly allocated by Vec, so this is fine.
+		unsafe {
+			slice::from_raw_parts(
+				self.data.as_ptr() as *const u8,
+				self.data.len() * mem::size_of::<Bgra>()
+			)
+		}
+	}
+
 	/// Returns an iterator over the pixels of the surface.
 	pub fn pixels(&self) -> impl Iterator<Item = (usize, usize, Bgra)> + '_ {
 		let width = self.width();
@@ -145,6 +165,12 @@ impl Surface {
 	/// Set the length of the pixel data to `width * height`.
 	unsafe fn set_len(&mut self) {
 		self.data.set_len(self.width() * self.height())
+	}
+}
+
+impl AsRef<[u8]> for Surface {
+	fn as_ref(&self) -> &[u8] {
+		self.data_as_bytes()
 	}
 }
 
