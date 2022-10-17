@@ -12,6 +12,7 @@ fn main() {
 		.parse_callbacks(Box::new(bindgen::CargoCallbacks))
 		.newtype_enum(".*")
 		.size_t_is_usize(true)
+		.use_core()
 		.generate()
 		.expect("Unable to generate bindings");
 
