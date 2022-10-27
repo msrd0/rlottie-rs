@@ -12,9 +12,19 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - uses: dtolnay/rust-toolchain@stable
-      - uses: msrd0/install-rlottie-action@v1
+      - uses: msrd0/install-rlottie-action@support-tg-vendor
       - run: cargo test --workspace --all-features
   
+  test-tg:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: dtolnay/rust-toolchain@stable
+      - uses: msrd0/install-rlottie-action@support-tg-vendor
+        with:
+          vendor: TelegramMessenger
+      - run: cargo test --workspace --all-features
+
   rustfmt:
     runs-on: ubuntu-latest
     steps:
