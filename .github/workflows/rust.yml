@@ -24,6 +24,24 @@ jobs:
         with:
           vendor: TelegramMessenger
       - run: cargo test --workspace --all-features
+  
+  test-2204:
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@v3
+      - uses: dtolnay/rust-toolchain@stable
+      - uses: msrd0/install-rlottie-action@support-tg-vendor
+      - run: cargo test --workspace --all-features
+  
+  test-tg-2204:
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@v3
+      - uses: dtolnay/rust-toolchain@stable
+      - uses: msrd0/install-rlottie-action@support-tg-vendor
+        with:
+          vendor: TelegramMessenger
+      - run: cargo test --workspace --all-features
 
   rustfmt:
     runs-on: ubuntu-latest
