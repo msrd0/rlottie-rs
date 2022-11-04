@@ -27,6 +27,8 @@
 
 use rgb::{alt::BGRA, RGB};
 use rlottie_sys::*;
+#[cfg(feature = "serde")]
+use serde::{Deserialize, Serialize};
 use std::{
 	ffi::CString,
 	fmt::{self, Debug},
@@ -56,6 +58,7 @@ where
 
 /// The size type used by lottie [`Animation`].
 #[derive(Clone, Copy, Debug, Eq, Ord, PartialEq, PartialOrd)]
+#[cfg_attr(feature = "serde", derive(Deserialize, Serialize))]
 pub struct Size {
 	pub width: usize,
 	pub height: usize

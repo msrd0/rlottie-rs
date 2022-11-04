@@ -12,11 +12,12 @@ repository = "https://github.com/msrd0/rlottie-rs"
 documentation = "https://docs.msrd0.de/rlottie/0.5.1/rlottie/"
 
 edition = "2021"
-rust-version = "1.56"
+rust-version = "1.60"
 
 [features]
-serde = ["rgb/serde"]
+serde = ["dep:serde", "rgb/serde"]
 
 [dependencies]
 rgb = { version = "0.8.32", default-features = false }
 rlottie-sys = { path = "../rlottie-sys", version = "0.2" }
+serde = { version = "1", features = ["derive"], optional = true }

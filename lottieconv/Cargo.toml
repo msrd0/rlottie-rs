@@ -13,7 +13,7 @@ repository = "https://github.com/msrd0/rlottie-rs"
 documentation = "https://docs.msrd0.de/lottieconv/0.2.1/lottieconv/"
 
 edition = "2021"
-rust-version = "1.56"
+rust-version = "1.60"
 autobins = false
 
 [[bin]]
@@ -28,9 +28,9 @@ required-features = ["clap", "webp"]
 
 [features]
 default = ["gif", "webp"]
-gif = ["gif_crate"]
+gif = ["dep:gif_crate"]
 serde = ["rgb/serde", "rlottie/serde"]
-webp = ["webp-animation"]
+webp = ["dep:webp-animation"]
 
 [dependencies]
 clap = { version = "4.0", features = ["derive"], optional = true }
