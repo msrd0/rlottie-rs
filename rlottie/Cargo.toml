@@ -3,13 +3,13 @@
 [package]
 workspace = ".."
 name = "rlottie"
-version = "0.5.1"
+version = "0.5.2" # update doc url as well!
 license = "MIT"
 include = ["build.rs", "src/**/*.rs", "/LICENSE"]
 
 description = "A platform independent standalone library that plays Lottie Animation"
 repository = "https://github.com/msrd0/rlottie-rs"
-documentation = "https://docs.msrd0.de/rlottie/0.5.1/rlottie/"
+documentation = "https://docs.msrd0.de/rlottie/0.5.2/rlottie/"
 
 edition = "2021"
 rust-version = "1.60"

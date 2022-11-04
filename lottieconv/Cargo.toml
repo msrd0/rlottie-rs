@@ -3,14 +3,14 @@
 [package]
 workspace = ".."
 name = "lottieconv"
-version = "0.2.1"
+version = "0.2.2" # update doc url as well!
 license = "MIT"
 include = ["src/**/*.rs", "bin/*.rs", "/LICENSE", "/README.md"]
 
 description = "Convert lottie files to WEBP or GIF"
 keywords = ["lottie", "webp", "gif", "convert"]
 repository = "https://github.com/msrd0/rlottie-rs"
-documentation = "https://docs.msrd0.de/lottieconv/0.2.1/lottieconv/"
+documentation = "https://docs.msrd0.de/lottieconv/0.2.2/lottieconv/"
 
 edition = "2021"
 rust-version = "1.60"
@@ -36,5 +36,5 @@ webp = ["dep:webp-animation"]
 clap = { version = "4.0", features = ["derive"], optional = true }
 gif_crate = { package = "gif", version = "0.11.3", optional = true }
 rgb = { version = "0.8.32", default-features = false }
-rlottie = { path = "../rlottie", version = "0.5" }
+rlottie = { path = "../rlottie", version = "0.5.2" }
 webp-animation = { version = "0.7", optional = true }
