@@ -29,8 +29,8 @@ required-features = ["clap", "webp"]
 [features]
 default = ["gif", "webp"]
 gif = ["gif_crate"]
-webp = ["webp-animation"]
 serde = ["rgb/serde"]
+webp = ["webp-animation"]
 
 [dependencies]
 clap = { version = "4.0", features = ["derive"], optional = true }
