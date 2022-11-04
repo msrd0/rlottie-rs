@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `rlottie/src/lib.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>lib.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" type="text/css" href="../../normalize.css"><link rel="stylesheet" type="text/css" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../ayu.css" disabled><link rel="stylesheet" type="text/css" href="../../dark.css" disabled><link rel="stylesheet" type="text/css" href="../../light.css" id="themeStyle"><script id="default-settings" 
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `rlottie/src/lib.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>lib.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" href="../../normalize.css"><link rel="stylesheet" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" href="../../ayu.css" disabled><link rel="stylesheet" href="../../dark.css" disabled><link rel="stylesheet" href="../../light.css" id="themeStyle"><script id="default-settings" 
         data-theme="ayu"
         data-use_system_theme="false"></script><script src="../../storage.js"></script><script defer src="../../source-script.js"></script><script defer src="../../source-files.js"></script><script defer src="../../main.js"></script><noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="sidebar-logo" href="../../rlottie/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div></a><h2 class="location"></h2></nav><nav class="sidebar"><a class="sidebar-logo" href="../../rlottie/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div></a></nav><main><div class="width-limiter"><div class="sub-container"><a class="sub-logo-container" href="../../rlottie/index.html"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></a><nav class="sub"><form class="search-form"><div class="search-container"><span></span><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><button type="button">?</button></div><div id="settings-menu" tabindex="-1"><a href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../wheel.svg"></a></div></div></form></nav></div><section id="main-content" class="content"><div class="example-wrap"><pre class="line-numbers"><span id="1">1</span>
 <span id="2">2</span>
@@ -411,416 +411,416 @@
 <span id="409">409</span>
 <span id="410">410</span>
 <span id="411">411</span>
-</pre><pre class="rust"><code><span class="attribute">#![<span class="ident">allow</span>(<span class="ident">clippy::tabs_in_doc_comments</span>)]</span>
-<span class="attribute">#![<span class="ident">warn</span>(<span class="ident">rust_2018_idioms</span>)]</span>
-<span class="attribute">#![<span class="ident">deny</span>(<span class="ident">elided_lifetimes_in_paths</span>, <span class="ident">unreachable_pub</span>)]</span>
+</pre><pre class="rust"><code><span class="attribute">#![allow(clippy::tabs_in_doc_comments)]
+#![warn(rust_2018_idioms)]
+#![deny(elided_lifetimes_in_paths, unreachable_pub)]
 
-<span class="doccomment">//! Safe Rust bindings to rlottie.</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! # Example</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! ```rust,edition2021,no_run</span>
-<span class="doccomment">//! use rlottie::{Animation, Surface};</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! # fn first(path_to_lottie_json: std::path::PathBuf) -&gt; Option&lt;()&gt; {</span>
-<span class="doccomment">//! let mut animation = Animation::from_file(path_to_lottie_json)?;</span>
-<span class="doccomment">//! # Some(())</span>
-<span class="doccomment">//! # }</span>
-<span class="doccomment">//! # fn second(mut animation: Animation) {</span>
-<span class="doccomment">//! let size = animation.size();</span>
-<span class="doccomment">//! let mut surface = Surface::new(size);</span>
-<span class="doccomment">//! for frame in 0 .. animation.totalframe() {</span>
-<span class="doccomment">//! 	animation.render(frame, &amp;mut surface);</span>
-<span class="doccomment">//! 	for (x, y, color) in surface.pixels() {</span>
-<span class="doccomment">//! 		println!(&quot;frame {frame} at ({x}, {y}): {color:?}&quot;);</span>
-<span class="doccomment">//! 	}</span>
-<span class="doccomment">//! }</span>
-<span class="doccomment">//! # }</span>
-<span class="doccomment">//! ```</span>
+</span><span class="doccomment">//! Safe Rust bindings to rlottie.
+//!
+//! # Example
+//!
+//! ```rust,edition2021,no_run
+//! use rlottie::{Animation, Surface};
+//!
+//! # fn first(path_to_lottie_json: std::path::PathBuf) -&gt; Option&lt;()&gt; {
+//! let mut animation = Animation::from_file(path_to_lottie_json)?;
+//! # Some(())
+//! # }
+//! # fn second(mut animation: Animation) {
+//! let size = animation.size();
+//! let mut surface = Surface::new(size);
+//! for frame in 0 .. animation.totalframe() {
+//! 	animation.render(frame, &amp;mut surface);
+//! 	for (x, y, color) in surface.pixels() {
+//! 		println!(&quot;frame {frame} at ({x}, {y}): {color:?}&quot;);
+//! 	}
+//! }
+//! # }
+//! ```
 
-<span class="kw">use</span> <span class="ident">rgb</span>::{<span class="ident">alt::BGRA</span>, <span class="ident">RGB</span>};
-<span class="kw">use</span> <span class="ident">rlottie_sys</span>::<span class="kw-2">*</span>;
-<span class="kw">use</span> <span class="ident">std</span>::{
-	<span class="ident">ffi::CString</span>,
-	<span class="ident">fmt</span>::{<span class="self">self</span>, <span class="ident">Debug</span>},
-	<span class="ident">mem</span>,
-	<span class="ident">os::unix::ffi::OsStrExt</span>,
-	<span class="ident">path::Path</span>,
-	<span class="ident">ptr::NonNull</span>,
-	<span class="ident">slice</span>
+</span><span class="kw">use </span>rgb::{alt::BGRA, RGB};
+<span class="kw">use </span>rlottie_sys::<span class="kw-2">*</span>;
+<span class="kw">use </span>std::{
+	ffi::CString,
+	fmt::{<span class="self">self</span>, Debug},
+	mem,
+	os::unix::ffi::OsStrExt,
+	path::Path,
+	ptr::NonNull,
+	slice
 };
 
-<span class="kw">pub</span> <span class="kw">type</span> <span class="ident">Bgra</span><span class="op">&lt;</span><span class="ident">T</span> <span class="op">=</span> <span class="ident">u8</span><span class="op">&gt;</span> <span class="op">=</span> <span class="ident">BGRA</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>;
-<span class="kw">pub</span> <span class="kw">type</span> <span class="ident">Rgb</span><span class="op">&lt;</span><span class="ident">T</span> <span class="op">=</span> <span class="ident">f64</span><span class="op">&gt;</span> <span class="op">=</span> <span class="ident">RGB</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>;
+<span class="kw">pub type </span>Bgra&lt;T = u8&gt; = BGRA&lt;T&gt;;
+<span class="kw">pub type </span>Rgb&lt;T = f64&gt; = RGB&lt;T&gt;;
 
-<span class="kw">fn</span> <span class="ident">color_is_valid</span>(<span class="ident">Rgb</span> { <span class="ident">r</span>, <span class="ident">g</span>, <span class="ident">b</span> }: <span class="ident">Rgb</span>) -&gt; <span class="ident">bool</span> {
-	(<span class="number">0.0</span> ..<span class="op">=</span> <span class="number">1.0</span>).<span class="ident">contains</span>(<span class="kw-2">&amp;</span><span class="ident">r</span>)
-		<span class="op">&amp;&amp;</span> (<span class="number">0.0</span> ..<span class="op">=</span> <span class="number">1.0</span>).<span class="ident">contains</span>(<span class="kw-2">&amp;</span><span class="ident">g</span>)
-		<span class="op">&amp;&amp;</span> (<span class="number">0.0</span> ..<span class="op">=</span> <span class="number">1.0</span>).<span class="ident">contains</span>(<span class="kw-2">&amp;</span><span class="ident">b</span>)
+<span class="kw">fn </span>color_is_valid(Rgb { r, g, b }: Rgb) -&gt; bool {
+	(<span class="number">0.0 </span>..= <span class="number">1.0</span>).contains(<span class="kw-2">&amp;</span>r)
+		&amp;&amp; (<span class="number">0.0 </span>..= <span class="number">1.0</span>).contains(<span class="kw-2">&amp;</span>g)
+		&amp;&amp; (<span class="number">0.0 </span>..= <span class="number">1.0</span>).contains(<span class="kw-2">&amp;</span>b)
 }
 
-<span class="kw">fn</span> <span class="ident">path_to_cstr</span><span class="op">&lt;</span><span class="ident">P</span><span class="op">&gt;</span>(<span class="ident">path</span>: <span class="ident">P</span>) -&gt; <span class="ident">CString</span>
-<span class="kw">where</span>
-	<span class="ident">P</span>: <span class="ident">AsRef</span><span class="op">&lt;</span><span class="ident">Path</span><span class="op">&gt;</span>
+<span class="kw">fn </span>path_to_cstr&lt;P&gt;(path: P) -&gt; CString
+<span class="kw">where
+	</span>P: AsRef&lt;Path&gt;
 {
-	<span class="kw">let</span> <span class="ident">bytes</span> <span class="op">=</span> <span class="ident">path</span>.<span class="ident">as_ref</span>().<span class="ident">as_os_str</span>().<span class="ident">as_bytes</span>().<span class="ident">to_vec</span>();
-	<span class="ident">CString::new</span>(<span class="ident">bytes</span>).<span class="ident">expect</span>(<span class="string">&quot;path must not contain nul&quot;</span>)
+	<span class="kw">let </span>bytes = path.as_ref().as_os_str().as_bytes().to_vec();
+	CString::new(bytes).expect(<span class="string">&quot;path must not contain nul&quot;</span>)
 }
 
-<span class="doccomment">/// The size type used by lottie [`Animation`].</span>
-<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Clone</span>, <span class="ident">Copy</span>, <span class="ident">Debug</span>, <span class="ident">Eq</span>, <span class="ident">Ord</span>, <span class="ident">PartialEq</span>, <span class="ident">PartialOrd</span>)]</span>
-<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">Size</span> {
-	<span class="kw">pub</span> <span class="ident">width</span>: <span class="ident">usize</span>,
-	<span class="kw">pub</span> <span class="ident">height</span>: <span class="ident">usize</span>
+<span class="doccomment">/// The size type used by lottie [`Animation`].
+</span><span class="attribute">#[derive(Clone, Copy, Debug, Eq, Ord, PartialEq, PartialOrd)]
+</span><span class="kw">pub struct </span>Size {
+	<span class="kw">pub </span>width: usize,
+	<span class="kw">pub </span>height: usize
 }
 
-<span class="kw">impl</span> <span class="ident">Size</span> {
-	<span class="kw">pub</span> <span class="kw">const</span> <span class="kw">fn</span> <span class="ident">new</span>(<span class="ident">width</span>: <span class="ident">usize</span>, <span class="ident">height</span>: <span class="ident">usize</span>) -&gt; <span class="self">Self</span> {
-		<span class="self">Self</span> { <span class="ident">width</span>, <span class="ident">height</span> }
+<span class="kw">impl </span>Size {
+	<span class="kw">pub const fn </span>new(width: usize, height: usize) -&gt; <span class="self">Self </span>{
+		<span class="self">Self </span>{ width, height }
 	}
 }
 
-<span class="doccomment">/// It is very important that [`Bgra`] and `u32` have exactly the same size. This</span>
-<span class="doccomment">/// mod does nothing other than fail to compile if that was not the case.</span>
-<span class="attribute">#[<span class="ident">allow</span>(<span class="ident">dead_code</span>)]</span>
-<span class="kw">mod</span> <span class="ident">bgra8_size</span> {
-	<span class="kw">use</span> <span class="ident"><span class="kw">super</span>::Bgra</span>;
-	<span class="kw">use</span> <span class="ident">std</span>::{<span class="ident">marker::PhantomData</span>, <span class="ident">mem</span>};
+<span class="doccomment">/// It is very important that [`Bgra`] and `u32` have exactly the same size. This
+/// mod does nothing other than fail to compile if that was not the case.
+</span><span class="attribute">#[allow(dead_code)]
+</span><span class="kw">mod </span>bgra8_size {
+	<span class="kw">use </span><span class="kw">super</span>::Bgra;
+	<span class="kw">use </span>std::{marker::PhantomData, mem};
 
-	<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Default</span>)]</span>
-	<span class="kw">struct</span> <span class="ident">AssertSize</span><span class="op">&lt;</span><span class="kw">const</span> <span class="ident">N</span>: <span class="ident">usize</span><span class="op">&gt;</span>(<span class="ident">PhantomData</span><span class="op">&lt;</span>[(); <span class="ident">N</span>]<span class="op">&gt;</span>);
+	<span class="attribute">#[derive(Default)]
+	</span><span class="kw">struct </span>AssertSize&lt;<span class="kw">const </span>N: usize&gt;(PhantomData&lt;[(); N]&gt;);
 
-	<span class="kw">impl</span><span class="op">&lt;</span><span class="kw">const</span> <span class="ident">N</span>: <span class="ident">usize</span><span class="op">&gt;</span> <span class="ident">AssertSize</span><span class="op">&lt;</span><span class="ident">N</span><span class="op">&gt;</span> {
-		<span class="kw">const</span> <span class="kw">fn</span> <span class="ident">new</span>() -&gt; <span class="self">Self</span> {
-			<span class="self">Self</span>(<span class="ident">PhantomData</span>)
+	<span class="kw">impl</span>&lt;<span class="kw">const </span>N: usize&gt; AssertSize&lt;N&gt; {
+		<span class="kw">const fn </span>new() -&gt; <span class="self">Self </span>{
+			<span class="self">Self</span>(PhantomData)
 		}
 	}
 
-	<span class="kw">impl</span> <span class="ident">AssertSize</span><span class="op">&lt;</span><span class="number">4</span><span class="op">&gt;</span> {
-		<span class="kw">const</span> <span class="kw">fn</span> <span class="ident">assert_size_u32</span>(<span class="self">self</span>) {}
+	<span class="kw">impl </span>AssertSize&lt;<span class="number">4</span>&gt; {
+		<span class="kw">const fn </span>assert_size_u32(<span class="self">self</span>) {}
 	}
 
-	<span class="kw">const</span> <span class="kw">_</span>: () <span class="op">=</span> {
-		<span class="ident">AssertSize</span>::<span class="op">&lt;</span>{ <span class="ident">mem::size_of</span>::<span class="op">&lt;</span><span class="ident">Bgra</span><span class="op">&gt;</span>() }<span class="op">&gt;</span><span class="ident">::new</span>().<span class="ident">assert_size_u32</span>();
-		<span class="ident">AssertSize</span>::<span class="op">&lt;</span>{ <span class="ident">mem::size_of</span>::<span class="op">&lt;</span><span class="ident">u32</span><span class="op">&gt;</span>() }<span class="op">&gt;</span><span class="ident">::new</span>().<span class="ident">assert_size_u32</span>();
+	<span class="kw">const _</span>: () = {
+		AssertSize::&lt;{ mem::size_of::&lt;Bgra&gt;() }&gt;::new().assert_size_u32();
+		AssertSize::&lt;{ mem::size_of::&lt;u32&gt;() }&gt;::new().assert_size_u32();
 	};
 }
 
-<span class="doccomment">/// A surface has a fixed size and contains pixel data for it. You can render frames onto</span>
-<span class="doccomment">/// the surface.</span>
-<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">Surface</span> {
-	<span class="ident">data</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">Bgra</span><span class="op">&gt;</span>,
-	<span class="ident">size</span>: <span class="ident">Size</span>
+<span class="doccomment">/// A surface has a fixed size and contains pixel data for it. You can render frames onto
+/// the surface.
+</span><span class="kw">pub struct </span>Surface {
+	data: Vec&lt;Bgra&gt;,
+	size: Size
 }
 
-<span class="kw">impl</span> <span class="ident">Surface</span> {
-	<span class="doccomment">/// Create a new surface with a fixed size.</span>
-	<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span>(<span class="ident">size</span>: <span class="ident">Size</span>) -&gt; <span class="self">Self</span> {
-		<span class="self">Self</span> {
-			<span class="ident">data</span>: <span class="ident">Vec::with_capacity</span>(<span class="ident">size</span>.<span class="ident">width</span> <span class="op">*</span> <span class="ident">size</span>.<span class="ident">height</span>),
-			<span class="ident">size</span>
+<span class="kw">impl </span>Surface {
+	<span class="doccomment">/// Create a new surface with a fixed size.
+	</span><span class="kw">pub fn </span>new(size: Size) -&gt; <span class="self">Self </span>{
+		<span class="self">Self </span>{
+			data: Vec::with_capacity(size.width * size.height),
+			size
 		}
 	}
 
-	<span class="doccomment">/// Return the size of the surface.</span>
-	<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">size</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">Size</span> {
-		<span class="self">self</span>.<span class="ident">size</span>
+	<span class="doccomment">/// Return the size of the surface.
+	</span><span class="kw">pub fn </span>size(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; Size {
+		<span class="self">self</span>.size
 	}
 
-	<span class="doccomment">/// Return the width of the surface.</span>
-	<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">width</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">usize</span> {
-		<span class="self">self</span>.<span class="ident">size</span>.<span class="ident">width</span>
+	<span class="doccomment">/// Return the width of the surface.
+	</span><span class="kw">pub fn </span>width(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; usize {
+		<span class="self">self</span>.size.width
 	}
 
-	<span class="doccomment">/// Return the height of the surface.</span>
-	<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">height</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">usize</span> {
-		<span class="self">self</span>.<span class="ident">size</span>.<span class="ident">height</span>
+	<span class="doccomment">/// Return the height of the surface.
+	</span><span class="kw">pub fn </span>height(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; usize {
+		<span class="self">self</span>.size.height
 	}
 
-	<span class="doccomment">/// Return the pixel data of the surface.</span>
-	<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">data</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw-2">&amp;</span>[<span class="ident">Bgra</span>] {
-		<span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">data</span>
+	<span class="doccomment">/// Return the pixel data of the surface.
+	</span><span class="kw">pub fn </span>data(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw-2">&amp;</span>[Bgra] {
+		<span class="kw-2">&amp;</span><span class="self">self</span>.data
 	}
 
-	<span class="doccomment">/// Return the pixel data of the surface. You should prefer [`data()`] unless you</span>
-	<span class="doccomment">/// absolutely need owned access to the data.</span>
-	<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">into_data</span>(<span class="self">self</span>) -&gt; <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">Bgra</span><span class="op">&gt;</span> {
-		<span class="self">self</span>.<span class="ident">data</span>
+	<span class="doccomment">/// Return the pixel data of the surface. You should prefer [`data()`] unless you
+	/// absolutely need owned access to the data.
+	</span><span class="kw">pub fn </span>into_data(<span class="self">self</span>) -&gt; Vec&lt;Bgra&gt; {
+		<span class="self">self</span>.data
 	}
 
-	<span class="doccomment">/// Return the raw pixel data of the surface.</span>
-	<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">data_as_bytes</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw-2">&amp;</span>[<span class="ident">u8</span>] {
-		<span class="comment">// Safety: We are not mutating the surface data for the lifetime of the returned</span>
-		<span class="comment">// slice, and the memory was properly allocated by Vec, so this is fine.</span>
-		<span class="kw">unsafe</span> {
-			<span class="ident">slice::from_raw_parts</span>(
-				<span class="self">self</span>.<span class="ident">data</span>.<span class="ident">as_ptr</span>() <span class="kw">as</span> <span class="kw-2">*const</span> <span class="ident">u8</span>,
-				<span class="self">self</span>.<span class="ident">data</span>.<span class="ident">len</span>() <span class="op">*</span> <span class="ident">mem::size_of</span>::<span class="op">&lt;</span><span class="ident">Bgra</span><span class="op">&gt;</span>()
+	<span class="doccomment">/// Return the raw pixel data of the surface.
+	</span><span class="kw">pub fn </span>data_as_bytes(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw-2">&amp;</span>[u8] {
+		<span class="comment">// Safety: We are not mutating the surface data for the lifetime of the returned
+		// slice, and the memory was properly allocated by Vec, so this is fine.
+		</span><span class="kw">unsafe </span>{
+			slice::from_raw_parts(
+				<span class="self">self</span>.data.as_ptr() <span class="kw">as </span><span class="kw-2">*const </span>u8,
+				<span class="self">self</span>.data.len() * mem::size_of::&lt;Bgra&gt;()
 			)
 		}
 	}
 
-	<span class="doccomment">/// Returns an iterator over the pixels of the surface.</span>
-	<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">pixels</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw">impl</span> <span class="ident">Iterator</span><span class="op">&lt;</span><span class="ident">Item</span> <span class="op">=</span> (<span class="ident">usize</span>, <span class="ident">usize</span>, <span class="ident">Bgra</span>)<span class="op">&gt;</span> <span class="op">+</span> <span class="lifetime">&#39;_</span> {
-		<span class="kw">let</span> <span class="ident">width</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">width</span>();
-		<span class="self">self</span>.<span class="ident">data</span>().<span class="ident">iter</span>().<span class="ident">enumerate</span>().<span class="ident">map</span>(<span class="kw">move</span> <span class="op">|</span>(<span class="ident">i</span>, <span class="ident">color</span>)<span class="op">|</span> {
-			<span class="kw">let</span> <span class="ident">x</span> <span class="op">=</span> <span class="ident">i</span> <span class="op">%</span> <span class="ident">width</span>;
-			<span class="kw">let</span> <span class="ident">y</span> <span class="op">=</span> <span class="ident">i</span> <span class="op">/</span> <span class="ident">width</span>;
-			(<span class="ident">x</span>, <span class="ident">y</span>, <span class="kw-2">*</span><span class="ident">color</span>)
+	<span class="doccomment">/// Returns an iterator over the pixels of the surface.
+	</span><span class="kw">pub fn </span>pixels(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw">impl </span>Iterator&lt;Item = (usize, usize, Bgra)&gt; + <span class="lifetime">&#39;_ </span>{
+		<span class="kw">let </span>width = <span class="self">self</span>.width();
+		<span class="self">self</span>.data().iter().enumerate().map(<span class="kw">move </span>|(i, color)| {
+			<span class="kw">let </span>x = i % width;
+			<span class="kw">let </span>y = i / width;
+			(x, y, <span class="kw-2">*</span>color)
 		})
 	}
 
-	<span class="doccomment">/// Return a pointer to the pixel data.</span>
-	<span class="kw">fn</span> <span class="ident">as_mut_ptr</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>) -&gt; <span class="kw-2">*mut</span> <span class="ident">u32</span> {
-		<span class="self">self</span>.<span class="ident">data</span>.<span class="ident">as_mut_ptr</span>() <span class="kw">as</span> <span class="kw-2">*mut</span> <span class="ident">u32</span>
+	<span class="doccomment">/// Return a pointer to the pixel data.
+	</span><span class="kw">fn </span>as_mut_ptr(<span class="kw-2">&amp;mut </span><span class="self">self</span>) -&gt; <span class="kw-2">*mut </span>u32 {
+		<span class="self">self</span>.data.as_mut_ptr() <span class="kw">as </span><span class="kw-2">*mut </span>u32
 	}
 
-	<span class="doccomment">/// Set the length of the pixel data to `width * height`.</span>
-	<span class="kw">unsafe</span> <span class="kw">fn</span> <span class="ident">set_len</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>) {
-		<span class="self">self</span>.<span class="ident">data</span>.<span class="ident">set_len</span>(<span class="self">self</span>.<span class="ident">width</span>() <span class="op">*</span> <span class="self">self</span>.<span class="ident">height</span>())
-	}
-}
-
-<span class="kw">impl</span> <span class="ident">AsRef</span><span class="op">&lt;</span>[<span class="ident">u8</span>]<span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">Surface</span> {
-	<span class="kw">fn</span> <span class="ident">as_ref</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw-2">&amp;</span>[<span class="ident">u8</span>] {
-		<span class="self">self</span>.<span class="ident">data_as_bytes</span>()
+	<span class="doccomment">/// Set the length of the pixel data to `width * height`.
+	</span><span class="kw">unsafe fn </span>set_len(<span class="kw-2">&amp;mut </span><span class="self">self</span>) {
+		<span class="self">self</span>.data.set_len(<span class="self">self</span>.width() * <span class="self">self</span>.height())
 	}
 }
 
-<span class="doccomment">/// A lottie animation.</span>
-<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">Animation</span>(<span class="ident">NonNull</span><span class="op">&lt;</span><span class="ident">Lottie_Animation_S</span><span class="op">&gt;</span>);
-
-<span class="kw">impl</span> <span class="ident">Debug</span> <span class="kw">for</span> <span class="ident">Animation</span> {
-	<span class="kw">fn</span> <span class="ident">fmt</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">f</span>: <span class="kw-2">&amp;mut</span> <span class="ident">fmt::Formatter</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>) -&gt; <span class="ident">fmt::Result</span> {
-		<span class="ident">f</span>.<span class="ident">debug_struct</span>(<span class="string">&quot;Animation&quot;</span>).<span class="ident">finish_non_exhaustive</span>()
+<span class="kw">impl </span>AsRef&lt;[u8]&gt; <span class="kw">for </span>Surface {
+	<span class="kw">fn </span>as_ref(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw-2">&amp;</span>[u8] {
+		<span class="self">self</span>.data_as_bytes()
 	}
 }
 
-<span class="kw">impl</span> <span class="ident">Drop</span> <span class="kw">for</span> <span class="ident">Animation</span> {
-	<span class="kw">fn</span> <span class="ident">drop</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>) {
-		<span class="kw">unsafe</span> {
-			<span class="ident">lottie_animation_destroy</span>(<span class="self">self</span>.<span class="number">0</span>.<span class="ident">as_ptr</span>());
+<span class="doccomment">/// A lottie animation.
+</span><span class="kw">pub struct </span>Animation(NonNull&lt;Lottie_Animation_S&gt;);
+
+<span class="kw">impl </span>Debug <span class="kw">for </span>Animation {
+	<span class="kw">fn </span>fmt(<span class="kw-2">&amp;</span><span class="self">self</span>, f: <span class="kw-2">&amp;mut </span>fmt::Formatter&lt;<span class="lifetime">&#39;_</span>&gt;) -&gt; fmt::Result {
+		f.debug_struct(<span class="string">&quot;Animation&quot;</span>).finish_non_exhaustive()
+	}
+}
+
+<span class="kw">impl </span>Drop <span class="kw">for </span>Animation {
+	<span class="kw">fn </span>drop(<span class="kw-2">&amp;mut </span><span class="self">self</span>) {
+		<span class="kw">unsafe </span>{
+			lottie_animation_destroy(<span class="self">self</span>.<span class="number">0</span>.as_ptr());
 		}
 	}
 }
 
-<span class="kw">impl</span> <span class="ident">Animation</span> {
-	<span class="kw">fn</span> <span class="ident">from_ptr</span>(<span class="ident">ptr</span>: <span class="kw-2">*mut</span> <span class="ident">Lottie_Animation_S</span>) -&gt; <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span> {
-		(<span class="op">!</span><span class="ident">ptr</span>.<span class="ident">is_null</span>()).<span class="ident">then</span>(<span class="op">|</span><span class="op">|</span> {
-			<span class="comment">// Safety: This is only called if ptr is non null</span>
-			<span class="self">Self</span>(<span class="kw">unsafe</span> { <span class="ident">NonNull::new_unchecked</span>(<span class="ident">ptr</span>) })
+<span class="kw">impl </span>Animation {
+	<span class="kw">fn </span>from_ptr(ptr: <span class="kw-2">*mut </span>Lottie_Animation_S) -&gt; <span class="prelude-ty">Option</span>&lt;<span class="self">Self</span>&gt; {
+		(!ptr.is_null()).then(|| {
+			<span class="comment">// Safety: This is only called if ptr is non null
+			</span><span class="self">Self</span>(<span class="kw">unsafe </span>{ NonNull::new_unchecked(ptr) })
 		})
 	}
 
-	<span class="doccomment">/// Constructs an animation object from file path. This file needs to be in JSON</span>
-	<span class="doccomment">/// format; if you want to read telegram&#39;s tgs files, you need to decompress</span>
-	<span class="doccomment">/// them first.</span>
-	<span class="doccomment">///</span>
-	<span class="doccomment">/// Note that the rlottie library might cache the file and/or its resources.</span>
-	<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">from_file</span><span class="op">&lt;</span><span class="ident">P</span><span class="op">&gt;</span>(<span class="ident">path</span>: <span class="ident">P</span>) -&gt; <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span>
-	<span class="kw">where</span>
-		<span class="ident">P</span>: <span class="ident">AsRef</span><span class="op">&lt;</span><span class="ident">Path</span><span class="op">&gt;</span>
+	<span class="doccomment">/// Constructs an animation object from file path. This file needs to be in JSON
+	/// format; if you want to read telegram&#39;s tgs files, you need to decompress
+	/// them first.
+	///
+	/// Note that the rlottie library might cache the file and/or its resources.
+	</span><span class="kw">pub fn </span>from_file&lt;P&gt;(path: P) -&gt; <span class="prelude-ty">Option</span>&lt;<span class="self">Self</span>&gt;
+	<span class="kw">where
+		</span>P: AsRef&lt;Path&gt;
 	{
-		<span class="kw">let</span> <span class="ident">path</span> <span class="op">=</span> <span class="ident">path_to_cstr</span>(<span class="ident">path</span>);
-		<span class="kw">let</span> <span class="ident">ptr</span> <span class="op">=</span> <span class="kw">unsafe</span> { <span class="ident">lottie_animation_from_file</span>(<span class="ident">path</span>.<span class="ident">as_ptr</span>()) };
-		<span class="ident"><span class="self">Self</span>::from_ptr</span>(<span class="ident">ptr</span>)
+		<span class="kw">let </span>path = path_to_cstr(path);
+		<span class="kw">let </span>ptr = <span class="kw">unsafe </span>{ lottie_animation_from_file(path.as_ptr()) };
+		<span class="self">Self</span>::from_ptr(ptr)
 	}
 
-	<span class="doccomment">/// Constructs an animation object from JSON string data. External resources are</span>
-	<span class="doccomment">/// resolved relative to `resource_path`.</span>
-	<span class="doccomment">///</span>
-	<span class="doccomment">/// Note that the `cache_key` might be used by the rlottie library to cache the</span>
-	<span class="doccomment">/// json data and/or its resources.</span>
-	<span class="doccomment">///</span>
-	<span class="doccomment">/// This method will panic if json_data or cache_key contain nul bytes.</span>
-	<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">from_data</span><span class="op">&lt;</span><span class="ident">D</span>, <span class="ident">K</span>, <span class="ident">P</span><span class="op">&gt;</span>(
-		<span class="ident">json_data</span>: <span class="ident">D</span>,
-		<span class="ident">cache_key</span>: <span class="ident">K</span>,
-		<span class="ident">resource_path</span>: <span class="ident">P</span>
-	) -&gt; <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span>
-	<span class="kw">where</span>
-		<span class="ident">D</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;</span><span class="op">&gt;</span>,
-		<span class="ident">K</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;</span><span class="op">&gt;</span>,
-		<span class="ident">P</span>: <span class="ident">AsRef</span><span class="op">&lt;</span><span class="ident">Path</span><span class="op">&gt;</span>
+	<span class="doccomment">/// Constructs an animation object from JSON string data. External resources are
+	/// resolved relative to `resource_path`.
+	///
+	/// Note that the `cache_key` might be used by the rlottie library to cache the
+	/// json data and/or its resources.
+	///
+	/// This method will panic if json_data or cache_key contain nul bytes.
+	</span><span class="kw">pub fn </span>from_data&lt;D, K, P&gt;(
+		json_data: D,
+		cache_key: K,
+		resource_path: P
+	) -&gt; <span class="prelude-ty">Option</span>&lt;<span class="self">Self</span>&gt;
+	<span class="kw">where
+		</span>D: Into&lt;Vec&lt;u8&gt;&gt;,
+		K: Into&lt;Vec&lt;u8&gt;&gt;,
+		P: AsRef&lt;Path&gt;
 	{
-		<span class="kw">let</span> <span class="ident">json_data</span> <span class="op">=</span>
-			<span class="ident">CString::new</span>(<span class="ident">json_data</span>).<span class="ident">expect</span>(<span class="string">&quot;json_data must not contain nul&quot;</span>);
-		<span class="kw">let</span> <span class="ident">cache_key</span> <span class="op">=</span> <span class="ident">CString::new</span>(<span class="ident">cache_key</span>).<span class="ident">expect</span>(<span class="string">&quot;key must not contain nul&quot;</span>);
-		<span class="kw">let</span> <span class="ident">resource_path</span> <span class="op">=</span> <span class="ident">path_to_cstr</span>(<span class="ident">resource_path</span>);
-		<span class="kw">let</span> <span class="ident">ptr</span> <span class="op">=</span> <span class="kw">unsafe</span> {
-			<span class="ident">lottie_animation_from_data</span>(
-				<span class="ident">json_data</span>.<span class="ident">as_ptr</span>(),
-				<span class="ident">cache_key</span>.<span class="ident">as_ptr</span>(),
-				<span class="ident">resource_path</span>.<span class="ident">as_ptr</span>()
+		<span class="kw">let </span>json_data =
+			CString::new(json_data).expect(<span class="string">&quot;json_data must not contain nul&quot;</span>);
+		<span class="kw">let </span>cache_key = CString::new(cache_key).expect(<span class="string">&quot;key must not contain nul&quot;</span>);
+		<span class="kw">let </span>resource_path = path_to_cstr(resource_path);
+		<span class="kw">let </span>ptr = <span class="kw">unsafe </span>{
+			lottie_animation_from_data(
+				json_data.as_ptr(),
+				cache_key.as_ptr(),
+				resource_path.as_ptr()
 			)
 		};
-		<span class="ident"><span class="self">Self</span>::from_ptr</span>(<span class="ident">ptr</span>)
+		<span class="self">Self</span>::from_ptr(ptr)
 	}
 
-	<span class="doccomment">/// Return the default viewport size of this animation.</span>
-	<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">size</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">Size</span> {
-		<span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">size</span> <span class="op">=</span> <span class="ident">Size</span> {
-			<span class="ident">width</span>: <span class="number">0</span>,
-			<span class="ident">height</span>: <span class="number">0</span>
-		};
-		<span class="kw">unsafe</span> {
-			<span class="ident">lottie_animation_get_size</span>(
-				<span class="self">self</span>.<span class="number">0</span>.<span class="ident">as_ptr</span>(),
-				<span class="kw-2">&amp;mut</span> <span class="ident">size</span>.<span class="ident">width</span>,
-				<span class="kw-2">&amp;mut</span> <span class="ident">size</span>.<span class="ident">height</span>
+	<span class="doccomment">/// Return the default viewport size of this animation.
+	</span><span class="kw">pub fn </span>size(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; Size {
+		<span class="kw">let </span><span class="kw-2">mut </span>size = Size {
+			width: <span class="number">0</span>,
+			height: <span class="number">0
+		</span>};
+		<span class="kw">unsafe </span>{
+			lottie_animation_get_size(
+				<span class="self">self</span>.<span class="number">0</span>.as_ptr(),
+				<span class="kw-2">&amp;mut </span>size.width,
+				<span class="kw-2">&amp;mut </span>size.height
 			);
 		}
-		<span class="ident">size</span>
+		size
 	}
 
-	<span class="doccomment">/// Return the total duration of this animation in seconds.</span>
-	<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">duration</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">f64</span> {
-		<span class="kw">unsafe</span> { <span class="ident">lottie_animation_get_duration</span>(<span class="self">self</span>.<span class="number">0</span>.<span class="ident">as_ptr</span>()) }
+	<span class="doccomment">/// Return the total duration of this animation in seconds.
+	</span><span class="kw">pub fn </span>duration(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; f64 {
+		<span class="kw">unsafe </span>{ lottie_animation_get_duration(<span class="self">self</span>.<span class="number">0</span>.as_ptr()) }
 	}
 
-	<span class="doccomment">/// Return the total number of frames in this animation.</span>
-	<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">totalframe</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">usize</span> {
-		<span class="kw">unsafe</span> { <span class="ident">lottie_animation_get_totalframe</span>(<span class="self">self</span>.<span class="number">0</span>.<span class="ident">as_ptr</span>()) }
+	<span class="doccomment">/// Return the total number of frames in this animation.
+	</span><span class="kw">pub fn </span>totalframe(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; usize {
+		<span class="kw">unsafe </span>{ lottie_animation_get_totalframe(<span class="self">self</span>.<span class="number">0</span>.as_ptr()) }
 	}
 
-	<span class="doccomment">/// Return the default framerate of this animation.</span>
-	<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">framerate</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">f64</span> {
-		<span class="kw">unsafe</span> { <span class="ident">lottie_animation_get_framerate</span>(<span class="self">self</span>.<span class="number">0</span>.<span class="ident">as_ptr</span>()) }
+	<span class="doccomment">/// Return the default framerate of this animation.
+	</span><span class="kw">pub fn </span>framerate(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; f64 {
+		<span class="kw">unsafe </span>{ lottie_animation_get_framerate(<span class="self">self</span>.<span class="number">0</span>.as_ptr()) }
 	}
 
-	<span class="doccomment">/// Maps position to frame number and returns it.</span>
-	<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">frame_at_pos</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">pos</span>: <span class="ident">f32</span>) -&gt; <span class="ident">usize</span> {
-		<span class="kw">unsafe</span> { <span class="ident">lottie_animation_get_frame_at_pos</span>(<span class="self">self</span>.<span class="number">0</span>.<span class="ident">as_ptr</span>(), <span class="ident">pos</span>) }
+	<span class="doccomment">/// Maps position to frame number and returns it.
+	</span><span class="kw">pub fn </span>frame_at_pos(<span class="kw-2">&amp;</span><span class="self">self</span>, pos: f32) -&gt; usize {
+		<span class="kw">unsafe </span>{ lottie_animation_get_frame_at_pos(<span class="self">self</span>.<span class="number">0</span>.as_ptr(), pos) }
 	}
 
-	<span class="doccomment">/// Render the contents of a frame onto the surface.</span>
-	<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">render</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">frame_num</span>: <span class="ident">usize</span>, <span class="ident">surface</span>: <span class="kw-2">&amp;mut</span> <span class="ident">Surface</span>) {
-		<span class="kw">unsafe</span> {
-			<span class="ident">lottie_animation_render</span>(
-				<span class="self">self</span>.<span class="number">0</span>.<span class="ident">as_ptr</span>(),
-				<span class="ident">frame_num</span>,
-				<span class="ident">surface</span>.<span class="ident">as_mut_ptr</span>(),
-				<span class="ident">surface</span>.<span class="ident">width</span>(),
-				<span class="ident">surface</span>.<span class="ident">height</span>(),
-				<span class="ident">surface</span>.<span class="ident">width</span>() <span class="op">*</span> <span class="number">4</span>
-			);
-			<span class="ident">surface</span>.<span class="ident">set_len</span>();
+	<span class="doccomment">/// Render the contents of a frame onto the surface.
+	</span><span class="kw">pub fn </span>render(<span class="kw-2">&amp;mut </span><span class="self">self</span>, frame_num: usize, surface: <span class="kw-2">&amp;mut </span>Surface) {
+		<span class="kw">unsafe </span>{
+			lottie_animation_render(
+				<span class="self">self</span>.<span class="number">0</span>.as_ptr(),
+				frame_num,
+				surface.as_mut_ptr(),
+				surface.width(),
+				surface.height(),
+				surface.width() * <span class="number">4
+			</span>);
+			surface.set_len();
 		}
 	}
 
-	<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">set_fill_color</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">keypath</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>, <span class="ident">color</span>: <span class="ident">Rgb</span>) {
-		<span class="macro">assert!</span>(<span class="ident">color_is_valid</span>(<span class="ident">color</span>), <span class="string">&quot;color is not valid&quot;</span>);
-		<span class="kw">let</span> <span class="ident">keypath</span> <span class="op">=</span> <span class="ident">CString::new</span>(<span class="ident">keypath</span>).<span class="ident">unwrap</span>();
-		<span class="kw">let</span> <span class="ident">RGB</span> { <span class="ident">r</span>, <span class="ident">g</span>, <span class="ident">b</span> } <span class="op">=</span> <span class="ident">color</span>;
-		<span class="kw">unsafe</span> {
-			<span class="ident">lottie_animation_property_override</span>(
-                <span class="self">self</span>.<span class="number">0</span>.<span class="ident">as_ptr</span>(),
-                <span class="ident">rlottie_sys::Lottie_Animation_Property::LOTTIE_ANIMATION_PROPERTY_FILLCOLOR</span>,
-                <span class="ident">keypath</span>.<span class="ident">as_ptr</span>(),
-                <span class="ident">r</span>,
-                <span class="ident">g</span>,
-                <span class="ident">b</span>,
+	<span class="kw">pub fn </span>set_fill_color(<span class="kw-2">&amp;mut </span><span class="self">self</span>, keypath: <span class="kw-2">&amp;</span>str, color: Rgb) {
+		<span class="macro">assert!</span>(color_is_valid(color), <span class="string">&quot;color is not valid&quot;</span>);
+		<span class="kw">let </span>keypath = CString::new(keypath).unwrap();
+		<span class="kw">let </span>RGB { r, g, b } = color;
+		<span class="kw">unsafe </span>{
+			lottie_animation_property_override(
+                <span class="self">self</span>.<span class="number">0</span>.as_ptr(),
+                rlottie_sys::Lottie_Animation_Property::LOTTIE_ANIMATION_PROPERTY_FILLCOLOR,
+                keypath.as_ptr(),
+                r,
+                g,
+                b,
             );
 		}
 	}
 
-	<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">set_fill_opacity</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">keypath</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>, <span class="ident">opacity</span>: <span class="ident">f64</span>) {
+	<span class="kw">pub fn </span>set_fill_opacity(<span class="kw-2">&amp;mut </span><span class="self">self</span>, keypath: <span class="kw-2">&amp;</span>str, opacity: f64) {
 		<span class="macro">assert!</span>(
-			(<span class="number">0.0</span> ..<span class="op">=</span> <span class="number">100.0</span>).<span class="ident">contains</span>(<span class="kw-2">&amp;</span><span class="ident">opacity</span>),
-			<span class="string">&quot;opacity values must be between 0.0 and 100.0&quot;</span>
-		);
-		<span class="kw">let</span> <span class="ident">keypath</span> <span class="op">=</span> <span class="ident">CString::new</span>(<span class="ident">keypath</span>).<span class="ident">unwrap</span>();
-		<span class="kw">unsafe</span> {
-			<span class="ident">lottie_animation_property_override</span>(
-                <span class="self">self</span>.<span class="number">0</span>.<span class="ident">as_ptr</span>(),
-                <span class="ident">rlottie_sys::Lottie_Animation_Property::LOTTIE_ANIMATION_PROPERTY_FILLOPACITY</span>,
-                <span class="ident">keypath</span>.<span class="ident">as_ptr</span>(),
-                <span class="ident">opacity</span>,
+			(<span class="number">0.0 </span>..= <span class="number">100.0</span>).contains(<span class="kw-2">&amp;</span>opacity),
+			<span class="string">&quot;opacity values must be between 0.0 and 100.0&quot;
+		</span>);
+		<span class="kw">let </span>keypath = CString::new(keypath).unwrap();
+		<span class="kw">unsafe </span>{
+			lottie_animation_property_override(
+                <span class="self">self</span>.<span class="number">0</span>.as_ptr(),
+                rlottie_sys::Lottie_Animation_Property::LOTTIE_ANIMATION_PROPERTY_FILLOPACITY,
+                keypath.as_ptr(),
+                opacity,
             );
 		}
 	}
 
-	<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">set_stroke_color</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">keypath</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>, <span class="ident">color</span>: <span class="ident">Rgb</span>) {
-		<span class="macro">assert!</span>(<span class="ident">color_is_valid</span>(<span class="ident">color</span>), <span class="string">&quot;color is not valid&quot;</span>);
-		<span class="kw">let</span> <span class="ident">keypath</span> <span class="op">=</span> <span class="ident">CString::new</span>(<span class="ident">keypath</span>).<span class="ident">unwrap</span>();
-		<span class="kw">let</span> <span class="ident">RGB</span> { <span class="ident">r</span>, <span class="ident">g</span>, <span class="ident">b</span> } <span class="op">=</span> <span class="ident">color</span>;
-		<span class="kw">unsafe</span> {
-			<span class="ident">lottie_animation_property_override</span>(
-                <span class="self">self</span>.<span class="number">0</span>.<span class="ident">as_ptr</span>(),
-                <span class="ident">rlottie_sys::Lottie_Animation_Property::LOTTIE_ANIMATION_PROPERTY_STROKECOLOR</span>,
-                <span class="ident">keypath</span>.<span class="ident">as_ptr</span>(),
-                <span class="ident">r</span>,
-                <span class="ident">g</span>,
-                <span class="ident">b</span>,
+	<span class="kw">pub fn </span>set_stroke_color(<span class="kw-2">&amp;mut </span><span class="self">self</span>, keypath: <span class="kw-2">&amp;</span>str, color: Rgb) {
+		<span class="macro">assert!</span>(color_is_valid(color), <span class="string">&quot;color is not valid&quot;</span>);
+		<span class="kw">let </span>keypath = CString::new(keypath).unwrap();
+		<span class="kw">let </span>RGB { r, g, b } = color;
+		<span class="kw">unsafe </span>{
+			lottie_animation_property_override(
+                <span class="self">self</span>.<span class="number">0</span>.as_ptr(),
+                rlottie_sys::Lottie_Animation_Property::LOTTIE_ANIMATION_PROPERTY_STROKECOLOR,
+                keypath.as_ptr(),
+                r,
+                g,
+                b,
             );
 		}
 	}
 
-	<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">set_stroke_opacity</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">keypath</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>, <span class="ident">opacity</span>: <span class="ident">f64</span>) {
+	<span class="kw">pub fn </span>set_stroke_opacity(<span class="kw-2">&amp;mut </span><span class="self">self</span>, keypath: <span class="kw-2">&amp;</span>str, opacity: f64) {
 		<span class="macro">assert!</span>(
-			(<span class="number">0.0</span> ..<span class="op">=</span> <span class="number">100.0</span>).<span class="ident">contains</span>(<span class="kw-2">&amp;</span><span class="ident">opacity</span>),
-			<span class="string">&quot;opacity values must be between 0.0 and 100.0&quot;</span>
-		);
-		<span class="kw">let</span> <span class="ident">keypath</span> <span class="op">=</span> <span class="ident">CString::new</span>(<span class="ident">keypath</span>).<span class="ident">unwrap</span>();
-		<span class="kw">unsafe</span> {
-			<span class="ident">lottie_animation_property_override</span>(
-                <span class="self">self</span>.<span class="number">0</span>.<span class="ident">as_ptr</span>(),
-                <span class="ident">rlottie_sys::Lottie_Animation_Property::LOTTIE_ANIMATION_PROPERTY_STROKEOPACITY</span>,
-                <span class="ident">keypath</span>.<span class="ident">as_ptr</span>(),
-                <span class="ident">opacity</span>,
+			(<span class="number">0.0 </span>..= <span class="number">100.0</span>).contains(<span class="kw-2">&amp;</span>opacity),
+			<span class="string">&quot;opacity values must be between 0.0 and 100.0&quot;
+		</span>);
+		<span class="kw">let </span>keypath = CString::new(keypath).unwrap();
+		<span class="kw">unsafe </span>{
+			lottie_animation_property_override(
+                <span class="self">self</span>.<span class="number">0</span>.as_ptr(),
+                rlottie_sys::Lottie_Animation_Property::LOTTIE_ANIMATION_PROPERTY_STROKEOPACITY,
+                keypath.as_ptr(),
+                opacity,
             );
 		}
 	}
 
-	<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">set_stroke_width</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">keypath</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>, <span class="ident">width</span>: <span class="ident">f64</span>) {
-		<span class="kw">let</span> <span class="ident">keypath</span> <span class="op">=</span> <span class="ident">CString::new</span>(<span class="ident">keypath</span>).<span class="ident">unwrap</span>();
-		<span class="kw">unsafe</span> {
-			<span class="ident">lottie_animation_property_override</span>(
-                <span class="self">self</span>.<span class="number">0</span>.<span class="ident">as_ptr</span>(),
-                <span class="ident">rlottie_sys::Lottie_Animation_Property::LOTTIE_ANIMATION_PROPERTY_STROKEWIDTH</span>,
-                <span class="ident">keypath</span>.<span class="ident">as_ptr</span>(),
-                <span class="ident">width</span>,
+	<span class="kw">pub fn </span>set_stroke_width(<span class="kw-2">&amp;mut </span><span class="self">self</span>, keypath: <span class="kw-2">&amp;</span>str, width: f64) {
+		<span class="kw">let </span>keypath = CString::new(keypath).unwrap();
+		<span class="kw">unsafe </span>{
+			lottie_animation_property_override(
+                <span class="self">self</span>.<span class="number">0</span>.as_ptr(),
+                rlottie_sys::Lottie_Animation_Property::LOTTIE_ANIMATION_PROPERTY_STROKEWIDTH,
+                keypath.as_ptr(),
+                width,
             );
 		}
 	}
 
-	<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">set_tr_position</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">keypath</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>, <span class="ident">x</span>: <span class="ident">f64</span>, <span class="ident">y</span>: <span class="ident">f64</span>) {
-		<span class="kw">let</span> <span class="ident">keypath</span> <span class="op">=</span> <span class="ident">CString::new</span>(<span class="ident">keypath</span>).<span class="ident">unwrap</span>();
-		<span class="kw">unsafe</span> {
-			<span class="ident">lottie_animation_property_override</span>(
-                <span class="self">self</span>.<span class="number">0</span>.<span class="ident">as_ptr</span>(),
-                <span class="ident">rlottie_sys::Lottie_Animation_Property::LOTTIE_ANIMATION_PROPERTY_TR_POSITION</span>,
-                <span class="ident">keypath</span>.<span class="ident">as_ptr</span>(),
-                <span class="ident">x</span>,
-                <span class="ident">y</span>,
+	<span class="kw">pub fn </span>set_tr_position(<span class="kw-2">&amp;mut </span><span class="self">self</span>, keypath: <span class="kw-2">&amp;</span>str, x: f64, y: f64) {
+		<span class="kw">let </span>keypath = CString::new(keypath).unwrap();
+		<span class="kw">unsafe </span>{
+			lottie_animation_property_override(
+                <span class="self">self</span>.<span class="number">0</span>.as_ptr(),
+                rlottie_sys::Lottie_Animation_Property::LOTTIE_ANIMATION_PROPERTY_TR_POSITION,
+                keypath.as_ptr(),
+                x,
+                y,
             );
 		}
 	}
 
-	<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">set_tr_scale</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">keypath</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>, <span class="ident">width</span>: <span class="ident">f64</span>, <span class="ident">height</span>: <span class="ident">f64</span>) {
-		<span class="kw">let</span> <span class="ident">keypath</span> <span class="op">=</span> <span class="ident">CString::new</span>(<span class="ident">keypath</span>).<span class="ident">unwrap</span>();
-		<span class="kw">unsafe</span> {
-			<span class="ident">lottie_animation_property_override</span>(
-                <span class="self">self</span>.<span class="number">0</span>.<span class="ident">as_ptr</span>(),
-                <span class="ident">rlottie_sys::Lottie_Animation_Property::LOTTIE_ANIMATION_PROPERTY_TR_SCALE</span>,
-                <span class="ident">keypath</span>.<span class="ident">as_ptr</span>(),
-                <span class="ident">width</span>,
-                <span class="ident">height</span>,
+	<span class="kw">pub fn </span>set_tr_scale(<span class="kw-2">&amp;mut </span><span class="self">self</span>, keypath: <span class="kw-2">&amp;</span>str, width: f64, height: f64) {
+		<span class="kw">let </span>keypath = CString::new(keypath).unwrap();
+		<span class="kw">unsafe </span>{
+			lottie_animation_property_override(
+                <span class="self">self</span>.<span class="number">0</span>.as_ptr(),
+                rlottie_sys::Lottie_Animation_Property::LOTTIE_ANIMATION_PROPERTY_TR_SCALE,
+                keypath.as_ptr(),
+                width,
+                height,
             );
 		}
 	}
 
-	<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">set_tr_rotation</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">keypath</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>, <span class="ident">rotation</span>: <span class="ident">f64</span>) {
-		<span class="kw">let</span> <span class="ident">keypath</span> <span class="op">=</span> <span class="ident">CString::new</span>(<span class="ident">keypath</span>).<span class="ident">unwrap</span>();
-		<span class="kw">unsafe</span> {
-			<span class="ident">lottie_animation_property_override</span>(
-                <span class="self">self</span>.<span class="number">0</span>.<span class="ident">as_ptr</span>(),
-                <span class="ident">rlottie_sys::Lottie_Animation_Property::LOTTIE_ANIMATION_PROPERTY_TR_ROTATION</span>,
-                <span class="ident">keypath</span>.<span class="ident">as_ptr</span>(),
-                <span class="ident">rotation</span>,
+	<span class="kw">pub fn </span>set_tr_rotation(<span class="kw-2">&amp;mut </span><span class="self">self</span>, keypath: <span class="kw-2">&amp;</span>str, rotation: f64) {
+		<span class="kw">let </span>keypath = CString::new(keypath).unwrap();
+		<span class="kw">unsafe </span>{
+			lottie_animation_property_override(
+                <span class="self">self</span>.<span class="number">0</span>.as_ptr(),
+                rlottie_sys::Lottie_Animation_Property::LOTTIE_ANIMATION_PROPERTY_TR_ROTATION,
+                keypath.as_ptr(),
+                rotation,
             );
 		}
 	}
 }
 </code></pre></div>
-</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="rlottie" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.64.0 (a55dd71d5 2022-09-19)" ></div></body></html>
+</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="rlottie" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.65.0 (897e37553 2022-11-02)" ></div></body></html>

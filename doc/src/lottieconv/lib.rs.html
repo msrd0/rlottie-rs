@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `lottieconv/src/lib.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>lib.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" type="text/css" href="../../normalize.css"><link rel="stylesheet" type="text/css" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../ayu.css" disabled><link rel="stylesheet" type="text/css" href="../../dark.css" disabled><link rel="stylesheet" type="text/css" href="../../light.css" id="themeStyle"><script id="default-settings" 
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `lottieconv/src/lib.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>lib.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" href="../../normalize.css"><link rel="stylesheet" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" href="../../ayu.css" disabled><link rel="stylesheet" href="../../dark.css" disabled><link rel="stylesheet" href="../../light.css" id="themeStyle"><script id="default-settings" 
         data-theme="ayu"
         data-use_system_theme="false"></script><script src="../../storage.js"></script><script defer src="../../source-script.js"></script><script defer src="../../source-files.js"></script><script defer src="../../main.js"></script><noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="sidebar-logo" href="../../lottieconv/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div></a><h2 class="location"></h2></nav><nav class="sidebar"><a class="sidebar-logo" href="../../lottieconv/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div></a></nav><main><div class="width-limiter"><div class="sub-container"><a class="sub-logo-container" href="../../lottieconv/index.html"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></a><nav class="sub"><form class="search-form"><div class="search-container"><span></span><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><button type="button">?</button></div><div id="settings-menu" tabindex="-1"><a href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../wheel.svg"></a></div></div></form></nav></div><section id="main-content" class="content"><div class="example-wrap"><pre class="line-numbers"><span id="1">1</span>
 <span id="2">2</span>
@@ -211,216 +211,216 @@
 <span id="209">209</span>
 <span id="210">210</span>
 <span id="211">211</span>
-</pre><pre class="rust"><code><span class="attribute">#![<span class="ident">allow</span>(<span class="ident">clippy::tabs_in_doc_comments</span>)]</span>
-<span class="attribute">#![<span class="ident">warn</span>(<span class="ident">rust_2018_idioms</span>)]</span>
-<span class="attribute">#![<span class="ident">deny</span>(<span class="ident">elided_lifetimes_in_paths</span>, <span class="ident">unreachable_pub</span>)]</span>
+</pre><pre class="rust"><code><span class="attribute">#![allow(clippy::tabs_in_doc_comments)]
+#![warn(rust_2018_idioms)]
+#![deny(elided_lifetimes_in_paths, unreachable_pub)]
 
-<span class="doccomment">//! Convert lottie animations to GIF or WEBP format.</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! ## Examples</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! This example shows how to use this crate to convert a lottie animation to a gif</span>
-<span class="doccomment">//! animation. This requires the `gif` feature which is enabled by default.</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! ```rust,edition2018,no_run</span>
-<span class="doccomment">//! use lottieconv::{Animation, Converter, Rgba};</span>
-<span class="doccomment">//! use std::fs::File;</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! # fn first() -&gt; Option&lt;()&gt; {</span>
-<span class="doccomment">//! let animation = Animation::from_file(&quot;animation.json&quot;)?;</span>
-<span class="doccomment">//! # None</span>
-<span class="doccomment">//! # }</span>
-<span class="doccomment">//! # fn second() -&gt; Result&lt;(), std::io::Error&gt; {</span>
-<span class="doccomment">//! let mut out = File::create(&quot;animation.gif&quot;)?;</span>
-<span class="doccomment">//! # Ok(())</span>
-<span class="doccomment">//! # }</span>
-<span class="doccomment">//! # fn third(animation: Animation, mut out: File) -&gt; Result&lt;(), gif_crate::EncodingError&gt; {</span>
-<span class="doccomment">//! Converter::new(animation)</span>
-<span class="doccomment">//! 	.gif(Rgba::new_alpha(0, 0, 0, true), &amp;mut out)?</span>
-<span class="doccomment">//! 	.convert()?;</span>
-<span class="doccomment">//! # Ok(())</span>
-<span class="doccomment">//! # }</span>
-<span class="doccomment">//! ```</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! This example shows how to use this crate to convert a lottie animation to a webp</span>
-<span class="doccomment">//! animation. This requires the `webp` feature which is enabled by default.</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! ```rust,edition2018,no_run</span>
-<span class="doccomment">//! use lottieconv::{Animation, Converter};</span>
-<span class="doccomment">//! use std::{fs::File, io::Write as _};</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! # fn first() -&gt; Option&lt;()&gt; {</span>
-<span class="doccomment">//! let animation = Animation::from_file(&quot;animation.json&quot;)?;</span>
-<span class="doccomment">//! # None</span>
-<span class="doccomment">//! # }</span>
-<span class="doccomment">//! # fn second(animation: Animation) -&gt; Result&lt;(), webp_animation::Error&gt; {</span>
-<span class="doccomment">//! let webp_data = Converter::new(animation).webp()?.convert()?;</span>
-<span class="doccomment">//! # Ok(())</span>
-<span class="doccomment">//! # }</span>
-<span class="doccomment">//! # fn third(webp_data: webp_animation::WebPData) -&gt; Result&lt;(), std::io::Error&gt; {</span>
-<span class="doccomment">//! let mut out = File::create(&quot;animation.webp&quot;)?;</span>
-<span class="doccomment">//! out.write_all(&amp;webp_data)?;</span>
-<span class="doccomment">//! # Ok(())</span>
-<span class="doccomment">//! # }</span>
-<span class="doccomment">//! ```</span>
+</span><span class="doccomment">//! Convert lottie animations to GIF or WEBP format.
+//!
+//! ## Examples
+//!
+//! This example shows how to use this crate to convert a lottie animation to a gif
+//! animation. This requires the `gif` feature which is enabled by default.
+//!
+//! ```rust,edition2018,no_run
+//! use lottieconv::{Animation, Converter, Rgba};
+//! use std::fs::File;
+//!
+//! # fn first() -&gt; Option&lt;()&gt; {
+//! let animation = Animation::from_file(&quot;animation.json&quot;)?;
+//! # None
+//! # }
+//! # fn second() -&gt; Result&lt;(), std::io::Error&gt; {
+//! let mut out = File::create(&quot;animation.gif&quot;)?;
+//! # Ok(())
+//! # }
+//! # fn third(animation: Animation, mut out: File) -&gt; Result&lt;(), gif_crate::EncodingError&gt; {
+//! Converter::new(animation)
+//! 	.gif(Rgba::new_alpha(0, 0, 0, true), &amp;mut out)?
+//! 	.convert()?;
+//! # Ok(())
+//! # }
+//! ```
+//!
+//! This example shows how to use this crate to convert a lottie animation to a webp
+//! animation. This requires the `webp` feature which is enabled by default.
+//!
+//! ```rust,edition2018,no_run
+//! use lottieconv::{Animation, Converter};
+//! use std::{fs::File, io::Write as _};
+//!
+//! # fn first() -&gt; Option&lt;()&gt; {
+//! let animation = Animation::from_file(&quot;animation.json&quot;)?;
+//! # None
+//! # }
+//! # fn second(animation: Animation) -&gt; Result&lt;(), webp_animation::Error&gt; {
+//! let webp_data = Converter::new(animation).webp()?.convert()?;
+//! # Ok(())
+//! # }
+//! # fn third(webp_data: webp_animation::WebPData) -&gt; Result&lt;(), std::io::Error&gt; {
+//! let mut out = File::create(&quot;animation.webp&quot;)?;
+//! out.write_all(&amp;webp_data)?;
+//! # Ok(())
+//! # }
+//! ```
 
-<span class="kw">use</span> <span class="ident">rgb::RGBA8</span>;
-<span class="kw">use</span> <span class="ident">rlottie::Surface</span>;
-<span class="kw">use</span> <span class="ident">std::slice</span>;
+</span><span class="kw">use </span>rgb::RGBA8;
+<span class="kw">use </span>rlottie::Surface;
+<span class="kw">use </span>std::slice;
 
-<span class="attribute">#[<span class="ident">doc</span>(<span class="ident">no_inline</span>)]</span>
-<span class="kw">pub</span> <span class="kw">use</span> <span class="ident">rlottie</span>::{<span class="ident">Animation</span>, <span class="ident">Size</span>};
+<span class="attribute">#[doc(no_inline)]
+</span><span class="kw">pub use </span>rlottie::{Animation, Size};
 
-<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">any</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;gif&quot;</span>, <span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;webp&quot;</span>))]</span>
-<span class="attribute">#[<span class="ident">macro_use</span>]</span>
-<span class="kw">mod</span> <span class="ident">util</span>;
+<span class="attribute">#[cfg(any(feature = <span class="string">&quot;gif&quot;</span>, feature = <span class="string">&quot;webp&quot;</span>))]
+#[macro_use]
+</span><span class="kw">mod </span>util;
 
-<span class="kw">mod</span> <span class="ident">convert</span>;
-<span class="kw">use</span> <span class="ident">convert</span>::{<span class="ident">Convert</span>, <span class="ident">DummyConvert</span>};
+<span class="kw">mod </span>convert;
+<span class="kw">use </span>convert::{Convert, DummyConvert};
 
-<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;gif&quot;</span>)]</span>
-<span class="kw">mod</span> <span class="ident">gif</span>;
-<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;gif&quot;</span>)]</span>
-<span class="kw">use</span> <span class="ident">gif::Convert2Gif</span>;
+<span class="attribute">#[cfg(feature = <span class="string">&quot;gif&quot;</span>)]
+</span><span class="kw">mod </span>gif;
+<span class="attribute">#[cfg(feature = <span class="string">&quot;gif&quot;</span>)]
+</span><span class="kw">use </span>gif::Convert2Gif;
 
-<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;webp&quot;</span>)]</span>
-<span class="kw">mod</span> <span class="ident">webp</span>;
-<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;webp&quot;</span>)]</span>
-<span class="kw">use</span> <span class="ident">webp::Convert2Webp</span>;
+<span class="attribute">#[cfg(feature = <span class="string">&quot;webp&quot;</span>)]
+</span><span class="kw">mod </span>webp;
+<span class="attribute">#[cfg(feature = <span class="string">&quot;webp&quot;</span>)]
+</span><span class="kw">use </span>webp::Convert2Webp;
 
-<span class="doccomment">/// It is very important that [`RGBA8`] and `[u8; 4]` have exactly the same size.</span>
-<span class="doccomment">/// This mod does nothing other than fail to compile if that was not the case.</span>
-<span class="attribute">#[<span class="ident">allow</span>(<span class="ident">dead_code</span>)]</span>
-<span class="kw">mod</span> <span class="ident">rgba_size</span> {
-	<span class="kw">use</span> <span class="ident">rgb::RGBA8</span>;
-	<span class="kw">use</span> <span class="ident">std</span>::{<span class="ident">marker::PhantomData</span>, <span class="ident">mem</span>};
+<span class="doccomment">/// It is very important that [`RGBA8`] and `[u8; 4]` have exactly the same size.
+/// This mod does nothing other than fail to compile if that was not the case.
+</span><span class="attribute">#[allow(dead_code)]
+</span><span class="kw">mod </span>rgba_size {
+	<span class="kw">use </span>rgb::RGBA8;
+	<span class="kw">use </span>std::{marker::PhantomData, mem};
 
-	<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Default</span>)]</span>
-	<span class="kw">struct</span> <span class="ident">AssertSize</span><span class="op">&lt;</span><span class="kw">const</span> <span class="ident">N</span>: <span class="ident">usize</span><span class="op">&gt;</span>(<span class="ident">PhantomData</span><span class="op">&lt;</span>[(); <span class="ident">N</span>]<span class="op">&gt;</span>);
+	<span class="attribute">#[derive(Default)]
+	</span><span class="kw">struct </span>AssertSize&lt;<span class="kw">const </span>N: usize&gt;(PhantomData&lt;[(); N]&gt;);
 
-	<span class="kw">impl</span><span class="op">&lt;</span><span class="kw">const</span> <span class="ident">N</span>: <span class="ident">usize</span><span class="op">&gt;</span> <span class="ident">AssertSize</span><span class="op">&lt;</span><span class="ident">N</span><span class="op">&gt;</span> {
-		<span class="kw">const</span> <span class="kw">fn</span> <span class="ident">new</span>() -&gt; <span class="self">Self</span> {
-			<span class="self">Self</span>(<span class="ident">PhantomData</span>)
+	<span class="kw">impl</span>&lt;<span class="kw">const </span>N: usize&gt; AssertSize&lt;N&gt; {
+		<span class="kw">const fn </span>new() -&gt; <span class="self">Self </span>{
+			<span class="self">Self</span>(PhantomData)
 		}
 	}
 
-	<span class="kw">impl</span> <span class="ident">AssertSize</span><span class="op">&lt;</span><span class="number">4</span><span class="op">&gt;</span> {
-		<span class="kw">const</span> <span class="kw">fn</span> <span class="ident">assert_size_u8_4</span>(<span class="self">self</span>) {}
+	<span class="kw">impl </span>AssertSize&lt;<span class="number">4</span>&gt; {
+		<span class="kw">const fn </span>assert_size_u8_4(<span class="self">self</span>) {}
 	}
 
-	<span class="kw">const</span> <span class="kw">_</span>: () <span class="op">=</span> {
-		<span class="ident">AssertSize</span>::<span class="op">&lt;</span>{ <span class="ident">mem::size_of</span>::<span class="op">&lt;</span><span class="ident">RGBA8</span><span class="op">&gt;</span>() }<span class="op">&gt;</span><span class="ident">::new</span>().<span class="ident">assert_size_u8_4</span>();
-		<span class="ident">AssertSize</span>::<span class="op">&lt;</span>{ <span class="ident">mem::size_of</span>::<span class="op">&lt;</span>[<span class="ident">u8</span>; <span class="number">4</span>]<span class="op">&gt;</span>() }<span class="op">&gt;</span><span class="ident">::new</span>().<span class="ident">assert_size_u8_4</span>();
+	<span class="kw">const _</span>: () = {
+		AssertSize::&lt;{ mem::size_of::&lt;RGBA8&gt;() }&gt;::new().assert_size_u8_4();
+		AssertSize::&lt;{ mem::size_of::&lt;[u8; <span class="number">4</span>]&gt;() }&gt;::new().assert_size_u8_4();
 	};
 }
 
-<span class="doccomment">/// This type is used to perform the conversion. It does nothing unless you</span>
-<span class="doccomment">/// call [`.convert()`](Self::convert).</span>
-<span class="attribute">#[<span class="ident">must_use</span> <span class="op">=</span> <span class="string">&quot;A Converter does nothing unless you call .convert()&quot;</span>]</span>
-<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">Converter</span><span class="op">&lt;</span><span class="ident">C</span>: <span class="ident">Convert</span><span class="op">&gt;</span> {
-	<span class="ident">player</span>: <span class="ident">Animation</span>,
-	<span class="ident">size</span>: <span class="ident">Size</span>,
-	<span class="ident">convert</span>: <span class="ident">C</span>
+<span class="doccomment">/// This type is used to perform the conversion. It does nothing unless you
+/// call [`.convert()`](Self::convert).
+</span><span class="attribute">#[must_use = <span class="string">&quot;A Converter does nothing unless you call .convert()&quot;</span>]
+</span><span class="kw">pub struct </span>Converter&lt;C: Convert&gt; {
+	player: Animation,
+	size: Size,
+	convert: C
 }
 
-<span class="doccomment">/// This type is used to build a [`Converter`]. It is created using</span>
-<span class="doccomment">/// [`Converter::new()`].</span>
-<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">Builder</span> {
-	<span class="ident">player</span>: <span class="ident">Animation</span>,
-	<span class="ident">size</span>: <span class="ident">Size</span>
+<span class="doccomment">/// This type is used to build a [`Converter`]. It is created using
+/// [`Converter::new()`].
+</span><span class="kw">pub struct </span>Builder {
+	player: Animation,
+	size: Size
 }
 
-<span class="kw">impl</span> <span class="ident">Converter</span><span class="op">&lt;</span><span class="ident">DummyConvert</span><span class="op">&gt;</span> {
-	<span class="doccomment">/// Return a new converter builder.</span>
-	<span class="attribute">#[<span class="ident">allow</span>(<span class="ident">clippy::new_ret_no_self</span>)]</span>
-	<span class="attribute">#[<span class="ident">must_use</span>]</span>
-	<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span>(<span class="ident">player</span>: <span class="ident">Animation</span>) -&gt; <span class="ident">Builder</span> {
-		<span class="ident">Builder</span> {
-			<span class="ident">size</span>: <span class="ident">player</span>.<span class="ident">size</span>(),
-			<span class="ident">player</span>
+<span class="kw">impl </span>Converter&lt;DummyConvert&gt; {
+	<span class="doccomment">/// Return a new converter builder.
+	</span><span class="attribute">#[allow(clippy::new_ret_no_self)]
+	#[must_use]
+	</span><span class="kw">pub fn </span>new(player: Animation) -&gt; Builder {
+		Builder {
+			size: player.size(),
+			player
 		}
 	}
 }
 
-<span class="kw">impl</span> <span class="ident">Builder</span> {
-	<span class="doccomment">/// Change the size of the output image.</span>
-	<span class="attribute">#[<span class="ident">must_use</span>]</span>
-	<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">with_size</span>(<span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">size</span>: <span class="ident">Size</span>) -&gt; <span class="self">Self</span> {
-		<span class="self">self</span>.<span class="ident">size</span> <span class="op">=</span> <span class="ident">size</span>;
-		<span class="self">self</span>
-	}
+<span class="kw">impl </span>Builder {
+	<span class="doccomment">/// Change the size of the output image.
+	</span><span class="attribute">#[must_use]
+	</span><span class="kw">pub fn </span>with_size(<span class="kw-2">mut </span><span class="self">self</span>, size: Size) -&gt; <span class="self">Self </span>{
+		<span class="self">self</span>.size = size;
+		<span class="self">self
+	</span>}
 }
 
-<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;gif&quot;</span>)]</span>
-<span class="doccomment">/// This type is used to define the background of a GIF.</span>
-<span class="kw">pub</span> <span class="kw">type</span> <span class="ident">Rgba</span> <span class="op">=</span> <span class="ident">rgb::RGBA</span><span class="op">&lt;</span><span class="ident">u8</span>, <span class="ident">bool</span><span class="op">&gt;</span>;
+<span class="attribute">#[cfg(feature = <span class="string">&quot;gif&quot;</span>)]
+</span><span class="doccomment">/// This type is used to define the background of a GIF.
+</span><span class="kw">pub type </span>Rgba = rgb::RGBA&lt;u8, bool&gt;;
 
-<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;gif&quot;</span>)]</span>
-<span class="kw">impl</span> <span class="ident">Builder</span> {
-	<span class="doccomment">/// Create a converter for lottie animation to a GIF file.</span>
-	<span class="doccomment">///</span>
-	<span class="doccomment">/// **This is a lossy operation.**</span>
-	<span class="doccomment">/// GIF does not support full alpha channel. Even if you enable the alpha flag</span>
-	<span class="doccomment">/// for background color, the rgb value is required. This is because semi-transparent</span>
-	<span class="doccomment">/// pixels will be converted to non-transparent pixels, adding onto the background</span>
-	<span class="doccomment">/// color. Only fully transparent pixels will remain transparent.</span>
-	<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">gif</span><span class="op">&lt;</span><span class="ident">W</span>: <span class="ident">std::io::Write</span><span class="op">&gt;</span>(
+<span class="attribute">#[cfg(feature = <span class="string">&quot;gif&quot;</span>)]
+</span><span class="kw">impl </span>Builder {
+	<span class="doccomment">/// Create a converter for lottie animation to a GIF file.
+	///
+	/// **This is a lossy operation.**
+	/// GIF does not support full alpha channel. Even if you enable the alpha flag
+	/// for background color, the rgb value is required. This is because semi-transparent
+	/// pixels will be converted to non-transparent pixels, adding onto the background
+	/// color. Only fully transparent pixels will remain transparent.
+	</span><span class="kw">pub fn </span>gif&lt;W: std::io::Write&gt;(
 		<span class="self">self</span>,
-		<span class="ident">bg</span>: <span class="ident">Rgba</span>,
-		<span class="ident">out</span>: <span class="ident">W</span>
-	) -&gt; <span class="ident">gif::Result</span><span class="op">&lt;</span><span class="ident">Converter</span><span class="op">&lt;</span><span class="ident">Convert2Gif</span><span class="op">&lt;</span><span class="ident">W</span><span class="op">&gt;</span><span class="op">&gt;</span><span class="op">&gt;</span> {
-		<span class="kw">let</span> <span class="ident">framerate</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">player</span>.<span class="ident">framerate</span>();
-		<span class="prelude-val">Ok</span>(<span class="ident">Converter</span> {
-			<span class="ident">player</span>: <span class="self">self</span>.<span class="ident">player</span>,
-			<span class="ident">size</span>: <span class="self">self</span>.<span class="ident">size</span>,
-			<span class="ident">convert</span>: <span class="ident">Convert2Gif::new</span>(<span class="ident">bg</span>, <span class="ident">out</span>, <span class="self">self</span>.<span class="ident">size</span>, <span class="ident">framerate</span>)<span class="question-mark">?</span>
-		})
+		bg: Rgba,
+		out: W
+	) -&gt; gif::Result&lt;Converter&lt;Convert2Gif&lt;W&gt;&gt;&gt; {
+		<span class="kw">let </span>framerate = <span class="self">self</span>.player.framerate();
+		<span class="prelude-val">Ok</span>(Converter {
+			player: <span class="self">self</span>.player,
+			size: <span class="self">self</span>.size,
+			convert: Convert2Gif::new(bg, out, <span class="self">self</span>.size, framerate)<span class="question-mark">?
+		</span>})
 	}
 }
 
-<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;webp&quot;</span>)]</span>
-<span class="kw">impl</span> <span class="ident">Builder</span> {
-	<span class="doccomment">/// Create a converter for lottie animation to a WEBP file.</span>
-	<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">webp</span>(<span class="self">self</span>) -&gt; <span class="ident">webp::Result</span><span class="op">&lt;</span><span class="ident">Converter</span><span class="op">&lt;</span><span class="ident">Convert2Webp</span><span class="op">&gt;</span><span class="op">&gt;</span> {
-		<span class="kw">let</span> <span class="ident">framerate</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">player</span>.<span class="ident">framerate</span>();
-		<span class="prelude-val">Ok</span>(<span class="ident">Converter</span> {
-			<span class="ident">player</span>: <span class="self">self</span>.<span class="ident">player</span>,
-			<span class="ident">size</span>: <span class="self">self</span>.<span class="ident">size</span>,
-			<span class="ident">convert</span>: <span class="ident">Convert2Webp::new</span>(<span class="self">self</span>.<span class="ident">size</span>, <span class="ident">framerate</span>)<span class="question-mark">?</span>
-		})
+<span class="attribute">#[cfg(feature = <span class="string">&quot;webp&quot;</span>)]
+</span><span class="kw">impl </span>Builder {
+	<span class="doccomment">/// Create a converter for lottie animation to a WEBP file.
+	</span><span class="kw">pub fn </span>webp(<span class="self">self</span>) -&gt; webp::Result&lt;Converter&lt;Convert2Webp&gt;&gt; {
+		<span class="kw">let </span>framerate = <span class="self">self</span>.player.framerate();
+		<span class="prelude-val">Ok</span>(Converter {
+			player: <span class="self">self</span>.player,
+			size: <span class="self">self</span>.size,
+			convert: Convert2Webp::new(<span class="self">self</span>.size, framerate)<span class="question-mark">?
+		</span>})
 	}
 }
 
-<span class="kw">impl</span><span class="op">&lt;</span><span class="ident">C</span>: <span class="ident">Convert</span><span class="op">&gt;</span> <span class="ident">Converter</span><span class="op">&lt;</span><span class="ident">C</span><span class="op">&gt;</span> {
-	<span class="doccomment">/// Convert lottie animation to the requested format.</span>
-	<span class="doccomment">///</span>
-	<span class="doccomment">/// The return type of this function depends on the output format. For webp, it</span>
-	<span class="doccomment">/// returns the image data ([`WebPData`](webp_animation::WebPData)). For gif, it</span>
-	<span class="doccomment">/// returns `()` as the data is written directly to the writer that was passed</span>
-	<span class="doccomment">/// to the `.gif(..)` function.</span>
-	<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">convert</span>(<span class="kw-2">mut</span> <span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">C::Out</span>, <span class="ident">C::Err</span><span class="op">&gt;</span> {
-		<span class="kw">let</span> <span class="ident">buffer_len</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">size</span>.<span class="ident">width</span> <span class="op">*</span> <span class="self">self</span>.<span class="ident">size</span>.<span class="ident">height</span>;
-		<span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">surface</span> <span class="op">=</span> <span class="ident">Surface::new</span>(<span class="self">self</span>.<span class="ident">size</span>);
-		<span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">buffer</span> <span class="op">=</span> <span class="macro">vec!</span>[<span class="ident">RGBA8::default</span>(); <span class="ident">buffer_len</span>];
-		<span class="kw">let</span> <span class="ident">frame_count</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">player</span>.<span class="ident">totalframe</span>();
+<span class="kw">impl</span>&lt;C: Convert&gt; Converter&lt;C&gt; {
+	<span class="doccomment">/// Convert lottie animation to the requested format.
+	///
+	/// The return type of this function depends on the output format. For webp, it
+	/// returns the image data ([`WebPData`](webp_animation::WebPData)). For gif, it
+	/// returns `()` as the data is written directly to the writer that was passed
+	/// to the `.gif(..)` function.
+	</span><span class="kw">pub fn </span>convert(<span class="kw-2">mut </span><span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span>&lt;C::Out, C::Err&gt; {
+		<span class="kw">let </span>buffer_len = <span class="self">self</span>.size.width * <span class="self">self</span>.size.height;
+		<span class="kw">let </span><span class="kw-2">mut </span>surface = Surface::new(<span class="self">self</span>.size);
+		<span class="kw">let </span><span class="kw-2">mut </span>buffer = <span class="macro">vec!</span>[RGBA8::default(); buffer_len];
+		<span class="kw">let </span>frame_count = <span class="self">self</span>.player.totalframe();
 
-		<span class="kw">for</span> <span class="ident">frame</span> <span class="kw">in</span> <span class="number">0</span> .. <span class="ident">frame_count</span> {
-			<span class="self">self</span>.<span class="ident">player</span>.<span class="ident">render</span>(<span class="ident">frame</span>, <span class="kw-2">&amp;mut</span> <span class="ident">surface</span>);
-			<span class="self">self</span>.<span class="ident">convert</span>.<span class="ident">convert_frame</span>(<span class="ident">surface</span>.<span class="ident">data</span>(), <span class="kw-2">&amp;mut</span> <span class="ident">buffer</span>);
+		<span class="kw">for </span>frame <span class="kw">in </span><span class="number">0 </span>.. frame_count {
+			<span class="self">self</span>.player.render(frame, <span class="kw-2">&amp;mut </span>surface);
+			<span class="self">self</span>.convert.convert_frame(surface.data(), <span class="kw-2">&amp;mut </span>buffer);
 
-			<span class="comment">// Safety: The pointer is valid and aligned since it comes from a vec,</span>
-			<span class="comment">// and we don&#39;t use the vec while the slice exists.</span>
-			<span class="kw">let</span> <span class="ident">data</span> <span class="op">=</span> <span class="kw">unsafe</span> {
-				<span class="ident">slice::from_raw_parts_mut</span>(
-					<span class="ident">buffer</span>.<span class="ident">as_mut_ptr</span>() <span class="kw">as</span> <span class="kw-2">*mut</span> <span class="ident">u8</span>,
-					<span class="ident">buffer_len</span> <span class="op">*</span> <span class="number">4</span>
-				)
+			<span class="comment">// Safety: The pointer is valid and aligned since it comes from a vec,
+			// and we don&#39;t use the vec while the slice exists.
+			</span><span class="kw">let </span>data = <span class="kw">unsafe </span>{
+				slice::from_raw_parts_mut(
+					buffer.as_mut_ptr() <span class="kw">as </span><span class="kw-2">*mut </span>u8,
+					buffer_len * <span class="number">4
+				</span>)
 			};
-			<span class="self">self</span>.<span class="ident">convert</span>.<span class="ident">add_frame</span>(<span class="ident">data</span>)<span class="question-mark">?</span>;
+			<span class="self">self</span>.convert.add_frame(data)<span class="question-mark">?</span>;
 		}
 
-		<span class="self">self</span>.<span class="ident">convert</span>.<span class="ident">finish</span>()
+		<span class="self">self</span>.convert.finish()
 	}
 }
 </code></pre></div>
-</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="lottieconv" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.64.0 (a55dd71d5 2022-09-19)" ></div></body></html>
+</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="lottieconv" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.65.0 (897e37553 2022-11-02)" ></div></body></html>
