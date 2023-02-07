@@ -1,0 +1,35 @@
+name: Semver Check for rlottie-sys
+
+on:
+  pull_request:
+    paths:
+      - '.github/workflows/semver-rlottie-sys.yml'
+      - 'rlottie-sys/**/*'
+
+jobs:
+  semver:
+    name: Semver Check
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: dtolnay/rust-toolchain@nightly
+      - uses: msrd0/install-rlottie-action@v1
+      - name: Run cargo public-api diff latest
+        run: |
+          set -euo pipefail
+
+          cargo install cargo-public-api \
+            --git https://github.com/msrd0/cargo-public-api \
+            --rev 05a22c927ac476ac1b60762c7e9cf3ec3ea577da
+
+          echo '<details><summary>Output of <code>cargo public-api diff latest</code>:</summary>' >msg
+          echo >>msg
+          echo '```' >>msg
+          cargo public-api -p rlottie-sys diff latest | tee -a msg
+          echo '```' >>msg
+          echo >>msg
+          echo '</details>' >>msg
+      - uses: thollander/actions-comment-pull-request@v2
+        with:
+          filePath: msg
+          comment_tag: cargo-public-api
