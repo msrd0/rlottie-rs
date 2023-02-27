@@ -84,6 +84,6 @@ jobs:
           mkdir -p ${{steps.version.outputs.version}}
           tar xfa rustdoc.tar.zst -C ${{steps.version.outputs.version}} --strip-components=2
           rm rustdoc.tar.zst
-      - uses: stefanzweifel/git-auto-commit-action@v2
+      - uses: stefanzweifel/git-auto-commit-action@v4
         with:
           commit_message: "GitHub Pages for v${{steps.version.outputs.version}}"
