@@ -3,20 +3,22 @@
 [package]
 workspace = ".."
 name = "rlottie"
-version = "0.5.1"
+version = "0.5.2" # update doc url as well!
 license = "MIT"
 include = ["build.rs", "src/**/*.rs", "/LICENSE"]
 
 description = "A platform independent standalone library that plays Lottie Animation"
 repository = "https://github.com/msrd0/rlottie-rs"
-documentation = "https://docs.msrd0.de/rlottie/0.5.1/rlottie/"
+documentation = "https://docs.msrd0.de/rlottie/0.5.2/rlottie/"
 
 edition = "2021"
-rust-version = "1.56"
+rust-version = "1.60"
+
+[features]
+serde = ["dep:serde", "rgb/serde"]
+telegrand = []
 
 [dependencies]
 rgb = { version = "0.8.32", default-features = false }
 rlottie-sys = { path = "../rlottie-sys", version = "0.2" }
-
-[features]
-telegrand = []
+serde = { version = "1", features = ["derive"], optional = true }

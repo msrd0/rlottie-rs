@@ -15,6 +15,16 @@ jobs:
       - uses: msrd0/install-rlottie-action@v1
       - run: cargo test --workspace --all-features
   
+  test-tg:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: dtolnay/rust-toolchain@stable
+      - uses: msrd0/install-rlottie-action@v1
+        with:
+          vendor: TelegramMessenger
+      - run: cargo test --workspace --all-features
+
   rustfmt:
     runs-on: ubuntu-latest
     steps:
@@ -74,6 +84,6 @@ jobs:
           mkdir -p ${{steps.version.outputs.version}}
           tar xfa rustdoc.tar.zst -C ${{steps.version.outputs.version}} --strip-components=2
           rm rustdoc.tar.zst
-      - uses: stefanzweifel/git-auto-commit-action@v2
+      - uses: stefanzweifel/git-auto-commit-action@v4
         with:
           commit_message: "GitHub Pages for v${{steps.version.outputs.version}}"
