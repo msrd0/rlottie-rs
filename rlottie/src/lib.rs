@@ -244,6 +244,46 @@ impl Animation {
 		Self::from_ptr(ptr)
 	}
 
+	/// Constructs an animation object from JSON string data. External resources are
+	/// resolved relative to `resource_path`.
+	///
+	///
+	///
+	/// Note that the `cache_key` might be used by the rlottie library to cache the
+	/// json data and/or its resources.
+	///
+	/// This method will panic if json_data or cache_key contain nul bytes. or fitzpatrick_type not in range 0..=6
+	#[cfg(feature = "telegrand")]
+	pub fn from_data_recolored<D, K, P>(
+		json_data: D,
+		cache_key: K,
+		resource_path: P,
+		fitzpatrick_type: i32
+	) -> Option<Self>
+	where
+		D: Into<Vec<u8>>,
+		K: Into<Vec<u8>>,
+		P: AsRef<Path>
+	{
+		assert!(
+			(0 ..= 6).contains(&fitzpatrick_type),
+			"fitzpatrick_type must be in range 0..=6"
+		);
+		let json_data =
+			CString::new(json_data).expect("json_data must not contain nul");
+		let cache_key = CString::new(cache_key).expect("key must not contain nul");
+		let resource_path = path_to_cstr(resource_path);
+		let ptr = unsafe {
+			lottie_animation_from_data_recolored(
+				json_data.as_ptr(),
+				cache_key.as_ptr(),
+				resource_path.as_ptr(),
+				fitzpatrick_type
+			)
+		};
+		Self::from_ptr(ptr)
+	}
+
 	/// Return the default viewport size of this animation.
 	pub fn size(&self) -> Size {
 		let mut size = Size {
