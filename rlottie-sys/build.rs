@@ -7,7 +7,7 @@ fn main() {
 
 	println!("cargo:rerun-if-changed=wrapper.h");
 	let bindings = bindgen::Builder::default()
-		.rustfmt_bindings(false)
+		.formatter(bindgen::Formatter::Prettyplease)
 		.header("wrapper.h")
 		.parse_callbacks(Box::new(bindgen::CargoCallbacks))
 		.newtype_enum(".*")
