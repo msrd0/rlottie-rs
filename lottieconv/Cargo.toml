@@ -3,14 +3,14 @@
 [package]
 workspace = ".."
 name = "lottieconv"
-version = "0.2.2" # update doc url as well!
+version = "0.2.3" # update doc url as well!
 license = "MIT"
 include = ["src/**/*.rs", "bin/*.rs", "/LICENSE", "/README.md"]
 
 description = "Convert lottie files to WEBP or GIF"
 keywords = ["lottie", "webp", "gif", "convert"]
 repository = "https://github.com/msrd0/rlottie-rs"
-documentation = "https://docs.msrd0.de/lottieconv/0.2.2/lottieconv/"
+documentation = "https://docs.msrd0.de/lottieconv/0.2.3/lottieconv/"
 
 edition = "2021"
 rust-version = "1.60"
