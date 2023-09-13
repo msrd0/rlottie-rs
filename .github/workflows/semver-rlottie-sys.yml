@@ -11,7 +11,7 @@ jobs:
     name: Semver Check
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - uses: dtolnay/rust-toolchain@nightly
       - uses: msrd0/install-rlottie-action@v1
       - name: Run cargo public-api diff latest
