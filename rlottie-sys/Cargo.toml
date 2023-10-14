@@ -3,7 +3,7 @@
 [package]
 workspace = ".."
 name = "rlottie-sys"
-version = "0.2.9" # update doc url as well!
+version = "0.2.9"
 license = "MIT"
 include = ["src/**/*.rs", "/build.rs", "/wrapper.h", "/LICENSE"]
 
