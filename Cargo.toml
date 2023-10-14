@@ -1,6 +1,7 @@
 # -*- eval: (cargo-minor-mode 1) -*-
 
 [workspace]
+resolver = "2"
 members = [
 	"lottieconv",
 	"rlottie",
