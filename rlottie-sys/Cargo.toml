@@ -16,5 +16,5 @@ rust-version = "1.56"
 links = "rlottie"
 
 [build-dependencies]
-bindgen = { version = "0.68.1", features = ["prettyplease", "runtime"], default-features = false }
+bindgen = { version = "0.69.4", features = ["prettyplease", "runtime"], default-features = false }
 pkg-config = "0.3.22"
