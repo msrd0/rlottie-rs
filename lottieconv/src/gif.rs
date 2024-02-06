@@ -1,11 +1,10 @@
 use crate::{convert::Convert, Rgba};
 use gif_crate::{DisposalMethod, Encoder, EncodingError, Frame, Repeat};
-use rgb::{alt::BGRA8, RGBA8};
 use rlottie::Size;
 use std::io::Write;
 
 auto_vectorize! {
-	pub(crate) fn argb_to_rgba(bg: Rgba, buffer_argb: &[BGRA8], buffer_rgba: &mut [RGBA8]) {
+	pub(crate) fn argb_to_rgba(bg: Rgba, buffer_argb: &[rlottie::Color], buffer_rgba: &mut [crate::Color]) {
 		let bg_r = bg.r as u32;
 		let bg_g = bg.g as u32;
 		let bg_b = bg.b as u32;
@@ -71,7 +70,7 @@ impl<W: Write> Convert for Convert2Gif<W> {
 	type Out = ();
 	type Err = EncodingError;
 
-	fn convert_frame(&self, from: &[BGRA8], to: &mut [RGBA8]) {
+	fn convert_frame(&self, from: &[rlottie::Color], to: &mut [crate::Color]) {
 		argb_to_rgba(self.bg, from, to)
 	}
 

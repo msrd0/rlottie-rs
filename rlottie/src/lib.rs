@@ -25,7 +25,6 @@
 //! # }
 //! ```
 
-use rgb::{alt::BGRA, RGB};
 use rlottie_sys::*;
 #[cfg(feature = "serde")]
 use serde::{Deserialize, Serialize};
@@ -39,8 +38,12 @@ use std::{
 	slice
 };
 
-pub type Bgra<T = u8> = BGRA<T>;
-pub type Rgb<T = f64> = RGB<T>;
+pub type Color<T = u8> = rgb::alt::BGRA<T>;
+pub type Rgb<T = f64> = rgb::RGB<T>;
+
+#[doc(hidden)]
+#[deprecated = "This type is not guaranteed to have Bgra layout. Use Color instead"]
+pub type Bgra<T = u8> = Color<T>;
 
 fn color_is_valid(Rgb { r, g, b }: Rgb) -> bool {
 	(0.0 ..= 1.0).contains(&r)
@@ -70,11 +73,11 @@ impl Size {
 	}
 }
 
-/// It is very important that [`Bgra`] and `u32` have exactly the same size. This
+/// It is very important that [`Color`] and `u32` have exactly the same size. This
 /// mod does nothing other than fail to compile if that was not the case.
 #[allow(dead_code)]
-mod bgra8_size {
-	use super::Bgra;
+mod color_size {
+	use super::Color;
 	use std::{marker::PhantomData, mem};
 
 	#[derive(Default)]
@@ -91,7 +94,7 @@ mod bgra8_size {
 	}
 
 	const _: () = {
-		AssertSize::<{ mem::size_of::<Bgra>() }>::new().assert_size_u32();
+		AssertSize::<{ mem::size_of::<Color>() }>::new().assert_size_u32();
 		AssertSize::<{ mem::size_of::<u32>() }>::new().assert_size_u32();
 	};
 }
@@ -99,7 +102,7 @@ mod bgra8_size {
 /// A surface has a fixed size and contains pixel data for it. You can render frames onto
 /// the surface.
 pub struct Surface {
-	data: Vec<Bgra>,
+	data: Vec<Color>,
 	size: Size
 }
 
@@ -128,13 +131,13 @@ impl Surface {
 	}
 
 	/// Return the pixel data of the surface.
-	pub fn data(&self) -> &[Bgra] {
+	pub fn data(&self) -> &[Color] {
 		&self.data
 	}
 
 	/// Return the pixel data of the surface. You should prefer [`data()`] unless you
 	/// absolutely need owned access to the data.
-	pub fn into_data(self) -> Vec<Bgra> {
+	pub fn into_data(self) -> Vec<Color> {
 		self.data
 	}
 
@@ -145,13 +148,13 @@ impl Surface {
 		unsafe {
 			slice::from_raw_parts(
 				self.data.as_ptr() as *const u8,
-				self.data.len() * mem::size_of::<Bgra>()
+				self.data.len() * mem::size_of::<Color>()
 			)
 		}
 	}
 
 	/// Returns an iterator over the pixels of the surface.
-	pub fn pixels(&self) -> impl Iterator<Item = (usize, usize, Bgra)> + '_ {
+	pub fn pixels(&self) -> impl Iterator<Item = (usize, usize, Color)> + '_ {
 		let width = self.width();
 		self.data().iter().enumerate().map(move |(i, color)| {
 			let x = i % width;
@@ -301,7 +304,7 @@ impl Animation {
 	pub fn set_fill_color(&mut self, keypath: &str, color: Rgb) {
 		assert!(color_is_valid(color), "color is not valid");
 		let keypath = CString::new(keypath).unwrap();
-		let RGB { r, g, b } = color;
+		let Rgb { r, g, b } = color;
 		unsafe {
 			lottie_animation_property_override(
                 self.0.as_ptr(),
@@ -333,7 +336,7 @@ impl Animation {
 	pub fn set_stroke_color(&mut self, keypath: &str, color: Rgb) {
 		assert!(color_is_valid(color), "color is not valid");
 		let keypath = CString::new(keypath).unwrap();
-		let RGB { r, g, b } = color;
+		let Rgb { r, g, b } = color;
 		unsafe {
 			lottie_animation_property_override(
                 self.0.as_ptr(),

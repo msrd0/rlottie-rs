@@ -1,10 +1,9 @@
 use crate::convert::Convert;
-use rgb::{alt::BGRA8, RGBA8};
 use rlottie::Size;
 use webp_animation::{Encoder, WebPData};
 
 auto_vectorize! {
-	pub(crate) fn bgra_to_rgba(buf_bgra: &[BGRA8], buf_rgba: &mut [RGBA8]) {
+	pub(crate) fn bgra_to_rgba(buf_bgra: &[rlottie::Color], buf_rgba: &mut [crate::Color]) {
 		for i in 0..buf_bgra.len() {
 			buf_rgba[i].r = buf_bgra[i].r;
 			buf_rgba[i].g = buf_bgra[i].g;
@@ -36,7 +35,7 @@ impl Convert for Convert2Webp {
 	type Out = WebPData;
 	type Err = webp_animation::Error;
 
-	fn convert_frame(&self, from: &[BGRA8], to: &mut [RGBA8]) {
+	fn convert_frame(&self, from: &[rlottie::Color], to: &mut [crate::Color]) {
 		bgra_to_rgba(from, to)
 	}
 

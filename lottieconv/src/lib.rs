@@ -51,7 +51,6 @@
 //! # }
 //! ```
 
-use rgb::RGBA8;
 use rlottie::Surface;
 use std::slice;
 
@@ -75,11 +74,13 @@ mod webp;
 #[cfg(feature = "webp")]
 use webp::Convert2Webp;
 
-/// It is very important that [`RGBA8`] and `[u8; 4]` have exactly the same size.
+type Color = rgb::RGBA8;
+
+/// It is very important that [`Color`] and `[u8; 4]` have exactly the same size.
 /// This mod does nothing other than fail to compile if that was not the case.
 #[allow(dead_code)]
-mod rgba_size {
-	use rgb::RGBA8;
+mod color_size {
+	use super::Color;
 	use std::{marker::PhantomData, mem};
 
 	#[derive(Default)]
@@ -96,7 +97,7 @@ mod rgba_size {
 	}
 
 	const _: () = {
-		AssertSize::<{ mem::size_of::<RGBA8>() }>::new().assert_size_u8_4();
+		AssertSize::<{ mem::size_of::<Color>() }>::new().assert_size_u8_4();
 		AssertSize::<{ mem::size_of::<[u8; 4]>() }>::new().assert_size_u8_4();
 	};
 }
@@ -188,7 +189,7 @@ impl<C: Convert> Converter<C> {
 	pub fn convert(mut self) -> Result<C::Out, C::Err> {
 		let buffer_len = self.size.width * self.size.height;
 		let mut surface = Surface::new(self.size);
-		let mut buffer = vec![RGBA8::default(); buffer_len];
+		let mut buffer = vec![Color::default(); buffer_len];
 		let frame_count = self.player.totalframe();
 
 		for frame in 0 .. frame_count {

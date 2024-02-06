@@ -1,11 +1,10 @@
-use rgb::{alt::BGRA8, RGBA8};
 use std::convert::Infallible;
 
 pub trait Convert {
 	type Out;
 	type Err;
 
-	fn convert_frame(&self, from: &[BGRA8], to: &mut [RGBA8]);
+	fn convert_frame(&self, from: &[rlottie::Color], to: &mut [crate::Color]);
 
 	fn add_frame(&mut self, data: &mut [u8]) -> Result<(), Self::Err>;
 
@@ -18,7 +17,7 @@ impl Convert for DummyConvert {
 	type Out = ();
 	type Err = Infallible;
 
-	fn convert_frame(&self, _: &[BGRA8], _: &mut [RGBA8]) {
+	fn convert_frame(&self, _: &[rlottie::Color], _: &mut [crate::Color]) {
 		unreachable!()
 	}
 
