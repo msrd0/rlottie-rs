@@ -307,13 +307,13 @@ impl Animation {
 		let Rgb { r, g, b } = color;
 		unsafe {
 			lottie_animation_property_override(
-                self.0.as_ptr(),
-                rlottie_sys::Lottie_Animation_Property::LOTTIE_ANIMATION_PROPERTY_FILLCOLOR,
-                keypath.as_ptr(),
-                r,
-                g,
-                b,
-            );
+				self.0.as_ptr(),
+				rlottie_sys::Lottie_Animation_Property::LOTTIE_ANIMATION_PROPERTY_FILLCOLOR,
+				keypath.as_ptr(),
+				r,
+				g,
+				b,
+			);
 		}
 	}
 
@@ -325,11 +325,11 @@ impl Animation {
 		let keypath = CString::new(keypath).unwrap();
 		unsafe {
 			lottie_animation_property_override(
-                self.0.as_ptr(),
-                rlottie_sys::Lottie_Animation_Property::LOTTIE_ANIMATION_PROPERTY_FILLOPACITY,
-                keypath.as_ptr(),
-                opacity,
-            );
+				self.0.as_ptr(),
+				rlottie_sys::Lottie_Animation_Property::LOTTIE_ANIMATION_PROPERTY_FILLOPACITY,
+				keypath.as_ptr(),
+				opacity,
+			);
 		}
 	}
 
@@ -339,13 +339,13 @@ impl Animation {
 		let Rgb { r, g, b } = color;
 		unsafe {
 			lottie_animation_property_override(
-                self.0.as_ptr(),
-                rlottie_sys::Lottie_Animation_Property::LOTTIE_ANIMATION_PROPERTY_STROKECOLOR,
-                keypath.as_ptr(),
-                r,
-                g,
-                b,
-            );
+				self.0.as_ptr(),
+				rlottie_sys::Lottie_Animation_Property::LOTTIE_ANIMATION_PROPERTY_STROKECOLOR,
+				keypath.as_ptr(),
+				r,
+				g,
+				b,
+			);
 		}
 	}
 
@@ -357,11 +357,11 @@ impl Animation {
 		let keypath = CString::new(keypath).unwrap();
 		unsafe {
 			lottie_animation_property_override(
-                self.0.as_ptr(),
-                rlottie_sys::Lottie_Animation_Property::LOTTIE_ANIMATION_PROPERTY_STROKEOPACITY,
-                keypath.as_ptr(),
-                opacity,
-            );
+				self.0.as_ptr(),
+				rlottie_sys::Lottie_Animation_Property::LOTTIE_ANIMATION_PROPERTY_STROKEOPACITY,
+				keypath.as_ptr(),
+				opacity,
+			);
 		}
 	}
 
@@ -369,11 +369,11 @@ impl Animation {
 		let keypath = CString::new(keypath).unwrap();
 		unsafe {
 			lottie_animation_property_override(
-                self.0.as_ptr(),
-                rlottie_sys::Lottie_Animation_Property::LOTTIE_ANIMATION_PROPERTY_STROKEWIDTH,
-                keypath.as_ptr(),
-                width,
-            );
+				self.0.as_ptr(),
+				rlottie_sys::Lottie_Animation_Property::LOTTIE_ANIMATION_PROPERTY_STROKEWIDTH,
+				keypath.as_ptr(),
+				width,
+			);
 		}
 	}
 
@@ -381,12 +381,12 @@ impl Animation {
 		let keypath = CString::new(keypath).unwrap();
 		unsafe {
 			lottie_animation_property_override(
-                self.0.as_ptr(),
-                rlottie_sys::Lottie_Animation_Property::LOTTIE_ANIMATION_PROPERTY_TR_POSITION,
-                keypath.as_ptr(),
-                x,
-                y,
-            );
+				self.0.as_ptr(),
+				rlottie_sys::Lottie_Animation_Property::LOTTIE_ANIMATION_PROPERTY_TR_POSITION,
+				keypath.as_ptr(),
+				x,
+				y,
+			);
 		}
 	}
 
@@ -394,12 +394,12 @@ impl Animation {
 		let keypath = CString::new(keypath).unwrap();
 		unsafe {
 			lottie_animation_property_override(
-                self.0.as_ptr(),
-                rlottie_sys::Lottie_Animation_Property::LOTTIE_ANIMATION_PROPERTY_TR_SCALE,
-                keypath.as_ptr(),
-                width,
-                height,
-            );
+				self.0.as_ptr(),
+				rlottie_sys::Lottie_Animation_Property::LOTTIE_ANIMATION_PROPERTY_TR_SCALE,
+				keypath.as_ptr(),
+				width,
+				height,
+			);
 		}
 	}
 
@@ -407,11 +407,11 @@ impl Animation {
 		let keypath = CString::new(keypath).unwrap();
 		unsafe {
 			lottie_animation_property_override(
-                self.0.as_ptr(),
-                rlottie_sys::Lottie_Animation_Property::LOTTIE_ANIMATION_PROPERTY_TR_ROTATION,
-                keypath.as_ptr(),
-                rotation,
-            );
+				self.0.as_ptr(),
+				rlottie_sys::Lottie_Animation_Property::LOTTIE_ANIMATION_PROPERTY_TR_ROTATION,
+				keypath.as_ptr(),
+				rotation,
+			);
 		}
 	}
 }
