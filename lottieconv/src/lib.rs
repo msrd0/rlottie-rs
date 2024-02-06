@@ -74,7 +74,10 @@ mod webp;
 #[cfg(feature = "webp")]
 use webp::Convert2Webp;
 
+#[cfg(target_endian = "little")]
 type Color = rgb::RGBA8;
+#[cfg(target_endian = "big")]
+type Color = rgb::alt::ABGR8;
 
 /// It is very important that [`Color`] and `[u8; 4]` have exactly the same size.
 /// This mod does nothing other than fail to compile if that was not the case.

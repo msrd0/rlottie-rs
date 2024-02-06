@@ -18,6 +18,6 @@ rust-version = "1.60"
 serde = ["dep:serde", "rgb/serde"]
 
 [dependencies]
-rgb = { version = "0.8.32", default-features = false }
+rgb = { version = "0.8.32", default-features = false, features = ["argb"] }
 rlottie-sys = { path = "../rlottie-sys", version = "0.2" }
 serde = { version = "1", features = ["derive"], optional = true }

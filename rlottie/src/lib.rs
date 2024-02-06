@@ -38,7 +38,11 @@ use std::{
 	slice
 };
 
+#[cfg(target_endian = "little")]
 pub type Color<T = u8> = rgb::alt::BGRA<T>;
+#[cfg(target_endian = "big")]
+pub type Color<T = u8> = rgb::alt::ARGB<T>;
+
 pub type Rgb<T = f64> = rgb::RGB<T>;
 
 #[doc(hidden)]
