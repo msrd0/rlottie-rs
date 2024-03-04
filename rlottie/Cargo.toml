@@ -15,6 +15,7 @@ rust-version = "1.60"
 
 [features]
 serde = ["dep:serde", "rgb/serde"]
+telegrand = []
 
 [dependencies]
 rgb = { version = "0.8.32", default-features = false }
