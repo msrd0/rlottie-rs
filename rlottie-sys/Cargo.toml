@@ -17,4 +17,5 @@ links = "rlottie"
 
 [build-dependencies]
 bindgen = { version = "0.68.1", features = ["prettyplease", "runtime"], default-features = false }
+cmake = "0.1.50"
 pkg-config = "0.3.22"
