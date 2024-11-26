@@ -16,7 +16,7 @@ fn main() {
 	let bindings = bindgen::Builder::default()
 		.formatter(bindgen::Formatter::Prettyplease)
 		.header("wrapper.h")
-        .clang_args(&include_args) // Add include paths
+		.clang_args(&include_args) // Add include paths
 		.parse_callbacks(Box::new(bindgen::CargoCallbacks))
 		.newtype_enum(".*")
 		.size_t_is_usize(true)
