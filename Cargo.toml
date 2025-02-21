@@ -8,5 +8,11 @@ members = [
 	"rlottie-sys"
 ]
 
+[workspace.package]
+license = "MIT"
+repository = "https://github.com/msrd0/rlottie-rs"
+edition = "2024"
+rust-version = "1.85"
+
 [profile.test]
 opt-level = 3

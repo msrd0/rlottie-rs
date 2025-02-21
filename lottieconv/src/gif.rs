@@ -1,6 +1,6 @@
-use crate::{convert::Convert, Rgba};
+use crate::{Rgba, convert::Convert};
 use gif_crate::{DisposalMethod, Encoder, EncodingError, Frame, Repeat};
-use rgb::{alt::BGRA8, RGBA8};
+use rgb::{RGBA8, alt::BGRA8};
 use rlottie::Size;
 use std::io::Write;
 

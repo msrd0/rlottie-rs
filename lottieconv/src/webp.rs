@@ -1,5 +1,5 @@
 use crate::convert::Convert;
-use rgb::{alt::BGRA8, RGBA8};
+use rgb::{RGBA8, alt::BGRA8};
 use rlottie::Size;
 use webp_animation::{Encoder, WebPData};
 

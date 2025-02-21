@@ -1,4 +1,4 @@
-use rgb::{alt::BGRA8, RGBA8};
+use rgb::{RGBA8, alt::BGRA8};
 use std::convert::Infallible;
 
 pub trait Convert {

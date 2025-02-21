@@ -4,14 +4,13 @@
 workspace = ".."
 name = "rlottie"
 version = "0.5.2"
-license = "MIT"
+description = "A platform independent standalone library that plays Lottie Animation"
 include = ["build.rs", "src/**/*.rs", "/LICENSE"]
 
-description = "A platform independent standalone library that plays Lottie Animation"
-repository = "https://github.com/msrd0/rlottie-rs"
-
-edition = "2021"
-rust-version = "1.60"
+license.workspace = true
+repository.workspace = true
+edition.workspace = true
+rust-version.workspace = true
 
 [features]
 serde = ["dep:serde", "rgb/serde"]

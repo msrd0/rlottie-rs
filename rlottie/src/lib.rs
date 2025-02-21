@@ -25,7 +25,7 @@
 //! # }
 //! ```
 
-use rgb::{alt::BGRA, RGB};
+use rgb::{RGB, alt::BGRA};
 use rlottie_sys::*;
 #[cfg(feature = "serde")]
 use serde::{Deserialize, Serialize};
@@ -151,7 +151,7 @@ impl Surface {
 	}
 
 	/// Returns an iterator over the pixels of the surface.
-	pub fn pixels(&self) -> impl Iterator<Item = (usize, usize, Bgra)> + '_ {
+	pub fn pixels(&self) -> impl Iterator<Item = (usize, usize, Bgra)> {
 		let width = self.width();
 		self.data().iter().enumerate().map(move |(i, color)| {
 			let x = i % width;
@@ -167,7 +167,7 @@ impl Surface {
 
 	/// Set the length of the pixel data to `width * height`.
 	unsafe fn set_len(&mut self) {
-		self.data.set_len(self.width() * self.height())
+		unsafe { self.data.set_len(self.width() * self.height()) }
 	}
 }
 
