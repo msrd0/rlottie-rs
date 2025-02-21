@@ -1,6 +1,7 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `rlottie/src/lib.rs`."><title>lib.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceSerif4-Regular-46f98efaafac5295.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/FiraSans-Regular-018c141bf0843ffd.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/FiraSans-Medium-8f9a781e4970d388.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2"><link rel="stylesheet" href="../../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../../static.files/rustdoc-9ee3a5e31a2afa3e.css"><script id="default-settings" 
-data-theme="ayu"
-data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="rlottie" data-themes="" data-resource-suffix="" data-rustdoc-version="1.75.0 (82e1608df 2023-12-21)" data-channel="1.75.0" data-search-js="search-8fbf244ebcf71464.js" data-settings-js="settings-74424d7eec62a23e.js" ><script src="../../static.files/storage-fec3eaa3851e447d.js"></script><script defer src="../../static.files/src-script-3280b574d94e47b4.js"></script><script defer src="../../src-files.js"></script><script defer src="../../static.files/main-9dd44ab47b99a0fb.js"></script><noscript><link rel="stylesheet" href="../../static.files/noscript-5d8b3c7633ad77ba.css"></noscript><link rel="alternate icon" type="image/png" href="../../static.files/favicon-16x16-8b506e7a72182f1c.png"><link rel="alternate icon" type="image/png" href="../../static.files/favicon-32x32-422f7d1d52889060.png"><link rel="icon" type="image/svg+xml" href="../../static.files/favicon-2c020d218678b618.svg"></head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"></nav><main><nav class="sub"><form class="search-form"><span></span><input class="search-input" name="search" aria-label="Run search in the documentation" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><a href="../../help.html">?</a></div><div id="settings-menu" tabindex="-1"><a href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../static.files/wheel-7b819b6101059cd0.svg"></a></div></form></nav><section id="main-content" class="content"><div class="example-wrap"><div data-nosnippet><pre class="src-line-numbers"><a href="#1" id="1">1</a>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `rlottie/src/lib.rs`."><title>lib.rs - source</title><script>if(window.location.protocol!=="file:")document.head.insertAdjacentHTML("beforeend","SourceSerif4-Regular-6b053e98.ttf.woff2,FiraSans-Regular-0fe48ade.woff2,FiraSans-Medium-e1aa3f0a.woff2,SourceCodePro-Regular-8badfe75.ttf.woff2,SourceCodePro-Semibold-aa29a496.ttf.woff2".split(",").map(f=>`<link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/${f}">`).join(""))</script><link rel="stylesheet" href="../../static.files/normalize-9960930a.css"><link rel="stylesheet" href="../../static.files/rustdoc-46132b98.css"><script id="default-settings" 
+data-use_system_theme="false"
+data-theme="ayu"></script><meta name="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="rlottie" data-themes="" data-resource-suffix="" data-rustdoc-version="1.85.0 (4d91de4e4 2025-02-17)" data-channel="1.85.0" data-search-js="search-75f5ac3e.js" data-settings-js="settings-0f613d39.js" ><script src="../../static.files/storage-59e33391.js"></script><script defer src="../../static.files/src-script-56102188.js"></script><script defer src="../../src-files.js"></script><script defer src="../../static.files/main-5f194d8c.js"></script><noscript><link rel="stylesheet" href="../../static.files/noscript-893ab5e7.css"></noscript><link rel="alternate icon" type="image/png" href="../../static.files/favicon-32x32-6580c154.png"><link rel="icon" type="image/svg+xml" href="../../static.files/favicon-044be391.svg"></head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="src-sidebar-title"><h2>Files</h2></div></nav><div class="sidebar-resizer"></div><main><rustdoc-search></rustdoc-search><section id="main-content" class="content"><div class="main-heading"><h1><div class="sub-heading">rlottie/</div>lib.rs</h1><rustdoc-toolbar></rustdoc-toolbar></div><div class="example-wrap"><div data-nosnippet><pre class="src-line-numbers">
+<a href="#1" id="1">1</a>
 <a href="#2" id="2">2</a>
 <a href="#3" id="3">3</a>
 <a href="#4" id="4">4</a>
@@ -413,8 +414,7 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 <a href="#411" id="411">411</a>
 <a href="#412" id="412">412</a>
 <a href="#413" id="413">413</a>
-<a href="#414" id="414">414</a>
-</pre></div><pre class="rust"><code><span class="attr">#![allow(clippy::tabs_in_doc_comments)]
+<a href="#414" id="414">414</a></pre></div><pre class="rust"><code><span class="attr">#![allow(clippy::tabs_in_doc_comments)]
 #![warn(rust_2018_idioms)]
 #![deny(elided_lifetimes_in_paths, unreachable_pub)]
 
@@ -435,15 +435,15 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 //! for frame in 0 .. animation.totalframe() {
 //! 	animation.render(frame, &amp;mut surface);
 //! 	for (x, y, color) in surface.pixels() {
-//! 		println!(&quot;frame {frame} at ({x}, {y}): {color:?}&quot;);
+//! 		println!("frame {frame} at ({x}, {y}): {color:?}");
 //! 	}
 //! }
 //! # }
 //! ```
 
-</span><span class="kw">use </span>rgb::{alt::BGRA, RGB};
+</span><span class="kw">use </span>rgb::{RGB, alt::BGRA};
 <span class="kw">use </span>rlottie_sys::<span class="kw-2">*</span>;
-<span class="attr">#[cfg(feature = <span class="string">&quot;serde&quot;</span>)]
+<span class="attr">#[cfg(feature = <span class="string">"serde"</span>)]
 </span><span class="kw">use </span>serde::{Deserialize, Serialize};
 <span class="kw">use </span>std::{
 	ffi::CString,
@@ -469,12 +469,12 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 	</span>P: AsRef&lt;Path&gt;
 {
 	<span class="kw">let </span>bytes = path.as_ref().as_os_str().as_bytes().to_vec();
-	CString::new(bytes).expect(<span class="string">&quot;path must not contain nul&quot;</span>)
+	CString::new(bytes).expect(<span class="string">"path must not contain nul"</span>)
 }
 
 <span class="doccomment">/// The size type used by lottie [`Animation`].
 </span><span class="attr">#[derive(Clone, Copy, Debug, Eq, Ord, PartialEq, PartialOrd)]
-#[cfg_attr(feature = <span class="string">&quot;serde&quot;</span>, derive(Deserialize, Serialize))]
+#[cfg_attr(feature = <span class="string">"serde"</span>, derive(Deserialize, Serialize))]
 </span><span class="kw">pub struct </span>Size {
 	<span class="kw">pub </span>width: usize,
 	<span class="kw">pub </span>height: usize
@@ -567,7 +567,7 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 	}
 
 	<span class="doccomment">/// Returns an iterator over the pixels of the surface.
-	</span><span class="kw">pub fn </span>pixels(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw">impl </span>Iterator&lt;Item = (usize, usize, Bgra)&gt; + <span class="lifetime">&#39;_ </span>{
+	</span><span class="kw">pub fn </span>pixels(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw">impl </span>Iterator&lt;Item = (usize, usize, Bgra)&gt; {
 		<span class="kw">let </span>width = <span class="self">self</span>.width();
 		<span class="self">self</span>.data().iter().enumerate().map(<span class="kw">move </span>|(i, color)| {
 			<span class="kw">let </span>x = i % width;
@@ -583,7 +583,7 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 
 	<span class="doccomment">/// Set the length of the pixel data to `width * height`.
 	</span><span class="kw">unsafe fn </span>set_len(<span class="kw-2">&amp;mut </span><span class="self">self</span>) {
-		<span class="self">self</span>.data.set_len(<span class="self">self</span>.width() * <span class="self">self</span>.height())
+		<span class="kw">unsafe </span>{ <span class="self">self</span>.data.set_len(<span class="self">self</span>.width() * <span class="self">self</span>.height()) }
 	}
 }
 
@@ -597,8 +597,8 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 </span><span class="kw">pub struct </span>Animation(NonNull&lt;Lottie_Animation_S&gt;);
 
 <span class="kw">impl </span>Debug <span class="kw">for </span>Animation {
-	<span class="kw">fn </span>fmt(<span class="kw-2">&amp;</span><span class="self">self</span>, f: <span class="kw-2">&amp;mut </span>fmt::Formatter&lt;<span class="lifetime">&#39;_</span>&gt;) -&gt; fmt::Result {
-		f.debug_struct(<span class="string">&quot;Animation&quot;</span>).finish_non_exhaustive()
+	<span class="kw">fn </span>fmt(<span class="kw-2">&amp;</span><span class="self">self</span>, f: <span class="kw-2">&amp;mut </span>fmt::Formatter&lt;<span class="lifetime">'_</span>&gt;) -&gt; fmt::Result {
+		f.debug_struct(<span class="string">"Animation"</span>).finish_non_exhaustive()
 	}
 }
 
@@ -619,7 +619,7 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 	}
 
 	<span class="doccomment">/// Constructs an animation object from file path. This file needs to be in JSON
-	/// format; if you want to read telegram&#39;s tgs files, you need to decompress
+	/// format; if you want to read telegram's tgs files, you need to decompress
 	/// them first.
 	///
 	/// Note that the rlottie library might cache the file and/or its resources.
@@ -650,8 +650,8 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 		P: AsRef&lt;Path&gt;
 	{
 		<span class="kw">let </span>json_data =
-			CString::new(json_data).expect(<span class="string">&quot;json_data must not contain nul&quot;</span>);
-		<span class="kw">let </span>cache_key = CString::new(cache_key).expect(<span class="string">&quot;key must not contain nul&quot;</span>);
+			CString::new(json_data).expect(<span class="string">"json_data must not contain nul"</span>);
+		<span class="kw">let </span>cache_key = CString::new(cache_key).expect(<span class="string">"key must not contain nul"</span>);
 		<span class="kw">let </span>resource_path = path_to_cstr(resource_path);
 		<span class="kw">let </span>ptr = <span class="kw">unsafe </span>{
 			lottie_animation_from_data(
@@ -715,7 +715,7 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 	}
 
 	<span class="kw">pub fn </span>set_fill_color(<span class="kw-2">&amp;mut </span><span class="self">self</span>, keypath: <span class="kw-2">&amp;</span>str, color: Rgb) {
-		<span class="macro">assert!</span>(color_is_valid(color), <span class="string">&quot;color is not valid&quot;</span>);
+		<span class="macro">assert!</span>(color_is_valid(color), <span class="string">"color is not valid"</span>);
 		<span class="kw">let </span>keypath = CString::new(keypath).unwrap();
 		<span class="kw">let </span>RGB { r, g, b } = color;
 		<span class="kw">unsafe </span>{
@@ -733,7 +733,7 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 	<span class="kw">pub fn </span>set_fill_opacity(<span class="kw-2">&amp;mut </span><span class="self">self</span>, keypath: <span class="kw-2">&amp;</span>str, opacity: f64) {
 		<span class="macro">assert!</span>(
 			(<span class="number">0.0 </span>..= <span class="number">100.0</span>).contains(<span class="kw-2">&amp;</span>opacity),
-			<span class="string">&quot;opacity values must be between 0.0 and 100.0&quot;
+			<span class="string">"opacity values must be between 0.0 and 100.0"
 		</span>);
 		<span class="kw">let </span>keypath = CString::new(keypath).unwrap();
 		<span class="kw">unsafe </span>{
@@ -747,7 +747,7 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 	}
 
 	<span class="kw">pub fn </span>set_stroke_color(<span class="kw-2">&amp;mut </span><span class="self">self</span>, keypath: <span class="kw-2">&amp;</span>str, color: Rgb) {
-		<span class="macro">assert!</span>(color_is_valid(color), <span class="string">&quot;color is not valid&quot;</span>);
+		<span class="macro">assert!</span>(color_is_valid(color), <span class="string">"color is not valid"</span>);
 		<span class="kw">let </span>keypath = CString::new(keypath).unwrap();
 		<span class="kw">let </span>RGB { r, g, b } = color;
 		<span class="kw">unsafe </span>{
@@ -765,7 +765,7 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 	<span class="kw">pub fn </span>set_stroke_opacity(<span class="kw-2">&amp;mut </span><span class="self">self</span>, keypath: <span class="kw-2">&amp;</span>str, opacity: f64) {
 		<span class="macro">assert!</span>(
 			(<span class="number">0.0 </span>..= <span class="number">100.0</span>).contains(<span class="kw-2">&amp;</span>opacity),
-			<span class="string">&quot;opacity values must be between 0.0 and 100.0&quot;
+			<span class="string">"opacity values must be between 0.0 and 100.0"
 		</span>);
 		<span class="kw">let </span>keypath = CString::new(keypath).unwrap();
 		<span class="kw">unsafe </span>{
