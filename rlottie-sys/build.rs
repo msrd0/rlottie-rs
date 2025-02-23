@@ -8,7 +8,7 @@ mod source {
 	pub const GIT_PATCHES: &[&str] = &["2d7b1fa2b005bba3d4b45e8ebfa632060e8a157a"];
 }
 
-#[cfg(feature = "vendor-telegram")]
+#[cfg(all(not(feature = "vendor-samsung"), feature = "vendor-telegram"))]
 mod source {
 	pub const VENDOR: &str = "telegram";
 	pub const GIT_REPO: &str = "https://github.com/TelegramMessenger/rlottie";
