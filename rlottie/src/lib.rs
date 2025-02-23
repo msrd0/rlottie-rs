@@ -29,11 +29,16 @@ use rgb::{RGB, alt::BGRA};
 use rlottie_sys::*;
 #[cfg(feature = "serde")]
 use serde::{Deserialize, Serialize};
+#[cfg(target_os = "linux")]
+use	std::os::unix::ffi::OsStrExt;
+#[cfg(target_os = "macos")]
+use	std::os::unix::ffi::OsStrExt;
+#[cfg(target_os = "windows")]
+use	std::os::windows::ffi::OsStrExt;
 use std::{
 	ffi::CString,
 	fmt::{self, Debug},
 	mem,
-	os::unix::ffi::OsStrExt,
 	path::Path,
 	ptr::NonNull,
 	slice
@@ -52,7 +57,12 @@ fn path_to_cstr<P>(path: P) -> CString
 where
 	P: AsRef<Path>
 {
+	#[cfg(target_os = "linux")]
 	let bytes = path.as_ref().as_os_str().as_bytes().to_vec();
+	#[cfg(target_os = "macos")]
+	let bytes = path.as_ref().as_os_str().as_bytes().to_vec();
+	#[cfg(target_os = "windows")]
+	let bytes = path.as_ref().as_os_str().as_encoded_bytes().to_vec();
 	CString::new(bytes).expect("path must not contain nul")
 }
 
