@@ -30,14 +30,14 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: dtolnay/rust-toolchain@stable
-      - run: cargo test -p rlottie-sys
+      - run: cargo test -p rlottie-sys --lib
 
   rlottie-sys-vendor-telegram:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
       - uses: dtolnay/rust-toolchain@stable
-      - run: cargo test -p rlottie-sys --features vendor-telegram --no-default-features
+      - run: cargo test -p rlottie-sys --lib --features vendor-telegram --no-default-features
 
   rustfmt:
     runs-on: ubuntu-latest
