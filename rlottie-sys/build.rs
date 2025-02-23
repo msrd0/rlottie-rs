@@ -93,7 +93,9 @@ fn compile_rlottie() -> Vec<PathBuf> {
 			.arg("cherry-pick")
 			.arg("-x")
 			.arg(rev)
-			.current_dir(&src_dir));
+			.current_dir(&src_dir)
+			.env("GIT_COMMITTER_NAME", "nobody")
+			.env("GIT_COMMITTER_EMAIL", "nobody"));
 	}
 
 	// we could revisit this if the `cmake` crate becomes less opinionated
