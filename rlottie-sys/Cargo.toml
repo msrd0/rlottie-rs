@@ -11,9 +11,24 @@ license.workspace = true
 repository.workspace = true
 
 edition = "2021"
-rust-version = "1.64" # bump version in build.rs as well
+rust-version = "1.70" # bump version in build.rs as well
 links = "rlottie"
 
 [build-dependencies]
 bindgen = { version = "0.71", features = ["prettyplease", "runtime"], default-features = false }
+#cmake = { version = "0.1.54", optional = true }
 pkg-config = "0.3.22"
+
+[features]
+default = ["vendor-samsung"]
+
+# If rlottie cannot be found on the system, download the samsung version of rlottie and
+# compile it. You can force the use of the vendored code by setting `RLOTTIE_NO_PKG_CONFIG`.
+vendor-samsung = ["__vendor"]
+
+# If rlottie cannot be found on the system, download the telegram version of rlottie and
+# compile it. You can force the use of the vendored code by setting `RLOTTIE_NO_PKG_CONFIG`.
+vendor-telegram = ["__vendor"]
+
+# Internal
+__vendor = []
