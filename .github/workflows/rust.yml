@@ -32,7 +32,7 @@ jobs:
       - uses: dtolnay/rust-toolchain@stable
       - run: cargo test -p rlottie-sys
 
-  rlottie-sys-vendor-samsung:
+  rlottie-sys-vendor-telegram:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
