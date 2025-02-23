@@ -83,6 +83,16 @@ fn compile_rlottie() -> Vec<PathBuf> {
 			.arg(GIT_REPO)
 			.arg(&src_dir)
 			.current_dir(&out_dir));
+		// since telegram doesn't merge fixes we need to download pull requests
+		if VENDOR == "telegram" {
+			run(Command::new("git")
+				.arg("config")
+				.arg("--add")
+				.arg("remote.origin.fetch")
+				.arg("refs/pull/*/head:refs/remotes/origin/pull/*")
+				.current_dir(&src_dir));
+			run(Command::new("git").arg("fetch").current_dir(&src_dir));
+		}
 	}
 	run(Command::new("git")
 		.arg("checkout")
