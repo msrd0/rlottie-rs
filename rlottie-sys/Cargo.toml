@@ -15,5 +15,5 @@ rust-version = "1.64" # bump version in build.rs as well
 links = "rlottie"
 
 [build-dependencies]
-bindgen = { version = "0.71", features = ["prettyplease", "runtime"], default-features = false }
+bindgen = { version = "0.72", features = ["prettyplease", "runtime"], default-features = false }
 pkg-config = "0.3.22"
