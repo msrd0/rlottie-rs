@@ -1,5 +1,5 @@
 (function() {
-    var implementors = Object.fromEntries([["rlottie",[["impl <a class=\"trait\" href=\"https://doc.rust-lang.org/1.85.0/core/cmp/trait.PartialOrd.html\" title=\"trait core::cmp::PartialOrd\">PartialOrd</a> for <a class=\"struct\" href=\"rlottie/struct.Size.html\" title=\"struct rlottie::Size\">Size</a>"]]]]);
+    var implementors = Object.fromEntries([["rlottie",[["impl <a class=\"trait\" href=\"https://doc.rust-lang.org/1.93.1/core/cmp/trait.PartialOrd.html\" title=\"trait core::cmp::PartialOrd\">PartialOrd</a> for <a class=\"struct\" href=\"rlottie/struct.Size.html\" title=\"struct rlottie::Size\">Size</a>"]]]]);
     if (window.register_implementors) {
         window.register_implementors(implementors);
     } else {
