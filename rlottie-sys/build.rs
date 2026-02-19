@@ -11,9 +11,9 @@ mod source {
 #[cfg(all(not(feature = "vendor-samsung"), feature = "vendor-telegram"))]
 mod source {
 	pub const VENDOR: &str = "telegram";
-	pub const GIT_REPO: &str = "https://github.com/TelegramMessenger/rlottie";
-	pub const GIT_REV: &str = "67f103bc8b625f2a4a9e94f1d8c7bd84c5a08d1d";
-	pub const GIT_PATCHES: &[&str] = &["1dd47cec7eb8e1f657f02dce9c497ae60f7cf8c5"];
+	pub const GIT_REPO: &str = "https://github.com/msrd0/rlottie-telegram";
+	pub const GIT_REV: &str = "f435c0a4f364ce39f7e4eee9ddc7118573da9bf9";
+	pub const GIT_PATCHES: &[&str] = &[];
 }
 
 #[cfg(feature = "__vendor")]
